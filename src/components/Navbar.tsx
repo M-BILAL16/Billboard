@@ -677,6 +677,42 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               )}
             </div>
 
+            {/* Catalog Link */}
+            <a
+              href="#products"
+              onClick={() => setActiveLink('Catalog')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                textDecoration: 'none',
+                color: activeLink === 'Catalog' ? '#111111' : '#444444',
+                backgroundColor: activeLink === 'Catalog' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>Catalog</span>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  fontFamily: 'var(--font-mono)',
+                  backgroundColor: 'rgba(30, 86, 255, 0.1)',
+                  color: '#1E56FF',
+                  padding: '0.08rem 0.35rem',
+                  borderRadius: '9999px',
+                  fontWeight: 800,
+                }}
+              >
+                89
+              </span>
+            </a>
+
             {/* 2. Locations with Mega-Menu */}
             <div
               style={{ position: 'relative' }}
@@ -1377,12 +1413,13 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           {/* Mobile Navigation Links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
-              { num: '01', label: 'Formats', href: '#formats', tag: '5 Options' },
-              { num: '02', label: 'Locations', href: '#locations', tag: 'Interactive Map' },
-              { num: '03', label: 'Campaigns', href: '#campaigns', tag: 'Case Studies' },
-              { num: '04', label: 'Experience', href: '#experience', tag: '3D Simulation' },
-              { num: '05', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
-              { num: '06', label: 'Insights', href: '#insights', tag: 'Whitepapers' },
+              { num: '01', label: 'Catalog', href: '#products', tag: '89 Products' },
+              { num: '02', label: 'Formats', href: '#formats', tag: '5 Options' },
+              { num: '03', label: 'Locations', href: '#locations', tag: 'Borough Map' },
+              { num: '04', label: 'Campaigns', href: '#campaigns', tag: 'Case Studies' },
+              { num: '05', label: 'Experience', href: '#experience', tag: '3D Simulation' },
+              { num: '06', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
+              { num: '07', label: 'Insights', href: '#insights', tag: 'Sign Guides' },
             ].map((link) => (
               <a
                 key={link.label}

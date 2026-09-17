@@ -7,6 +7,7 @@ import MarqueeTicker from '@/components/MarqueeTicker';
 import IntroSection from '@/components/IntroSection';
 import ScrollyCanvas from '@/components/ScrollyCanvas';
 import FormatExplorer from '@/components/FormatExplorer';
+import SignProductsDirectory from '@/components/SignProductsDirectory';
 import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
 import CampaignShowcase from '@/components/CampaignShowcase';
@@ -102,6 +103,9 @@ export default function Home() {
 
       {/* Billboard Format Explorer */}
       <FormatExplorer />
+
+      {/* Signs Products Catalog & Directory (Tabs, Compact Height, All 9 Categories & 89 Subcategories) */}
+      <SignProductsDirectory onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* Attention Contrast Section (Minimal, Stark, Sequential Typographic) */}
       <AttentionStatement />
