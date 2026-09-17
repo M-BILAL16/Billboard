@@ -48,7 +48,7 @@ const STATEMENTS: StatementItem[] = [
     line1: 'BUT YOU CAN’T',
     line2: 'IGNORE A REAL SIGN.',
     subtext:
-      'Towering over New York streets. Commanding millions of eyes 24/7/365. Real presence. Unignorable.',
+      'Towering over New York streets. In full view of millions 24/7/365. Real presence. Unignorable.',
     isClimax: true,
   },
 ];
@@ -65,8 +65,8 @@ function getItemState(index: number, progress: number) {
   if (progress < z.enter || progress > z.exit) {
     return {
       opacity: 0,
-      translateY: progress < z.enter ? 48 : -48,
-      scale: 0.97,
+      translateY: progress < z.enter ? 32 : -32,
+      scale: 0.98,
       isVisible: false,
     };
   }
@@ -82,16 +82,16 @@ function getItemState(index: number, progress: number) {
     const ratio = Math.max(0, Math.min(1, (progress - z.enter) / (z.peakStart - z.enter)));
     return {
       opacity: ratio,
-      translateY: (1 - ratio) * 48,
-      scale: 0.97 + ratio * 0.03,
+      translateY: (1 - ratio) * 32,
+      scale: 0.98 + ratio * 0.02,
       isVisible: true,
     };
   } else {
     const ratio = Math.max(0, Math.min(1, (progress - z.peakEnd) / (z.exit - z.peakEnd)));
     return {
       opacity: 1 - ratio,
-      translateY: -ratio * 48,
-      scale: 1 - ratio * 0.03,
+      translateY: -ratio * 32,
+      scale: 1 - ratio * 0.02,
       isVisible: true,
     };
   }
@@ -115,7 +115,6 @@ export default function AttentionStatement() {
       const progress = Math.min(1, Math.max(0, scrolled / totalScrollable));
       setScrollProgress(progress);
 
-      // Determine the primary active step
       if (progress < 0.22) setActiveStep(0);
       else if (progress < 0.5) setActiveStep(1);
       else if (progress < 0.78) setActiveStep(2);
@@ -148,7 +147,7 @@ export default function AttentionStatement() {
       id="attention-statement"
       style={{
         position: 'relative',
-        height: '350vh', // Generous scroll runway so transitions feel deliberate and controllable
+        height: '350vh',
         backgroundColor: '#FDF7E7',
       }}
     >
@@ -174,7 +173,7 @@ export default function AttentionStatement() {
             height: '130%',
             zIndex: 0,
             pointerEvents: 'none',
-            transform: `translate3d(0, ${(scrollProgress - 0.5) * -120}px, 0) scale(${1.03 + scrollProgress * 0.04})`,
+            transform: `translate3d(0, ${(scrollProgress - 0.5) * -100}px, 0) scale(${1.03 + scrollProgress * 0.04})`,
             transition: 'transform 0.08s ease-out',
           }}
         >
@@ -217,9 +216,9 @@ export default function AttentionStatement() {
         <div
           style={{
             position: 'absolute',
-            top: '32px',
-            left: '32px',
-            right: '32px',
+            top: 'clamp(18px, 3vh, 32px)',
+            left: 'clamp(18px, 4vw, 40px)',
+            right: 'clamp(18px, 4vw, 40px)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',
@@ -235,7 +234,7 @@ export default function AttentionStatement() {
               alignItems: 'center',
               gap: '0.6rem',
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
+              fontSize: 'clamp(0.65rem, 0.9vw, 0.75rem)',
               color: '#333333',
               letterSpacing: '0.04em',
             }}
@@ -261,7 +260,7 @@ export default function AttentionStatement() {
           <div
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '0.72rem',
+              fontSize: 'clamp(0.65rem, 0.9vw, 0.75rem)',
               fontWeight: 700,
               color: '#111111',
               letterSpacing: '0.04em',
@@ -273,19 +272,20 @@ export default function AttentionStatement() {
           </div>
         </div>
 
-        {/* Center Stage: Giant Big Font Typography (No Box) */}
+        {/* Center Stage: Viewbox-Safe Giant Typography (No Box) */}
         <div
           style={{
             position: 'relative',
             zIndex: 5,
             width: '100%',
             maxWidth: '1200px',
-            padding: '0 1.5rem',
-            textAlign: 'center',
+            height: '100%',
+            maxHeight: 'calc(100vh - 140px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '420px',
+            padding: '0 1.5rem',
+            boxSizing: 'border-box',
           }}
         >
           {STATEMENTS.map((item, idx) => {
@@ -297,47 +297,53 @@ export default function AttentionStatement() {
                 key={item.id}
                 style={{
                   position: 'absolute',
-                  inset: 0,
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate3d(-50%, calc(-50% + ${state.translateY}px), 0) scale(${state.scale})`,
+                  width: '100%',
+                  maxWidth: '1100px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  textAlign: 'center',
                   opacity: state.opacity,
-                  transform: `translate3d(0, ${state.translateY}px, 0) scale(${state.scale})`,
-                  transition: 'opacity 0.1s linear, transform 0.1s linear',
                   pointerEvents: state.opacity > 0.6 ? 'auto' : 'none',
+                  transition: 'opacity 0.1s linear, transform 0.1s linear',
+                  boxSizing: 'border-box',
                 }}
               >
                 {/* Mini Chapter Label Above */}
                 <div
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(0.72rem, 1.1vw, 0.92rem)',
+                    fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
                     fontWeight: 800,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    color: item.isClimax ? '#1E56FF' : '#666666',
-                    marginBottom: '1.25rem',
+                    color: item.isClimax ? '#1E56FF' : '#777777',
+                    marginBottom: 'clamp(0.75rem, 1.5vh, 1.25rem)',
                     transition: 'color 0.3s ease',
                   }}
                 >
                   {item.num} // {item.tag}
                 </div>
 
-                {/* Giant Headline Typography */}
+                {/* Giant Headline Typography - Scaled to Stay Safely Inside Viewbox */}
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
                     fontSize: item.isClimax
-                      ? 'clamp(3.4rem, 9.2vw, 8.2rem)'
-                      : 'clamp(3.2rem, 8.6vw, 7.6rem)',
-                    letterSpacing: '-0.045em',
-                    lineHeight: 0.94,
+                      ? 'clamp(2.4rem, 6.4vw, 5.6rem)'
+                      : 'clamp(2.3rem, 6.0vw, 5.2rem)',
+                    letterSpacing: '-0.04em',
+                    lineHeight: 1.02,
                     textTransform: 'uppercase',
                     color: '#111111',
                     margin: 0,
-                    maxWidth: '1150px',
+                    padding: '0 0.5rem',
+                    textWrap: 'balance',
                     textShadow: '0 2px 24px rgba(253, 247, 231, 0.9)',
                   }}
                 >
@@ -346,8 +352,9 @@ export default function AttentionStatement() {
                     style={{
                       color: item.isClimax ? '#1E56FF' : '#111111',
                       textShadow: item.isClimax
-                        ? '0 0 45px rgba(30, 86, 255, 0.30), 0 2px 24px rgba(253, 247, 231, 0.9)'
+                        ? '0 0 35px rgba(30, 86, 255, 0.32), 0 2px 24px rgba(253, 247, 231, 0.9)'
                         : undefined,
+                      display: 'inline-block',
                     }}
                   >
                     {item.line2}
@@ -357,40 +364,42 @@ export default function AttentionStatement() {
                 {/* Italic Supporting Editorial Subtext */}
                 <p
                   style={{
-                    marginTop: '2rem',
+                    marginTop: 'clamp(1rem, 2vh, 1.75rem)',
                     fontFamily: 'var(--font-serif)',
                     fontStyle: 'italic',
-                    fontSize: 'clamp(1.2rem, 2vw, 1.7rem)',
+                    fontSize: 'clamp(1.05rem, 1.6vw, 1.45rem)',
                     color: '#555555',
-                    maxWidth: '680px',
+                    maxWidth: '650px',
                     lineHeight: 1.35,
                     marginRight: 'auto',
                     marginLeft: 'auto',
+                    padding: '0 1rem',
                   }}
                 >
                   {item.subtext}
                 </p>
 
-                {/* Climax Highlights for Step 4 */}
+                {/* Climax Highlights for Step 4 (Viewbox-Safe Padded Tags) */}
                 {item.isClimax && (
                   <div
                     style={{
                       display: 'flex',
                       flexWrap: 'wrap',
                       justifyContent: 'center',
-                      gap: '0.75rem',
-                      marginTop: '1.75rem',
+                      gap: '0.5rem',
+                      marginTop: 'clamp(0.9rem, 1.8vh, 1.4rem)',
+                      padding: '0 1rem',
                     }}
                   >
                     <span
                       style={{
-                        padding: '0.4rem 0.9rem',
+                        padding: '0.3rem 0.75rem',
                         borderRadius: '9999px',
                         backgroundColor: 'rgba(30, 86, 255, 0.08)',
-                        border: '1px solid rgba(30, 86, 255, 0.25)',
+                        border: '1px solid rgba(30, 86, 255, 0.28)',
                         color: '#1E56FF',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '0.72rem',
+                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
                       }}
@@ -399,28 +408,28 @@ export default function AttentionStatement() {
                     </span>
                     <span
                       style={{
-                        padding: '0.4rem 0.9rem',
+                        padding: '0.3rem 0.75rem',
                         borderRadius: '9999px',
                         backgroundColor: 'rgba(17, 17, 17, 0.05)',
-                        border: '1px solid rgba(17, 17, 17, 0.12)',
+                        border: '1px solid rgba(17, 17, 17, 0.14)',
                         color: '#111111',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '0.72rem',
+                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
                       }}
                     >
-                      ✓ 24/7 NYC STREET PRESENCE
+                      ✓ 24/7/365 STREET PRESENCE
                     </span>
                     <span
                       style={{
-                        padding: '0.4rem 0.9rem',
+                        padding: '0.3rem 0.75rem',
                         borderRadius: '9999px',
                         backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                        border: '1px solid rgba(16, 185, 129, 0.25)',
+                        border: '1px solid rgba(16, 185, 129, 0.28)',
                         color: '#059669',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: '0.72rem',
+                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
                       }}
@@ -438,7 +447,7 @@ export default function AttentionStatement() {
         <div
           style={{
             position: 'absolute',
-            bottom: '36px',
+            bottom: 'clamp(20px, 3.5vh, 36px)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',
@@ -454,18 +463,18 @@ export default function AttentionStatement() {
                 aria-label={`Scroll to statement ${i + 1}`}
                 type="button"
                 style={{
-                  width: isActive ? '36px' : '9px',
+                  width: isActive ? '32px' : '8px',
                   height: '5px',
                   borderRadius: '3px',
                   backgroundColor: isActive
                     ? i === 3
                       ? '#1E56FF'
                       : '#111111'
-                    : 'rgba(17, 17, 17, 0.22)',
+                    : 'rgba(17, 17, 17, 0.20)',
                   border: 'none',
                   padding: 0,
                   cursor: 'pointer',
-                  transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
               />
             );
