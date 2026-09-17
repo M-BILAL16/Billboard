@@ -60,38 +60,45 @@ const ZONES = [
   { enter: 0.72, peakStart: 0.84, peakEnd: 1.0, exit: 1.1 }, // Item 3
 ];
 
-function getItemState(index: number, progress: number) {
+function getParallaxItemState(index: number, progress: number) {
   const z = ZONES[index];
+
+  // Outside active window
   if (progress < z.enter || progress > z.exit) {
     return {
       opacity: 0,
-      translateY: progress < z.enter ? 32 : -32,
-      scale: 0.98,
+      scale: progress < z.enter ? 0.93 : 1.07,
+      blur: 8,
       isVisible: false,
     };
   }
+
+  // Steady peak focus (locked dead-center, crisp)
   if (progress >= z.peakStart && progress <= z.peakEnd) {
     return {
       opacity: 1,
-      translateY: 0,
       scale: 1,
+      blur: 0,
       isVisible: true,
     };
   }
+
+  // Transitioning in from depth
   if (progress < z.peakStart) {
     const ratio = Math.max(0, Math.min(1, (progress - z.enter) / (z.peakStart - z.enter)));
     return {
       opacity: ratio,
-      translateY: (1 - ratio) * 32,
-      scale: 0.98 + ratio * 0.02,
+      scale: 0.93 + ratio * 0.07,
+      blur: (1 - ratio) * 8,
       isVisible: true,
     };
   } else {
+    // Transitioning out forward into parallax depth
     const ratio = Math.max(0, Math.min(1, (progress - z.peakEnd) / (z.exit - z.peakEnd)));
     return {
       opacity: 1 - ratio,
-      translateY: -ratio * 32,
-      scale: 1 - ratio * 0.02,
+      scale: 1.0 + ratio * 0.07,
+      blur: ratio * 8,
       isVisible: true,
     };
   }
@@ -115,6 +122,7 @@ export default function AttentionStatement() {
       const progress = Math.min(1, Math.max(0, scrolled / totalScrollable));
       setScrollProgress(progress);
 
+      // Determine active indicator step
       if (progress < 0.22) setActiveStep(0);
       else if (progress < 0.5) setActiveStep(1);
       else if (progress < 0.78) setActiveStep(2);
@@ -151,7 +159,7 @@ export default function AttentionStatement() {
         backgroundColor: '#FDF7E7',
       }}
     >
-      {/* Sticky Fullscreen Stage */}
+      {/* Sticky Fullscreen Viewport Stage */}
       <div
         style={{
           position: 'sticky',
@@ -173,7 +181,7 @@ export default function AttentionStatement() {
             height: '130%',
             zIndex: 0,
             pointerEvents: 'none',
-            transform: `translate3d(0, ${(scrollProgress - 0.5) * -100}px, 0) scale(${1.03 + scrollProgress * 0.04})`,
+            transform: `translate3d(0, ${(scrollProgress - 0.5) * -120}px, 0) scale(${1.03 + scrollProgress * 0.04})`,
             transition: 'transform 0.08s ease-out',
           }}
         >
@@ -212,13 +220,13 @@ export default function AttentionStatement() {
           />
         </div>
 
-        {/* Floating Minimal Telemetry Indicator (Top Bar - No Box) */}
+        {/* Top Minimal Telemetry Bar */}
         <div
           style={{
             position: 'absolute',
-            top: 'clamp(18px, 3vh, 32px)',
-            left: 'clamp(18px, 4vw, 40px)',
-            right: 'clamp(18px, 4vw, 40px)',
+            top: 'clamp(20px, 3.5vh, 36px)',
+            left: 'clamp(20px, 4vw, 44px)',
+            right: 'clamp(20px, 4vw, 44px)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',
@@ -272,24 +280,18 @@ export default function AttentionStatement() {
           </div>
         </div>
 
-        {/* Center Stage: Viewbox-Safe Giant Typography (No Box) */}
+        {/* Center Stage: Dead-Centered Stacked Words with Parallax Transition */}
         <div
           style={{
             position: 'relative',
             zIndex: 5,
             width: '100%',
-            maxWidth: '1200px',
             height: '100%',
-            maxHeight: 'calc(100vh - 140px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0 1.5rem',
-            boxSizing: 'border-box',
+            pointerEvents: 'none',
           }}
         >
           {STATEMENTS.map((item, idx) => {
-            const state = getItemState(idx, scrollProgress);
+            const state = getParallaxItemState(idx, scrollProgress);
             if (!state.isVisible) return null;
 
             return (
@@ -299,77 +301,86 @@ export default function AttentionStatement() {
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
-                  transform: `translate3d(-50%, calc(-50% + ${state.translateY}px), 0) scale(${state.scale})`,
-                  width: '100%',
-                  maxWidth: '1100px',
+                  transform: `translate(-50%, -50%) scale(${state.scale})`,
+                  width: '92%',
+                  maxWidth: '1050px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   textAlign: 'center',
                   opacity: state.opacity,
+                  filter: state.blur > 0 ? `blur(${state.blur.toFixed(1)}px)` : 'none',
+                  transition: 'opacity 0.08s linear, filter 0.08s linear, transform 0.08s linear',
                   pointerEvents: state.opacity > 0.6 ? 'auto' : 'none',
-                  transition: 'opacity 0.1s linear, transform 0.1s linear',
                   boxSizing: 'border-box',
                 }}
               >
-                {/* Mini Chapter Label Above */}
+                {/* Chapter Label Stacked on Top */}
                 <div
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
                     fontWeight: 800,
-                    letterSpacing: '0.12em',
+                    letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     color: item.isClimax ? '#1E56FF' : '#777777',
-                    marginBottom: 'clamp(0.75rem, 1.5vh, 1.25rem)',
+                    marginBottom: 'clamp(0.75rem, 1.6vh, 1.4rem)',
                     transition: 'color 0.3s ease',
                   }}
                 >
                   {item.num} // {item.tag}
                 </div>
 
-                {/* Giant Headline Typography - Scaled to Stay Safely Inside Viewbox */}
+                {/* Stacked Centered Words - Line 1 */}
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: 'clamp(2.3rem, 5.6vw, 4.8rem)',
+                    letterSpacing: '-0.035em',
+                    lineHeight: 1.05,
+                    textTransform: 'uppercase',
+                    color: '#111111',
+                    margin: 0,
+                    padding: '0 0.5rem',
+                    textShadow: '0 2px 24px rgba(253, 247, 231, 0.9)',
+                  }}
+                >
+                  {item.line1}
+                </h2>
+
+                {/* Stacked Centered Words - Line 2 (Hero Statement) */}
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
                     fontSize: item.isClimax
-                      ? 'clamp(2.4rem, 6.4vw, 5.6rem)'
-                      : 'clamp(2.3rem, 6.0vw, 5.2rem)',
-                    letterSpacing: '-0.04em',
-                    lineHeight: 1.02,
+                      ? 'clamp(2.7rem, 6.8vw, 5.8rem)'
+                      : 'clamp(2.5rem, 6.2vw, 5.2rem)',
+                    letterSpacing: '-0.045em',
+                    lineHeight: 1.0,
                     textTransform: 'uppercase',
-                    color: '#111111',
-                    margin: 0,
+                    color: item.isClimax ? '#1E56FF' : '#111111',
+                    textShadow: item.isClimax
+                      ? '0 0 45px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(253, 247, 231, 0.9)'
+                      : '0 2px 24px rgba(253, 247, 231, 0.9)',
+                    margin: '0.15rem 0 0 0',
                     padding: '0 0.5rem',
-                    textWrap: 'balance',
-                    textShadow: '0 2px 24px rgba(253, 247, 231, 0.9)',
                   }}
                 >
-                  {item.line1} <br />
-                  <span
-                    style={{
-                      color: item.isClimax ? '#1E56FF' : '#111111',
-                      textShadow: item.isClimax
-                        ? '0 0 35px rgba(30, 86, 255, 0.32), 0 2px 24px rgba(253, 247, 231, 0.9)'
-                        : undefined,
-                      display: 'inline-block',
-                    }}
-                  >
-                    {item.line2}
-                  </span>
+                  {item.line2}
                 </h2>
 
-                {/* Italic Supporting Editorial Subtext */}
+                {/* Italic Supporting Subtext Stacked Underneath */}
                 <p
                   style={{
-                    marginTop: 'clamp(1rem, 2vh, 1.75rem)',
+                    marginTop: 'clamp(1rem, 2.2vh, 1.8rem)',
                     fontFamily: 'var(--font-serif)',
                     fontStyle: 'italic',
-                    fontSize: 'clamp(1.05rem, 1.6vw, 1.45rem)',
+                    fontSize: 'clamp(1.1rem, 1.6vw, 1.45rem)',
                     color: '#555555',
-                    maxWidth: '650px',
+                    maxWidth: '620px',
                     lineHeight: 1.35,
                     marginRight: 'auto',
                     marginLeft: 'auto',
@@ -379,7 +390,7 @@ export default function AttentionStatement() {
                   {item.subtext}
                 </p>
 
-                {/* Climax Highlights for Step 4 (Viewbox-Safe Padded Tags) */}
+                {/* Climax Badges Stacked on Step 4 */}
                 {item.isClimax && (
                   <div
                     style={{
@@ -387,7 +398,7 @@ export default function AttentionStatement() {
                       flexWrap: 'wrap',
                       justifyContent: 'center',
                       gap: '0.5rem',
-                      marginTop: 'clamp(0.9rem, 1.8vh, 1.4rem)',
+                      marginTop: 'clamp(0.9rem, 1.8vh, 1.35rem)',
                       padding: '0 1rem',
                     }}
                   >
@@ -443,7 +454,7 @@ export default function AttentionStatement() {
           })}
         </div>
 
-        {/* Bottom Minimal Interactive Progress Dots (No Box) */}
+        {/* Bottom Minimal Interactive Progress Dots */}
         <div
           style={{
             position: 'absolute',
