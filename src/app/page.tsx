@@ -95,8 +95,8 @@ export default function Home() {
       {/* Moving Brand Statement Marquee */}
       <MarqueeTicker />
 
-      {/* Editorial Intro: "The Internet is Crowded. The City Isn't." */}
-      <IntroSection />
+      {/* Signs Products Catalog & Directory (Tabs, Compact Height, All 9 Categories & 89 Subcategories) */}
+      <SignProductsDirectory onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* 7-Stage "Your Brand Goes Here" Scrollytelling */}
       <ScrollyCanvas />
@@ -104,8 +104,8 @@ export default function Home() {
       {/* Billboard Format Explorer */}
       <FormatExplorer />
 
-      {/* Signs Products Catalog & Directory (Tabs, Compact Height, All 9 Categories & 89 Subcategories) */}
-      <SignProductsDirectory onOpenCampaignModal={handleOpenCampaignModal} />
+      {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." */}
+      <IntroSection />
 
       {/* Attention Contrast Section (Minimal, Stark, Sequential Typographic) */}
       <AttentionStatement />
