@@ -41,7 +41,7 @@ export default function LocationMap({ onSelectLocation }: LocationMapProps) {
             }}
           >
             <Sparkles size={14} />
-            OUR NETWORK.
+            FIVE BOROUGH INSTALLATION COVERAGE.
           </div>
 
           <h2
@@ -56,12 +56,12 @@ export default function LocationMap({ onSelectLocation }: LocationMapProps) {
               marginBottom: '1.25rem',
             }}
           >
-            BE WHERE <br />
-            <span style={{ color: '#1E56FF' }}>PEOPLE ARE.</span>
+            SERVICING <br />
+            <span style={{ color: '#1E56FF' }}>ALL 5 NYC BOROUGHS.</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '640px', lineHeight: 1.6 }}>
-            From busy city centres to major highways and retail destinations, discover locations built for visibility.
+            From high-density retail corridors on Fifth Avenue and SoHo to expansive commercial centers in Brooklyn, Queens, The Bronx, and Staten Island. In-house fabrication with certified field crews.
           </p>
         </div>
 

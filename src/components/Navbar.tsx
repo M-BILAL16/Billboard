@@ -264,7 +264,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                 borderRadius: '9999px',
                 transition: 'background-color 0.2s ease',
               }}
-              data-cursor="VORTEX"
+              data-cursor="SIGNS.NYC"
             >
               {/* 3D Geometric Billboard Monolith */}
               <div
@@ -312,7 +312,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                     alignItems: 'baseline',
                   }}
                 >
-                  VORTEX
+                  SIGNS
                   <span
                     style={{
                       color: '#1E56FF',
@@ -322,7 +322,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                       fontFamily: 'var(--font-mono)',
                     }}
                   >
-                    .OOH
+                    .NYC
                   </span>
                 </span>
                 <span
@@ -334,7 +334,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                     textTransform: 'uppercase',
                   }}
                 >
-                  Global Media
+                  35+ Yrs // 5 Boroughs
                 </span>
               </div>
             </Link>
@@ -376,7 +376,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                     display: 'inline-block',
                   }}
                 />
-                <span style={{ fontWeight: 600 }}>4,820 LIVE</span>
+                <span style={{ fontWeight: 600 }}>5 BOROUGHS ACTIVE</span>
                 <ChevronDown size={11} style={{ opacity: 0.5 }} />
               </button>
 
@@ -420,7 +420,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                           color: '#111111',
                         }}
                       >
-                        Global Network Telemetry
+                        NYC Fabrication & Service
                       </span>
                     </div>
                     <span
@@ -431,16 +431,17 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         fontWeight: 700,
                       }}
                     >
-                      99.8% UPTIME
+                      DOB LICENSED
                     </span>
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
                     {[
-                      { city: 'London', code: 'LDN', time: timezones.ldn || '12:00', screens: '1,420', status: 'Peak Footfall' },
-                      { city: 'New York', code: 'NYC', time: timezones.nyc || '07:00', screens: '1,850', status: 'Morning Commute' },
-                      { city: 'Dubai', code: 'DXB', time: timezones.dxb || '15:00', screens: '890', status: 'High Traffic' },
-                      { city: 'Tokyo', code: 'TYO', time: timezones.tyo || '20:00', screens: '660', status: 'Prime Nighttime' },
+                      { city: 'Brooklyn Plant', code: 'BK', time: '10,000 SQ FT', screens: 'In-House CNC', status: 'Full Production' },
+                      { city: 'Manhattan', code: 'MN', time: 'Active Boom', screens: 'DOB Permitted', status: 'Install Crews' },
+                      { city: 'Queens Bay', code: 'QN', time: 'Laser & Weld', screens: 'Channel Letters', status: 'Fabrication' },
+                      { city: 'The Bronx', code: 'BX', time: 'Scaffolding Unit', screens: 'Large Mesh', status: 'Field Team' },
+                      { city: 'Staten Island', code: 'SI', time: 'Rapid Response', screens: '24/7 Service', status: 'Maintenance' },
                     ].map((hub) => (
                       <div
                         key={hub.code}
@@ -588,7 +589,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         textTransform: 'uppercase',
                       }}
                     >
-                      DOOH Screen Formats
+                      Custom Signage Formats
                     </span>
                     <a
                       href="#formats"
@@ -754,7 +755,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Global Billboard Hubs
+                      Five NYC Borough Coverage
                     </span>
                     <a
                       href="#locations"
@@ -769,7 +770,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         gap: '2px',
                       }}
                     >
-                      Interactive Map <MapPin size={12} />
+                      Borough Map <MapPin size={12} />
                     </a>
                   </div>
 
@@ -1010,12 +1011,12 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               </kbd>
             </button>
 
-            {/* Primary Magnetic CTA: START A CAMPAIGN */}
+            {/* Primary Magnetic CTA: GET SIGN QUOTE */}
             <button
               type="button"
               onClick={onOpenCampaignModal}
               className="btn-shimmer"
-              data-cursor="LAUNCH"
+              data-cursor="GET QUOTE"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -1041,7 +1042,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                 e.currentTarget.style.boxShadow = '0 4px 18px rgba(30, 86, 255, 0.32)';
               }}
             >
-              <span>START CAMPAIGN</span>
+              <span>GET SIGN QUOTE</span>
               <ArrowUpRight size={15} strokeWidth={2.6} />
             </button>
 
@@ -1121,7 +1122,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               <input
                 ref={searchInputRef}
                 type="text"
-                placeholder="Search billboard formats, global cities, campaigns..."
+                placeholder="Search sign types, boroughs, materials, permit services..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 style={{
@@ -1198,7 +1199,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                       textAlign: 'left',
                     }}
                   >
-                    <Sparkles size={14} /> Start Campaign Builder
+                    <Sparkles size={14} /> Request Sign Quote
                   </button>
                   <button
                     type="button"
@@ -1237,7 +1238,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                       paddingLeft: '0.5rem',
                     }}
                   >
-                    Billboard Formats
+                    Signage Formats
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.35rem' }}>
                     {filteredFormats.map((fmt) => (
@@ -1290,7 +1291,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                       paddingLeft: '0.5rem',
                     }}
                   >
-                    Global Locations
+                    Borough Service Areas
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.35rem' }}>
                     {filteredLocations.map((loc) => (
@@ -1453,10 +1454,10 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                 color: '#555555',
               }}
             >
-              <span>LDN {timezones.ldn}</span>
-              <span>NYC {timezones.nyc}</span>
-              <span>DXB {timezones.dxb}</span>
-              <span>TYO {timezones.tyo}</span>
+              <span>MN 100% DOB</span>
+              <span>BK 10k SQ FT</span>
+              <span>QN CNC BAYS</span>
+              <span>BX 24/7 FLEET</span>
             </div>
 
             {/* Quick Find Button */}
@@ -1495,7 +1496,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               className="btn-primary"
               style={{ width: '100%', padding: '1rem', fontSize: '0.9rem' }}
             >
-              START A CAMPAIGN ↗
+              REQUEST A FREE QUOTE ↗
             </button>
           </div>
         </div>

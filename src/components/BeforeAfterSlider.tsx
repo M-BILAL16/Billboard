@@ -60,7 +60,7 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
             }}
           >
             <Sparkles size={14} />
-            SEE THE DIFFERENCE.
+            STOREFRONT TRANSFORMATION.
           </div>
 
           <h2
@@ -75,12 +75,12 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
               marginBottom: '1.25rem',
             }}
           >
-            SAME PLACE. <br />
-            <span style={{ color: '#1E56FF' }}>NEW ENERGY.</span>
+            SAME FACADE. <br />
+            <span style={{ color: '#1E56FF' }}>NEW LANDMARK.</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '620px', lineHeight: 1.6 }}>
-            A great billboard does not simply occupy space. It changes the character of the place around it.
+            A custom sign does not simply display a name. It commands footfall, increases perceived value, and turns an ordinary storefront into a recognizable New York destination.
           </p>
         </div>
 
@@ -135,11 +135,11 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
                 zIndex: 5,
               }}
             >
-              ✦ AFTER: FULL CAMPAIGN
+              ✦ AFTER: CUSTOM STOREFRONT LANDMARK
             </div>
           </div>
 
-          {/* BEFORE: Blank Billboard */}
+          {/* BEFORE: Blank Facade */}
           <div
             style={{
               position: 'absolute',
@@ -149,7 +149,7 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
           >
             <Image
               src="/images/street_before.jpg"
-              alt="Bright street with empty blank billboard"
+              alt="Storefront facade before signage"
               fill
               sizes="100vw"
               priority
@@ -173,7 +173,7 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
                 zIndex: 5,
               }}
             >
-              BEFORE: BLANK CANVAS
+              BEFORE: UNBRANDED FACADE
             </div>
           </div>
 
@@ -241,20 +241,20 @@ export default function BeforeAfterSlider({ onOpenCampaignModal }: BeforeAfterSl
                 marginBottom: '0.35rem',
               }}
             >
-              READY TO BRING NEW ENERGY TO THE STREET?
+              READY TO TRANSFORM YOUR NYC STOREFRONT?
             </h4>
             <p style={{ color: '#666666', fontSize: '0.95rem' }}>
-              Select prime screens and bring high-definition kinetic presence to any city avenue.
+              From Manhattan flagships to neighborhood storefronts, see how custom signs elevate footfall.
             </p>
           </div>
 
           <button
             onClick={onOpenCampaignModal}
             className="btn-primary"
-            data-cursor="PICTURE"
+            data-cursor="QUOTE"
             style={{ whiteSpace: 'nowrap' }}
           >
-            PICTURE YOUR BRAND HERE
+            GET A STOREFRONT QUOTE
             <ArrowRight size={16} strokeWidth={2.5} />
           </button>
         </div>

@@ -44,7 +44,7 @@ export default function BrandTrust() {
           }}
         >
           <Sparkles size={13} color="#1E56FF" />
-          BRANDS THAT LIKE TO BE SEEN.
+          TRUSTED BY 50,000+ NYC BUSINESSES & NATIONAL BRANDS
         </div>
       </div>
 

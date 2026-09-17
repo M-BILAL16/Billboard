@@ -9,9 +9,9 @@ const HOTSPOTS = [
     id: 'spot-1',
     x: 32, // %
     y: 38,
-    metric: '2.4M',
-    label: 'WEEKLY IMPRESSIONS',
-    sub: 'OXFORD CIRCUS DIGITAL LARGE FORMAT',
+    metric: '3.2M',
+    label: 'WEEKLY FOOTFALL',
+    sub: 'FIFTH AVENUE & BROADWAY CORRIDOR',
     icon: Eye,
   },
   {
@@ -19,17 +19,17 @@ const HOTSPOTS = [
     x: 62,
     y: 30,
     metric: '24/7',
-    label: 'CONTINUOUS VISIBILITY',
-    sub: 'UNINTERRUPTED DAYLIGHT PRESENCE',
+    label: 'HALO ILLUMINATION',
+    sub: 'UL-LISTED WEATHER-SEALED LEDS',
     icon: Clock,
   },
   {
     id: 'spot-3',
     x: 78,
     y: 65,
-    metric: '1.8M',
-    label: 'PEDESTRIANS',
-    sub: 'PREMIUM RETAIL DISTRICT',
+    metric: '100%',
+    label: 'DOB COMPLIANT',
+    sub: 'LICENSED SIGN HANGER EXPEDITING',
     icon: Users,
   },
 ];
@@ -75,7 +75,7 @@ export default function SpotlightSection() {
             }}
           >
             <Sparkles size={14} />
-            INTERACTIVE AUDIENCE RADAR
+            NYC SIGHTLINE & VISIBILITY RADAR
           </div>
 
           <h2
@@ -91,12 +91,12 @@ export default function SpotlightSection() {
             }}
           >
             ATTENTION <br />
-            <span style={{ color: '#1E56FF' }}>HAS A LOCATION.</span>
+            <span style={{ color: '#1E56FF' }}>HAS AN ADDRESS.</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '620px', lineHeight: 1.6 }}>
-            Explore the places where brands become part of everyday city life. Move across the daytime scene to reveal
-            real-time footfall and high-impact sightlines.
+            Explore the places where custom signs become iconic landmarks. Move across the NYC avenue to reveal
+            pedestrian sightlines, architectural elevations, and day-to-night illumination.
           </p>
         </div>
 

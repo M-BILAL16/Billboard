@@ -52,7 +52,7 @@ export interface InsightArticle {
   id: string;
   number: string;
   title: string;
-  category: 'INSIGHTS' | 'GUIDE' | 'TRENDS';
+  category: string;
   readTime: string;
   date: string;
   excerpt: string;

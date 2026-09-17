@@ -7,33 +7,33 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 const STAGES = [
   {
     stage: 1,
-    title: 'THE BLANK CANVAS',
-    detail: 'A clean, high-elevation urban billboard frame mounted on a sunlit corner waiting for an idea.',
+    title: 'ARCHITECTURAL SITE CAD',
+    detail: 'Precision facade measurements, structural load calculations, and electrical schematics prepared for NYC approval.',
   },
   {
     stage: 2,
-    title: 'CAMPAIGN SCANNING IN',
-    detail: 'Digital elements and vibrant campaign graphics begin tiling across the daylight screen.',
+    title: 'DOB PERMIT EXPEDITING',
+    detail: 'Complete submission to NYC Department of Buildings for zoning variance, structural sign-off, and landmark approvals.',
   },
   {
     stage: 3,
-    title: 'FULL ARTWORK TAKEOVER',
-    detail: 'High-contrast creative fills the display with saturated daylight visibility.',
+    title: 'CNC & LASER FABRICATION',
+    detail: 'Aerospace-grade aluminum, brass, stainless steel, and acrylic machined in our 10,000 sq ft facility in NYC.',
   },
   {
     stage: 4,
-    title: 'CITY ACTIVITY RISES',
-    detail: 'Camera pulls back as midday city life, taxis, and pedestrians surround the cornerstone.',
+    title: 'CHANNEL BENDING & LED WIRING',
+    detail: 'Automated return flanging, UL-certified high-lumen LED modules, and weather-sealed internal power supplies.',
   },
   {
     stage: 5,
-    title: 'STREET PULSE IN MOTION',
-    detail: 'Vehicles, cyclists, and shoppers move continuously past the prime sightline.',
+    title: '5-BOROUGH CRANE MOUNTING',
+    detail: 'Licensed Master Sign Hangers mount structural anchors with heavy boom trucks and bucket lifts across the city.',
   },
   {
     stage: 6,
-    title: 'DYNAMIC CAMPAIGN ROTATION',
-    detail: 'Smart scheduling transitions seamlessly to the next seasonal brand experience.',
+    title: 'ILLUMINATED NYC LANDMARK',
+    detail: 'Daytime architectural authority and brilliant nighttime halo glow establishing a permanent commercial landmark.',
   },
 ];
 
@@ -78,7 +78,7 @@ export default function ScrollyCanvas() {
             }}
           >
             <Sparkles size={14} />
-            THE CITY IS YOUR CANVAS.
+            THE ANATOMY OF A NEW YORK SIGN.
           </div>
 
           <h2
@@ -93,8 +93,8 @@ export default function ScrollyCanvas() {
               marginBottom: '1.5rem',
             }}
           >
-            YOUR BRAND <br />
-            <span style={{ color: '#1E56FF' }}>GOES HERE.</span>
+            CRAFTED IN NYC. <br />
+            <span style={{ color: '#1E56FF' }}>BUILT TO LAST.</span>
           </h2>
 
           <p
@@ -105,8 +105,7 @@ export default function ScrollyCanvas() {
               maxWidth: '680px',
             }}
           >
-            Thousands pass it. Thousands see it. The right location can transform an advertisement into part of the city
-            itself.
+            From raw sheet metal and computerized laser tables to the highest facade elevations across Manhattan, Brooklyn, Queens, Bronx, and Staten Island.
           </p>
         </div>
 
@@ -473,7 +472,7 @@ export default function ScrollyCanvas() {
                     color: '#666666',
                   }}
                 >
-                  DAYLIGHT DOOH SIMULATOR
+                  SIGNS NYC CRAFT SIMULATOR
                 </span>
               </div>
             </div>

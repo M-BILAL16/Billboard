@@ -32,7 +32,7 @@ export default function IntroSection() {
           }}
         >
           <Sparkles size={14} />
-          WE PUT BRANDS IN THE REAL WORLD.
+          NEW YORK’S SIGN MAKERS SINCE 1989.
         </div>
 
         {/* 2-Column Spacious Editorial Grid */}
@@ -58,10 +58,10 @@ export default function IntroSection() {
                 color: '#111111',
               }}
             >
-              THE INTERNET <br />
-              <span style={{ color: '#888888', fontWeight: 800 }}>IS CROWDED.</span> <br />
-              THE CITY <br />
-              <span style={{ color: '#1E56FF' }}>ISN’T.</span>
+              DIGITAL ADS <br />
+              <span style={{ color: '#888888', fontWeight: 800 }}>GET IGNORED.</span> <br />
+              REAL SIGNS <br />
+              <span style={{ color: '#1E56FF' }}>STAND OUT.</span>
             </h2>
           </div>
 
@@ -84,8 +84,7 @@ export default function IntroSection() {
                 marginBottom: '2.5rem',
               }}
             >
-              Outdoor advertising creates real-world presence. We connect ambitious brands with unforgettable
-              locations, premium screens, and audiences already moving through the city.
+              Signs NYC creates real-world architectural authority. From Manhattan flagships and corporate lobbies to industrial parks and retail facades across all five boroughs, we build signs that make your business impossible to miss.
             </p>
 
             <div>
@@ -106,7 +105,7 @@ export default function IntroSection() {
                   paddingBottom: '4px',
                   transition: 'color 0.2s ease, transform 0.2s ease',
                 }}
-                data-cursor="NETWORK"
+                data-cursor="BOROUGHS"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = '#1E56FF';
                   e.currentTarget.style.transform = 'translateX(4px)';
@@ -116,7 +115,7 @@ export default function IntroSection() {
                   e.currentTarget.style.transform = 'translateX(0)';
                 }}
               >
-                DISCOVER OUR NETWORK
+                EXPLORE 5-BOROUGH PROJECTS
                 <ArrowRight size={17} strokeWidth={2.5} color="#1E56FF" />
               </a>
             </div>
@@ -142,7 +141,7 @@ export default function IntroSection() {
         >
           <Image
             src="/images/daylight_arch_vertical.jpg"
-            alt="Towering architectural billboard in sunny European plaza"
+            alt="Custom storefront architectural sign in New York City"
             fill
             sizes="1080px"
             style={{ objectFit: 'cover' }}
@@ -165,7 +164,7 @@ export default function IntroSection() {
               boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
             }}
           >
-            FLUSH ARCHITECTURAL CANVASES // COPENHAGEN
+            IN-HOUSE FABRICATION // 10,000 SQ FT FACILITY
           </div>
         </div>
       </div>

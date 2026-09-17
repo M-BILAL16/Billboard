@@ -6,19 +6,19 @@ import { Quote, Sparkles } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
-    id: 'sarah',
-    quote: 'Outdoor gave our campaign something digital channels couldn’t: presence. People didn’t just see the campaign. They experienced it.',
-    name: 'SARAH MITCHELL',
-    role: 'GLOBAL MARKETING DIRECTOR',
-    company: 'APEX LUXURY GROUP',
+    id: 'marcus',
+    quote: 'Signs NYC handled our entire SoHo flagship package from complex landmark DOB permits to precision halo channel letters. Having a real 10,000 sq ft NYC fabrication shop behind our project made all the difference.',
+    name: 'MARCUS VANCE',
+    role: 'VP OF RETAIL DEVELOPMENT',
+    company: 'SOHO LUXURY GROUP',
     image: '/images/daylight_hero.jpg',
   },
   {
-    id: 'david',
-    quote: 'The right screen in the right place completely changed the scale of our launch. The Piccadilly and Times Square takeovers triggered millions in earned media.',
-    name: 'DAVID TURNER',
-    role: 'BRAND DIRECTOR',
-    company: 'KINETIC LABS',
+    id: 'elena',
+    quote: 'When an unexpected storm damaged our restaurant canopy in Midtown at 9 PM, Signs NYC had emergency crews on-site within hours. Their 24/7 service and fabrication quality are unmatched in the five boroughs.',
+    name: 'ELENA ROSTOVA',
+    role: 'OPERATIONS DIRECTOR',
+    company: 'METRO HOSPITALITY NYC',
     image: '/images/daylight_arch_vertical.jpg',
   },
 ];

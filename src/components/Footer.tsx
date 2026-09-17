@@ -147,7 +147,7 @@ export default function Footer() {
                           color: isLit ? '#FFFFFF' : '#666666',
                         }}
                       >
-                        VORTEX
+                        SIGNS NYC
                       </span>
                     </div>
                   )}
@@ -192,8 +192,8 @@ export default function Footer() {
               color: '#111111',
             }}
           >
-            THE CITY <br />
-            <span style={{ color: '#1E56FF' }}>IS WAITING.</span>
+            NEW YORK <br />
+            <span style={{ color: '#1E56FF' }}>BUILT TO LAST.</span>
           </h2>
         </div>
 
@@ -225,10 +225,10 @@ export default function Footer() {
               NAVIGATION
             </span>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {['Billboards', 'Locations', 'Campaigns', 'Experience', 'Insights', 'Planner'].map((item) => (
+              {['Sign Categories', 'Boroughs', 'Installations', 'DOB Permits', 'Experience', 'Planner'].map((item) => (
                 <li key={item}>
                   <a
-                    href={`#${item.toLowerCase()}`}
+                    href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
                     style={{
                       color: '#444444',
                       textDecoration: 'none',
@@ -259,16 +259,16 @@ export default function Footer() {
                 marginBottom: '1.25rem',
               }}
             >
-              MEDIA FORMATS
+              FABRICATION SERVICES
             </span>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {[
-                'Digital Billboards',
-                'Large Format Icons',
-                'Street Furniture',
-                'Transit Hubs',
-                'Retail Media',
-                'Highway Networks',
+                'Storefront Channel Letters',
+                'Indoor & Lobby Signs',
+                'Commercial Awnings',
+                'Scaffolding & Banners',
+                'Fleet Vehicle Wraps',
+                'DOB Permit Expediting',
               ].map((item) => (
                 <li key={item}>
                   <span
@@ -298,11 +298,11 @@ export default function Footer() {
                 marginBottom: '1.25rem',
               }}
             >
-              CONTACT
+              GET IN TOUCH
             </span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
               <a
-                href="mailto:HELLO@VORTEXOOH.COM"
+                href="mailto:INFO@SIGNSNY.COM"
                 style={{
                   color: '#111111',
                   fontSize: '0.95rem',
@@ -314,10 +314,10 @@ export default function Footer() {
                 }}
               >
                 <Mail size={16} color="#1E56FF" />
-                HELLO@VORTEXOOH.COM
+                INFO@SIGNSNY.COM
               </a>
               <a
-                href="tel:+442079460991"
+                href="tel:+17184538300"
                 style={{
                   color: '#111111',
                   fontSize: '0.95rem',
@@ -329,11 +329,11 @@ export default function Footer() {
                 }}
               >
                 <Phone size={16} color="#1E56FF" />
-                +44 20 7946 0991
+                (718) 453-8300
               </a>
               <p style={{ color: '#666666', fontSize: '0.82rem', marginTop: '0.5rem', lineHeight: 1.45 }}>
-                HQ: 100 Bishopsgate, London EC2N 4AG <br />
-                Americas: 1540 Broadway, New York NY 10036
+                Plant: 10,000 Sq Ft NYC Production Facility <br />
+                Licensed & Insured in All 5 Boroughs • 24/7 Emergency Service
               </p>
             </div>
           </div>
@@ -351,13 +351,18 @@ export default function Footer() {
                 marginBottom: '1.25rem',
               }}
             >
-              CHANNELS
+              FOLLOW OUR WORK
             </span>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {['Instagram', 'LinkedIn', 'YouTube', 'Vimeo'].map((item) => (
-                <li key={item}>
+              {[
+                { name: 'Instagram', url: 'https://instagram.com/signs_newyork' },
+                { name: 'Facebook', url: 'https://facebook.com/SignsNYC' },
+                { name: 'LinkedIn', url: 'https://linkedin.com/company/signsnewyork' },
+                { name: 'YouTube', url: 'https://youtube.com/channel/UCyXun-0bHhrj5IpsFjrYbog' },
+              ].map((item) => (
+                <li key={item.name}>
                   <a
-                    href={`https://${item.toLowerCase()}.com`}
+                    href={item.url}
                     target="_blank"
                     rel="noreferrer"
                     style={{
@@ -372,7 +377,7 @@ export default function Footer() {
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#1E56FF')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = '#444444')}
                   >
-                    {item}
+                    {item.name}
                     <ArrowUpRight size={13} />
                   </a>
                 </li>
@@ -396,7 +401,7 @@ export default function Footer() {
             color: '#777777',
           }}
         >
-          <div>© 2026 VORTEX OOH MEDIA GROUP. ALL RIGHTS RESERVED.</div>
+          <div>© 2026 SIGNS NYC. YOUR LOCAL SIGN MAKER & PRINT SHOP. ALL RIGHTS RESERVED.</div>
 
           <div style={{ display: 'flex', gap: '1.5rem' }}>
             <a href="#" style={{ color: '#777777', textDecoration: 'none' }}>

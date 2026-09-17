@@ -81,7 +81,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
             marginBottom: '0.25rem',
           }}
         >
-          // SKYLINE FLAGSHIP DISPLAY
+          // NYC ARCHITECTURAL FABRICATION
         </span>
         <h4
           style={{
@@ -93,7 +93,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
             letterSpacing: '-0.02em',
           }}
         >
-          {btnHovered ? "LET'S MAKE SOMETHING UNMISSABLE." : 'YOUR BRAND HERE.'}
+          {btnHovered ? "LET'S BUILD SOMETHING UNMISSABLE." : 'YOUR STOREFRONT HERE.'}
         </h4>
       </div>
 
@@ -128,7 +128,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
           }}
         >
           <Sparkles size={14} />
-          YOUR AUDIENCE IS ALREADY OUT THERE.
+          SERVING ALL 5 BOROUGHS SINCE 1989.
         </div>
 
         {/* Massive Confident Headline */}
@@ -145,8 +145,8 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
           }}
         >
           MAKE <br />
-          THEM <br />
-          <span style={{ color: '#1E56FF' }}>LOOK.</span>
+          NYC <br />
+          <span style={{ color: '#1E56FF' }}>REMEMBER.</span>
         </h2>
 
         {/* Supporting Copy */}
@@ -159,7 +159,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
             margin: '0 auto 3.5rem',
           }}
         >
-          From one standout screen to an entire city, let’s put your brand somewhere impossible to ignore.
+          From custom storefront channel letters and corporate lobby plaques to full-building scaffolding wraps, let's create a landmark for your business.
         </p>
 
         {/* CTAs */}
@@ -175,7 +175,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
             onClick={onOpenCampaignModal}
             onMouseEnter={() => setBtnHovered(true)}
             onMouseLeave={() => setBtnHovered(false)}
-            data-cursor="GO LIVE"
+            data-cursor="QUOTE"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -199,7 +199,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
               transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            START A CAMPAIGN
+            REQUEST A FREE SIGN QUOTE
             <ArrowUpRight size={24} strokeWidth={3} />
           </button>
 
@@ -222,7 +222,7 @@ export default function FinalCTA({ onOpenCampaignModal }: FinalCTAProps) {
             onMouseEnter={(e) => (e.currentTarget.style.color = '#1E56FF')}
             onMouseLeave={(e) => (e.currentTarget.style.color = '#444444')}
           >
-            EXPLORE BILLBOARDS
+            EXPLORE SIGN CATEGORIES
             <ArrowRight size={14} />
           </a>
         </div>

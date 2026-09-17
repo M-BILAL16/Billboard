@@ -14,50 +14,48 @@ interface CampaignBuilderProps {
   }) => void;
 }
 
-const CITIES = ['London', 'Dubai', 'New York', 'Manchester', 'Birmingham', 'Other'];
-const AUDIENCES = ['Commuters', 'Shoppers', 'Tourists', 'Professionals', 'Students', 'Families', 'Everyone'];
+const CITIES = ['Manhattan', 'Brooklyn', 'Queens', 'The Bronx', 'Staten Island', 'Tri-State'];
+const AUDIENCES = ['Storefront Letters', 'Indoor & Lobby', 'Commercial Awnings', 'Large Format Banners', 'Vehicle Wraps', 'ADA & Metal Signs'];
 const GOALS = [
-  'Brand Awareness',
-  'Product Launch',
-  'Event Promotion',
-  'Store Visits',
-  'Mass Reach',
-  'Local Awareness',
+  'Retail Storefront',
+  'Hospitality & Dining',
+  'Corporate HQ',
+  'Construction & DOB',
+  'Medical & Clinics',
+  'Flagship Landmark',
 ];
 const FORMATS = [
-  'Digital Billboards',
-  'Mega Billboards',
-  'Street Media',
-  'Mall Media',
-  'Transit',
-  'Highways',
+  'Turnkey Fabrication',
+  'DOB Permit Expediting',
+  '24/7 Emergency Repair',
+  'LED Lighting Retrofit',
+  'Sign Maintenance',
+  'Relocation & Removal',
 ];
 
 export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
-  const [selectedCity, setSelectedCity] = useState('London');
-  const [selectedAudience, setSelectedAudience] = useState('Commuters');
-  const [selectedGoal, setSelectedGoal] = useState('Brand Awareness');
-  const [selectedFormat, setSelectedFormat] = useState('Digital Billboards');
+  const [selectedCity, setSelectedCity] = useState('Manhattan');
+  const [selectedAudience, setSelectedAudience] = useState('Storefront Letters');
+  const [selectedGoal, setSelectedGoal] = useState('Retail Storefront');
+  const [selectedFormat, setSelectedFormat] = useState('Turnkey Fabrication');
 
   const screenCount =
-    selectedFormat === 'Mega Billboards'
-      ? 6
-      : selectedFormat === 'Highways'
-      ? 18
-      : selectedFormat === 'Street Media'
-      ? 42
-      : selectedCity === 'New York'
-      ? 24
-      : 14;
+    selectedFormat === '24/7 Emergency Repair'
+      ? 1
+      : selectedFormat === 'DOB Permit Expediting'
+      ? 2
+      : selectedCity === 'Manhattan'
+      ? 4
+      : 2;
 
   const estimatedReach =
-    selectedCity === 'New York'
-      ? '8.2M'
-      : selectedCity === 'London'
-      ? '6.4M'
-      : selectedCity === 'Dubai'
-      ? '5.1M'
-      : '3.6M';
+    selectedCity === 'Manhattan'
+      ? '150K - 300K Daily Footfall'
+      : selectedCity === 'Brooklyn'
+      ? '80K - 180K Daily Footfall'
+      : selectedCity === 'Queens'
+      ? '60K - 140K Daily Footfall'
+      : '40K - 100K Daily Views';
 
   const handleBuild = () => {
     onComplete({
@@ -66,7 +64,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
       goal: selectedGoal,
       format: selectedFormat,
       screens: screenCount,
-      impressions: `${estimatedReach} Weekly Impressions`,
+      impressions: `${estimatedReach}`,
     });
   };
 
@@ -99,7 +97,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
             }}
           >
             <Sparkles size={14} />
-            INTERACTIVE CAMPAIGN BUILDER
+            INTERACTIVE SIGN SPECIFICATION BUILDER
           </div>
 
           <h2
@@ -114,12 +112,12 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
               marginBottom: '1.25rem',
             }}
           >
-            WHERE DO YOU <br />
-            <span style={{ color: '#1E56FF' }}>WANT TO BE SEEN?</span>
+            WHERE IS YOUR <br />
+            <span style={{ color: '#1E56FF' }}>NEXT NYC PROJECT?</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '620px', lineHeight: 1.6 }}>
-            Build a quick campaign and discover which outdoor formats could fit your goals.
+            Configure your custom sign requirements and receive an instant fabrication scope and DOB code assessment.
           </p>
         </div>
 
@@ -155,7 +153,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                   marginBottom: '0.85rem',
                 }}
               >
-                STEP 01 // CHOOSE YOUR CITY
+                STEP 01 // SELECT NYC BOROUGH
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {CITIES.map((city) => {
@@ -197,7 +195,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                   marginBottom: '0.85rem',
                 }}
               >
-                STEP 02 // CHOOSE YOUR AUDIENCE
+                STEP 02 // SELECT SIGN CATEGORY
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {AUDIENCES.map((aud) => {
@@ -239,7 +237,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                   marginBottom: '0.85rem',
                 }}
               >
-                STEP 03 // CHOOSE YOUR GOAL
+                STEP 03 // SELECT BUSINESS SECTOR
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {GOALS.map((goal) => {
@@ -281,7 +279,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                   marginBottom: '0.85rem',
                 }}
               >
-                STEP 04 // CHOOSE YOUR FORMAT
+                STEP 04 // SELECT SERVICE SCOPE
               </span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {FORMATS.map((fmt) => {
@@ -342,7 +340,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     fontWeight: 800,
                   }}
                 >
-                  LIVE CAMPAIGN BLUEPRINT
+                  LIVE SIGN BLUEPRINT
                 </span>
                 <span
                   style={{
@@ -355,26 +353,26 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     border: '1px solid rgba(17, 17, 17, 0.08)',
                   }}
                 >
-                  CALCULATED
+                  ESTIMATED
                 </span>
               </div>
 
               {/* Specs */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-                  <span style={{ color: '#666666' }}>City</span>
+                  <span style={{ color: '#666666' }}>Borough</span>
                   <span style={{ color: '#111111', fontWeight: 800 }}>{selectedCity}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-                  <span style={{ color: '#666666' }}>Target Audience</span>
+                  <span style={{ color: '#666666' }}>Category</span>
                   <span style={{ color: '#111111', fontWeight: 800 }}>{selectedAudience}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-                  <span style={{ color: '#666666' }}>Objective</span>
+                  <span style={{ color: '#666666' }}>Industry</span>
                   <span style={{ color: '#111111', fontWeight: 800 }}>{selectedGoal}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.95rem' }}>
-                  <span style={{ color: '#666666' }}>Format</span>
+                  <span style={{ color: '#666666' }}>Service</span>
                   <span style={{ color: '#1E56FF', fontWeight: 800 }}>{selectedFormat}</span>
                 </div>
               </div>
@@ -394,18 +392,18 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
               >
                 <div>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#666666' }}>
-                    RECOMMENDED
+                    FABRICATION SPEED
                   </span>
-                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 900, color: '#111111' }}>
-                    {screenCount} Screens
+                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 900, color: '#111111' }}>
+                    3-7 Days
                   </p>
                 </div>
                 <div>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: '#666666' }}>
-                    EST. WEEKLY REACH
+                    DOB EXPEDITING
                   </span>
-                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 900, color: '#1E56FF' }}>
-                    {estimatedReach}
+                  <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', fontWeight: 900, color: '#1E56FF' }}>
+                    Permit Ready
                   </p>
                 </div>
               </div>
@@ -422,7 +420,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     letterSpacing: '-0.02em',
                   }}
                 >
-                  YOUR CITY <span style={{ color: '#1E56FF' }}>IS READY.</span>
+                  YOUR PROJECT <span style={{ color: '#1E56FF' }}>STARTS HERE.</span>
                 </h4>
               </div>
 
@@ -430,9 +428,9 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                 onClick={handleBuild}
                 className="btn-primary"
                 style={{ width: '100%', padding: '1.15rem' }}
-                data-cursor="GENERATE"
+                data-cursor="QUOTE"
               >
-                BUILD MY CAMPAIGN
+                REQUEST AN OFFICIAL QUOTE
                 <ArrowRight size={18} strokeWidth={2.5} />
               </button>
             </div>

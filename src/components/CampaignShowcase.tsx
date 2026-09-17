@@ -42,7 +42,7 @@ export default function CampaignShowcase({ onSelectCampaign }: CampaignShowcaseP
             }}
           >
             <Sparkles size={14} />
-            SEEN IN THE WILD.
+            BUILT ACROSS THE 5 BOROUGHS.
           </div>
 
           <h2
@@ -57,13 +57,13 @@ export default function CampaignShowcase({ onSelectCampaign }: CampaignShowcaseP
               marginBottom: '1.25rem',
             }}
           >
-            WORK THAT <br />
+            LANDMARKS THAT <br />
             BECAME PART <br />
-            <span style={{ color: '#1E56FF' }}>OF THE CITY.</span>
+            <span style={{ color: '#1E56FF' }}>OF NYC SKYLINE.</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '620px', lineHeight: 1.6 }}>
-            Explore how the world’s most ambitious brands turned urban crossroads into culturally dominant moments.
+            Explore how New York’s iconic flagships, retail corridors, and hospitality leaders turned their street facades into unmissable landmarks.
           </p>
         </div>
 

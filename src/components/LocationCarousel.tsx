@@ -62,7 +62,7 @@ export default function LocationCarousel({ onSelectLocation }: LocationCarouselP
               }}
             >
               <Sparkles size={14} />
-              ICONIC CITY SIGHTLINES
+              BOROUGH INSTALLATION SHOWCASE
             </div>
 
             <h2
@@ -76,8 +76,8 @@ export default function LocationCarousel({ onSelectLocation }: LocationCarouselP
                 color: '#111111',
               }}
             >
-              PLACES <br />
-              <span style={{ color: '#1E56FF' }}>PEOPLE REMEMBER.</span>
+              SIGNS <br />
+              <span style={{ color: '#1E56FF' }}>NEW YORK REMEMBERS.</span>
             </h2>
           </div>
 

@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const STATEMENTS = [
-  { top: 'ONE', bottom: 'SCREEN.' },
+  { top: 'ONE', bottom: 'STOREFRONT.' },
   { top: 'A MILLION', bottom: 'GLANCES.' },
-  { top: 'ONE', bottom: 'MESSAGE.' },
-  { top: 'MAKE IT', bottom: 'COUNT.' },
+  { top: 'NYC BUILT.', bottom: 'DOB APPROVED.' },
+  { top: 'MAKE IT', bottom: 'A LANDMARK.' },
 ];
 
 export default function AttentionStatement() {
@@ -121,8 +121,8 @@ export default function AttentionStatement() {
             lineHeight: 1.4,
           }}
         >
-          Outdoor advertising turns ordinary spaces into <br />
-          <strong style={{ color: '#111111', fontStyle: 'normal' }}>extraordinary moments.</strong>
+          Custom architectural signage turns ordinary storefronts into <br />
+          <strong style={{ color: '#111111', fontStyle: 'normal' }}>extraordinary New York landmarks.</strong>
         </p>
       </div>
 

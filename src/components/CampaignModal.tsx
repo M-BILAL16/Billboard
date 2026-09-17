@@ -137,7 +137,7 @@ export default function CampaignModal({
               }}
             >
               <Sparkles size={14} />
-              VORTEX OOH 2026 GLOBAL SHOWREEL
+              SIGNS NYC IN-HOUSE FABRICATION SHOWCASE
             </div>
 
             <h3
@@ -150,7 +150,7 @@ export default function CampaignModal({
                 marginBottom: '1.5rem',
               }}
             >
-              EXPERIENCE THE POWER OF PUBLIC ATTENTION
+              TOUR OUR 10,000 SQ FT NYC PRODUCTION PLANT
             </h3>
 
             <div
@@ -211,7 +211,7 @@ export default function CampaignModal({
                       fontWeight: 800,
                     }}
                   >
-                    DAYLIGHT 4K MASTER // 02:45
+                    SIGNS NYC PRODUCTION TOUR // 02:45
                   </span>
                 </div>
 
@@ -237,8 +237,7 @@ export default function CampaignModal({
             </div>
 
             <p style={{ color: '#555555', fontSize: '0.95rem', lineHeight: 1.6 }}>
-              Featuring synchronized takeovers across London Piccadilly Lights, Times Square Broadway, and Dubai
-              Downtown Boulevard.
+              Featuring CNC routers, fiber laser cutters, channel letter bending machines, and certified boom-truck installation crews across all 5 boroughs.
             </p>
           </div>
         )}
@@ -358,7 +357,7 @@ export default function CampaignModal({
                   }}
                 >
                   <Sparkles size={14} />
-                  EXCLUSIVE NETWORK RESERVATION
+                  REQUEST AN ARCHITECTURAL SIGN QUOTE
                 </div>
 
                 <h3
@@ -373,12 +372,12 @@ export default function CampaignModal({
                   }}
                 >
                   START YOUR <br />
-                  <span style={{ color: '#1E56FF' }}>CITY TAKEOVER.</span>
+                  <span style={{ color: '#1E56FF' }}>NYC SIGN PROJECT.</span>
                 </h3>
 
                 <p style={{ color: '#555555', fontSize: '0.95rem', marginBottom: '2rem' }}>
-                  Reserve standout screen locations across premier global capitals. Real-time availability and
-                  creative specs delivered within 2 hours.
+                  Get engineered fabrication estimates, site survey scheduling, and NYC Department of Buildings (DOB)
+                  permit expediting within 2 business hours.
                 </p>
 
                 {initialConfig && (
@@ -398,9 +397,9 @@ export default function CampaignModal({
                       fontWeight: 700,
                     }}
                   >
-                    <span>📍 <strong>City:</strong> {initialConfig.city}</span>
+                    <span>📍 <strong>Borough:</strong> {initialConfig.city}</span>
                     <span>🎯 <strong>Format:</strong> {initialConfig.format}</span>
-                    <span>⚡ <strong>Est. Reach:</strong> {initialConfig.impressions}</span>
+                    <span>⚡ <strong>Est. Turnaround:</strong> {initialConfig.impressions}</span>
                   </div>
                 )}
 
@@ -417,12 +416,12 @@ export default function CampaignModal({
                         marginBottom: '0.4rem',
                       }}
                     >
-                      BRAND OR AGENCY NAME *
+                      BUSINESS / ORGANIZATION NAME *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder="e.g. Apex Global or Studio Alpha"
+                      placeholder="e.g. SoHo Retail, Midtown Eatery, General Contractor"
                       value={formData.brandName}
                       onChange={(e) => setFormData({ ...formData, brandName: e.target.value })}
                       style={{
@@ -451,12 +450,12 @@ export default function CampaignModal({
                         marginBottom: '0.4rem',
                       }}
                     >
-                      WORK EMAIL *
+                      WORK EMAIL OR PHONE NUMBER *
                     </label>
                     <input
-                      type="email"
+                      type="text"
                       required
-                      placeholder="marketing@yourbrand.com"
+                      placeholder="project@yourbrand.com or (718) 555-0100"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       style={{
@@ -486,7 +485,7 @@ export default function CampaignModal({
                           marginBottom: '0.4rem',
                         }}
                       >
-                        BUDGET TIER
+                        PROJECT BUDGET RANGE
                       </label>
                       <select
                         value={formData.budget}
@@ -503,10 +502,10 @@ export default function CampaignModal({
                           outline: 'none',
                         }}
                       >
-                        <option value="$25k - $50k">$25k - $50k</option>
-                        <option value="$50k - $150k">$50k - $150k</option>
-                        <option value="$150k - $500k">$150k - $500k</option>
-                        <option value="$500k+">$500k+ (Iconic Mega Takeover)</option>
+                        <option value="$2,500 - $7,500">$2,500 - $7,500 (Lobby / Dimensional Letters)</option>
+                        <option value="$7,500 - $25,000">$7,500 - $25,000 (Channel Letters & Storefront Awning)</option>
+                        <option value="$25,000 - $75,000">$25,000 - $75,000 (Full Multi-Floor / Flagship Package)</option>
+                        <option value="$75,000+">$75,000+ (Multi-Location / Scaffold Wrap)</option>
                       </select>
                     </div>
 
@@ -522,7 +521,7 @@ export default function CampaignModal({
                           marginBottom: '0.4rem',
                         }}
                       >
-                        TARGET FLIGHT
+                        TARGET INSTALLATION TIMELINE
                       </label>
                       <select
                         value={formData.launchDate}
@@ -539,10 +538,10 @@ export default function CampaignModal({
                           outline: 'none',
                         }}
                       >
-                        <option value="Immediate (Next 14 Days)">Immediate (Next 14 Days)</option>
-                        <option value="Q4 2026">Q4 2026</option>
-                        <option value="Q1 2027">Q1 2027</option>
-                        <option value="Annual Partner">Annual Partner</option>
+                        <option value="Emergency Rush (24-48 Hours)">Emergency Rush (24-48 Hours)</option>
+                        <option value="Standard Fabrication (1-2 Weeks)">Standard Fabrication (1-2 Weeks)</option>
+                        <option value="DOB Expedited (3-4 Weeks)">DOB Expedited (3-4 Weeks)</option>
+                        <option value="Architectural / GC Partner">Architectural / GC Partner</option>
                       </select>
                     </div>
                   </div>
@@ -551,9 +550,9 @@ export default function CampaignModal({
                     type="submit"
                     className="btn-primary"
                     style={{ width: '100%', padding: '1.2rem', marginTop: '1rem' }}
-                    data-cursor="TRANSMIT"
+                    data-cursor="SUBMIT"
                   >
-                    REQUEST AVAILABILITY & LOCK SCREENS
+                    REQUEST FREE ESTIMATE & CODE REVIEW
                     <ArrowRight size={18} strokeWidth={2.5} />
                   </button>
                 </form>
@@ -584,15 +583,15 @@ export default function CampaignModal({
                     marginBottom: '0.75rem',
                   }}
                 >
-                  TRANSMISSION RECEIVED.
+                  PROJECT SPECIFICATION RECEIVED.
                 </h3>
                 <p style={{ color: '#555555', fontSize: '1rem', maxWidth: '440px', margin: '0 auto 2rem' }}>
-                  Our media directors have received your campaign parameters for{' '}
-                  <strong style={{ color: '#111111' }}>{formData.brandName || 'your brand'}</strong>. We will contact{' '}
-                  <span style={{ color: '#1E56FF' }}>{formData.email}</span> within 2 hours.
+                  Our fabrication engineers and permit expediters have received your sign parameters for{' '}
+                  <strong style={{ color: '#111111' }}>{formData.brandName || 'your business'}</strong>. We will review DOB zoning and contact{' '}
+                  <span style={{ color: '#1E56FF' }}>{formData.email}</span> within 2 business hours.
                 </p>
                 <button onClick={onClose} className="btn-secondary" style={{ padding: '0.8rem 2rem' }}>
-                  RETURN TO CITY
+                  RETURN TO SITE
                 </button>
               </div>
             )}

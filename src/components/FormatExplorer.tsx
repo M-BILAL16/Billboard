@@ -41,7 +41,7 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
             }}
           >
             <Sparkles size={14} />
-            CHOOSE YOUR STAGE.
+            CUSTOM FABRICATION FORMATS.
           </div>
 
           <h2
@@ -56,14 +56,13 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
               marginBottom: '1.5rem',
             }}
           >
-            EVERY BRAND <br />
+            EVERY STOREFRONT <br />
             DESERVES THE <br />
-            <span style={{ color: '#1E56FF' }}>RIGHT PLACE.</span>
+            <span style={{ color: '#1E56FF' }}>RIGHT LANDMARK.</span>
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '640px', lineHeight: 1.6 }}>
-            Each format commands a distinct architectural presence and mindset. Expand each stage to discover
-            technical reach, dwell dynamics, and unmissable city impact.
+            From precision front-lit & halo channel letters and architectural corporate lobbies to DOB-permitted awnings and heavy-duty building wraps. Expand each format to view engineered specs, materials, and lead times.
           </p>
         </div>
 

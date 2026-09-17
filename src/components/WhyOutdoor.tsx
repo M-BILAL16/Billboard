@@ -32,7 +32,7 @@ export default function WhyOutdoor() {
             }}
           >
             <Sparkles size={14} />
-            THE POWER OF PHYSICAL PRESENCE
+            THE VALUE OF PHYSICAL STOREFRONT PRESENCE
           </div>
 
           {/* Main Headline */}
@@ -63,10 +63,10 @@ export default function WhyOutdoor() {
                 textUnderlineOffset: '8px',
               }}
             >
-              CAN’T UNSEE
+              CAN’T IGNORE
             </span>{' '}
             <br />
-            THE CITY.
+            A REAL SIGN.
           </h2>
 
           {/* Supporting Copy */}
@@ -79,8 +79,7 @@ export default function WhyOutdoor() {
               margin: '0 auto 4.5rem',
             }}
           >
-            Outdoor advertising lives in the real world. No feeds. No scroll. No skip button. Just memorable creative
-            placed directly in front of real people.
+            Commercial signage lives in the physical world. Built in-house in New York with aerospace-grade metals, UL-certified LEDs, and precision craftsmanship that welcomes footfall 24/7/365.
           </p>
 
           {/* Three Large Statements */}
@@ -116,10 +115,10 @@ export default function WhyOutdoor() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                NO SKIP BUTTON.
+                35+ YEARS IN NYC.
               </h3>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#666666' }}>
-                Commands genuine 100% dwell time
+                Serving all five boroughs since 1989
               </span>
             </div>
 
@@ -146,10 +145,10 @@ export default function WhyOutdoor() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                NO AD BLOCKER.
+                100% DOB PERMITS.
               </h3>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#666666' }}>
-                Cannot be muted, minimized or filtered
+                Full code expediting & licensed install
               </span>
             </div>
 
@@ -176,15 +175,15 @@ export default function WhyOutdoor() {
                   letterSpacing: '-0.02em',
                 }}
               >
-                NO TINY SCREEN.
+                10,000 SQ FT SHOP.
               </h3>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.78rem', color: '#666666' }}>
-                Pure architectural scale and shared authority
+                CNC • Laser • Welding • Channel Bending
               </span>
             </div>
           </div>
 
-          {/* Final Line: JUST PRESENCE. */}
+          {/* Final Line: JUST CRAFTSMANSHIP. */}
           <div
             style={{
               fontFamily: 'var(--font-display)',
@@ -195,7 +194,7 @@ export default function WhyOutdoor() {
               color: '#111111',
             }}
           >
-            JUST <span style={{ color: '#1E56FF' }}>PRESENCE.</span>
+            JUST REAL <span style={{ color: '#1E56FF' }}>CRAFTSMANSHIP.</span>
           </div>
         </div>
       </div>

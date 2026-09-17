@@ -3,26 +3,28 @@ import './globals.css';
 import CustomCursor from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
-  title: 'VORTEX OOH | Outdoor Advertising Reimagined — Own The City',
+  title: 'Signs NYC | Custom Signs, Storefronts & Architectural Fabrication New York',
   description:
-    'From iconic city-centre screens to high-impact roadside billboards, VORTEX puts brands in the places people cannot ignore. High-impact digital billboards, 3D anamorphic displays, and global DOOH networks.',
+    'New York’s premier full-service sign company for 35+ years. 10,000 sq ft in-house fabrication, DOB permit expediting, 3M certified installation, and 24/7 emergency service across all 5 boroughs.',
   keywords: [
-    'digital billboards',
-    'DOOH',
-    'outdoor advertising',
-    'city takeovers',
-    '3D anamorphic screens',
-    'Times Square billboard',
-    'Piccadilly lights',
-    'highway billboards',
+    'Signs NYC',
+    'NYC sign company',
+    'storefront signs NYC',
+    'channel letters',
+    'DOB sign permits',
+    'commercial awnings',
+    'architectural signage',
+    'lobby signs NYC',
+    'vehicle wraps NYC',
+    'neon signs New York',
   ],
-  authors: [{ name: 'VORTEX Media Group' }],
+  authors: [{ name: 'Signs NYC Fabrication' }],
   openGraph: {
-    title: 'VORTEX OOH | Outdoor Advertising Reimagined',
-    description: "Don't just run an ad. Own the city.",
+    title: 'Signs NYC | Custom Signs & Architectural Fabrication New York',
+    description: 'We don’t just make signs. We build NYC landmarks.',
     type: 'website',
     locale: 'en_US',
-    siteName: 'VORTEX OOH',
+    siteName: 'Signs NYC',
   },
 };
 

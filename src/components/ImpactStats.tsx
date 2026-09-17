@@ -4,12 +4,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles } from 'lucide-react';
 
 const STATS_DATA = [
-  { value: '3,800+', label: 'SCREENS', sub: 'High-definition digital displays worldwide' },
-  { value: '74', label: 'CITIES', sub: 'Spanning tier-1 metropolitan markets' },
-  { value: '180M+', label: 'MONTHLY IMPRESSIONS', sub: 'Verified footfall & vehicular eyes on glass' },
-  { value: '24/7', label: 'VISIBILITY', sub: 'Zero ad blockers, uninterrupted presence' },
-  { value: '12+', label: 'MEDIA FORMATS', sub: 'From 3D curved LEDs to transit concourses' },
-  { value: 'ONE', label: 'GLOBAL NETWORK', sub: 'Turning brand campaigns into cultural landmarks' },
+  { value: '35+', label: 'YEARS IN NYC', sub: 'Serving all five boroughs continuously since 1989' },
+  { value: '10,000', label: 'SQ FT FACILITY', sub: 'In-house CNC, laser, welding, channel bending & paint' },
+  { value: '50,000+', label: 'SIGNS INSTALLED', sub: 'Storefronts, corporate lobbies & landmark monuments' },
+  { value: '24/7', label: 'EMERGENCY SERVICE', sub: 'Rapid repair & maintenance dispatch across NYC' },
+  { value: '100%', label: 'DOB COMPLIANT', sub: 'Licensed Master Sign Hanger & permit expediting' },
+  { value: 'ONE', label: 'COMPLETE SIGN SHOP', sub: 'From blueprint design to final crane installation' },
 ];
 
 export default function ImpactStats() {
@@ -57,7 +57,7 @@ export default function ImpactStats() {
             }}
           >
             <Sparkles size={14} />
-            NUMBERS THAT GET ATTENTION.
+            NEW YORK MANUFACTURING SCALE.
           </div>
 
           <h2
@@ -71,8 +71,8 @@ export default function ImpactStats() {
               color: '#111111',
             }}
           >
-            BIG SCREENS. <br />
-            <span style={{ color: '#1E56FF' }}>BIGGER REACH.</span>
+            PROVEN CRAFT. <br />
+            <span style={{ color: '#1E56FF' }}>35+ YEARS SERVING NYC.</span>
           </h2>
         </div>
 

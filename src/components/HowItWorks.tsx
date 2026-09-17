@@ -6,26 +6,26 @@ import { Sparkles, ArrowRight, Target, MapPin, Sliders, Radio } from 'lucide-rea
 const STEPS = [
   {
     number: '01',
-    title: 'CHOOSE YOUR AUDIENCE',
-    copy: 'Tell us who needs to see your campaign — from commuters and business leaders to shoppers and festival goers.',
+    title: 'CONSULTATION & SITE SURVEY',
+    copy: 'Share your sign vision, architectural plans, or storefront photos. Our engineers inspect facade mounts and measure sightlines.',
     icon: Target,
   },
   {
     number: '02',
-    title: 'FIND YOUR LOCATION',
-    copy: 'Discover the places your audience already moves through across iconic central intersections and arterial highways.',
+    title: 'DESIGN & DOB EXPEDITING',
+    copy: 'We draft CAD drawings, photorealistic mockups, and submit full permit applications directly to the NYC Department of Buildings.',
     icon: MapPin,
   },
   {
     number: '03',
-    title: 'BUILD YOUR CAMPAIGN',
-    copy: 'Choose formats, screen sizes, synchronized dayparts, dynamic triggers, and high-resolution creative direction.',
+    title: 'IN-HOUSE FABRICATION',
+    copy: 'Crafted in our 10,000 sq ft facility in NYC with precision CNC routing, laser cutting, channel bending, and UL-certified electrical assembly.',
     icon: Sliders,
   },
   {
     number: '04',
-    title: 'GO LIVE',
-    copy: 'Watch your brand become part of the city skyline, dominating attention in physical public space.',
+    title: 'LICENSED INSTALLATION',
+    copy: 'Our 3M certified sign installers and licensed crane crews mount your sign with complete DOB structural sign-off and warranty.',
     icon: Radio,
   },
 ];
@@ -63,7 +63,7 @@ export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
             }}
           >
             <Sparkles size={14} />
-            FROM IDEA TO IMPACT.
+            FROM BLUEPRINT TO LANDMARK.
           </div>
 
           <h2
@@ -78,8 +78,8 @@ export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
             }}
           >
             FOUR STEPS. <br />
-            ONE BIG <br />
-            <span style={{ color: '#1E56FF' }}>IMPRESSION.</span>
+            ONE NEW YORK <br />
+            <span style={{ color: '#1E56FF' }}>LANDMARK.</span>
           </h2>
         </div>
 
@@ -219,15 +219,15 @@ export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
                 marginBottom: '0.25rem',
               }}
             >
-              SIMPLE PLANNING. <span style={{ color: '#1E56FF' }}>UNMISSABLE RESULTS.</span>
+              PRECISION FABRICATION. <span style={{ color: '#1E56FF' }}>UNMISSABLE RESULTS.</span>
             </h4>
             <p style={{ color: '#666666', fontSize: '0.95rem' }}>
-              Launch in days, not months. Real-time availability and verified audience analytics.
+              From boutique retail storefronts to multi-story building signs across Manhattan and all five boroughs.
             </p>
           </div>
 
-          <button onClick={onStartPlanning} className="btn-primary" data-cursor="PLAN">
-            START PLANNING
+          <button onClick={onStartPlanning} className="btn-primary" data-cursor="QUOTE">
+            REQUEST A FREE QUOTE
             <ArrowRight size={16} strokeWidth={2.5} />
           </button>
         </div>

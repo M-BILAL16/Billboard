@@ -51,7 +51,7 @@ export default function InsightsSection() {
               }}
             >
               <Sparkles size={14} />
-              FROM THE STREETS.
+              SIGN KNOWLEDGE & NYC CODE.
             </div>
 
             <h2
@@ -65,19 +65,19 @@ export default function InsightsSection() {
                 color: '#111111',
               }}
             >
-              IDEAS. <br />
-              CULTURE. <br />
-              <span style={{ color: '#1E56FF' }}>ATTENTION.</span>
+              CODES. <br />
+              CRAFT. <br />
+              <span style={{ color: '#1E56FF' }}>COMPLIANCE.</span>
             </h2>
           </div>
 
           <a
             href="#insights"
             className="btn-secondary"
-            data-cursor="ALL STORIES"
+            data-cursor="ALL GUIDES"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
           >
-            VIEW ALL STORIES
+            VIEW ALL SIGN GUIDES
             <ArrowRight size={16} strokeWidth={2.5} />
           </a>
         </div>
