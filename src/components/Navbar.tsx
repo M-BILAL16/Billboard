@@ -1,0 +1,1523 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
+import {
+  ArrowUpRight,
+  Search,
+  Volume2,
+  VolumeX,
+  Radio,
+  Globe,
+  Clock,
+  Sparkles,
+  MapPin,
+  Layers,
+  Tv,
+  SlidersHorizontal,
+  TrendingUp,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  Command,
+  ExternalLink,
+} from 'lucide-react';
+import { BILLBOARD_FORMATS, FEATURED_CAMPAIGNS, GLOBAL_LOCATIONS } from '@/data/billboardData';
+
+interface NavbarProps {
+  onOpenCampaignModal: () => void;
+}
+
+export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
+  const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [activeLink, setActiveLink] = useState<string>('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [showNetworkTooltip, setShowNetworkTooltip] = useState(false);
+  const [timezones, setTimezones] = useState({
+    ldn: '',
+    nyc: '',
+    dxb: '',
+    tyo: '',
+  });
+
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+
+  // Update real-time clocks and scroll progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 25);
+
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) {
+        setScrollProgress(Math.min(100, Math.max(0, (scrollY / docHeight) * 100)));
+      }
+    };
+
+    const updateClocks = () => {
+      const now = new Date();
+      setTimezones({
+        ldn: now.toLocaleTimeString('en-GB', { timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit' }),
+        nyc: now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hour12: false }),
+        dxb: now.toLocaleTimeString('en-AE', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', hour12: false }),
+        tyo: now.toLocaleTimeString('ja-JP', { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', hour12: false }),
+      });
+    };
+
+    updateClocks();
+    const clockInterval = setInterval(updateClocks, 10000);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      clearInterval(clockInterval);
+    };
+  }, []);
+
+  // Keyboard shortcut for Cmd+K / Ctrl+K and Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      } else if (e.key === 'Escape') {
+        setSearchOpen(false);
+        setMobileMenuOpen(false);
+        setActiveDropdown(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Focus input when search modal opens
+  useEffect(() => {
+    if (searchOpen) {
+      setTimeout(() => searchInputRef.current?.focus(), 80);
+    }
+  }, [searchOpen]);
+
+  // Audio Ambience Synthesis (Subtle luxury haptic feedback)
+  const toggleSound = () => {
+    const newState = !soundEnabled;
+    setSoundEnabled(newState);
+
+    try {
+      if (!audioContextRef.current) {
+        const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        audioContextRef.current = new AudioContextClass();
+      }
+      const ctx = audioContextRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
+      }
+
+      if (newState) {
+        // High-tech pleasant dual-tone chime
+        const now = ctx.currentTime;
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc1.type = 'sine';
+        osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(587.33, now); // D5
+        osc2.frequency.setValueAtTime(880.0, now + 0.08); // A5
+
+        gain.gain.setValueAtTime(0.04, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc1.start(now);
+        osc2.start(now + 0.08);
+        osc1.stop(now + 0.4);
+        osc2.stop(now + 0.4);
+      }
+    } catch {
+      // AudioContext fallback
+    }
+  };
+
+  const handleDropdownEnter = (dropdownKey: string) => {
+    if (dropdownTimeoutRef.current) clearTimeout(dropdownTimeoutRef.current);
+    setActiveDropdown(dropdownKey);
+  };
+
+  const handleDropdownLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null);
+    }, 180);
+  };
+
+  // Search Results Filtering
+  const filteredFormats = BILLBOARD_FORMATS.filter(
+    (f) =>
+      f.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      f.tagline.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const filteredLocations = GLOBAL_LOCATIONS.filter(
+    (l) =>
+      l.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      l.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      l.country.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleNavigate = (hash: string) => {
+    setActiveDropdown(null);
+    setSearchOpen(false);
+    setMobileMenuOpen(false);
+    const element = document.querySelector(hash);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  return (
+    <>
+      <header
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 950,
+          padding: scrolled ? '0.65rem 1.25rem' : '1.15rem 1.5rem',
+          transition: 'padding 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          display: 'flex',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        {/* Main Floating Island Shell */}
+        <nav
+          style={{
+            width: '100%',
+            maxWidth: '1360px',
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0.45rem 0.65rem',
+            backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.82)',
+            backdropFilter: 'blur(26px)',
+            WebkitBackdropFilter: 'blur(26px)',
+            borderRadius: '9999px',
+            border: scrolled ? '1px solid rgba(17, 17, 17, 0.12)' : '1px solid rgba(17, 17, 17, 0.08)',
+            boxShadow: scrolled
+              ? '0 18px 44px -8px rgba(0, 0, 0, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03)'
+              : '0 8px 30px -6px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02)',
+            pointerEvents: 'auto',
+            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          }}
+        >
+          {/* Scroll Progress Indicator Line */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '1.5rem',
+              right: '1.5rem',
+              height: '2px',
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+              borderRadius: '9999px',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+          >
+            <div
+              style={{
+                width: `${scrollProgress}%`,
+                height: '100%',
+                background: 'linear-gradient(90deg, #1E56FF 0%, #00D4FF 100%)',
+                transition: 'width 0.1s ease-out',
+              }}
+            />
+          </div>
+
+          {/* ============================================================ */}
+          {/* LEFT SEGMENT: Brand Core & Live Network Telemetry */}
+          {/* ============================================================ */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+            {/* Brand Logo */}
+            <Link
+              href="/"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.65rem',
+                textDecoration: 'none',
+                color: '#111111',
+                padding: '0.35rem 0.65rem 0.35rem 0.45rem',
+                borderRadius: '9999px',
+                transition: 'background-color 0.2s ease',
+              }}
+              data-cursor="VORTEX"
+            >
+              {/* 3D Geometric Billboard Monolith */}
+              <div
+                style={{
+                  width: '28px',
+                  height: '28px',
+                  backgroundColor: '#111111',
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  position: 'relative',
+                  boxShadow: '0 4px 12px rgba(17, 17, 17, 0.15)',
+                  transform: 'perspective(400px) rotateX(10deg)',
+                  transition: 'transform 0.3s ease',
+                }}
+              >
+                {/* Micro Screen Grid */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '2px',
+                    width: '12px',
+                    height: '12px',
+                  }}
+                >
+                  <div style={{ backgroundColor: '#1E56FF', borderRadius: '1.5px' }} />
+                  <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: '1.5px' }} />
+                  <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '1.5px' }} />
+                  <div style={{ backgroundColor: '#00D4FF', borderRadius: '1.5px' }} />
+                </div>
+              </div>
+
+              {/* Wordmark */}
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.05 }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 900,
+                    fontSize: '1.18rem',
+                    letterSpacing: '-0.035em',
+                    color: '#111111',
+                    display: 'flex',
+                    alignItems: 'baseline',
+                  }}
+                >
+                  VORTEX
+                  <span
+                    style={{
+                      color: '#1E56FF',
+                      marginLeft: '2px',
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      fontFamily: 'var(--font-mono)',
+                    }}
+                  >
+                    .OOH
+                  </span>
+                </span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.55rem',
+                    letterSpacing: '0.08em',
+                    color: '#888888',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Global Media
+                </span>
+              </div>
+            </Link>
+
+            {/* Live Global Network Status Pill */}
+            <div
+              className="network-status-pill"
+              style={{ position: 'relative' }}
+              onMouseEnter={() => setShowNetworkTooltip(true)}
+              onMouseLeave={() => setShowNetworkTooltip(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setShowNetworkTooltip((prev) => !prev)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.32rem 0.75rem',
+                  borderRadius: '9999px',
+                  backgroundColor: 'rgba(17, 17, 17, 0.04)',
+                  border: '1px solid rgba(17, 17, 17, 0.07)',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.66rem',
+                  color: '#333333',
+                  userSelect: 'none',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {/* Radar Beacon */}
+                <span
+                  style={{
+                    width: '7px',
+                    height: '7px',
+                    borderRadius: '50%',
+                    backgroundColor: '#10B981',
+                    boxShadow: '0 0 8px rgba(16, 185, 129, 0.8)',
+                    display: 'inline-block',
+                  }}
+                />
+                <span style={{ fontWeight: 600 }}>4,820 LIVE</span>
+                <ChevronDown size={11} style={{ opacity: 0.5 }} />
+              </button>
+
+              {/* Telemetry Popover Dropdown */}
+              {showNetworkTooltip && (
+                <div
+                  className="mega-menu-enter"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 10px)',
+                    left: 0,
+                    width: '300px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    backdropFilter: 'blur(28px)',
+                    WebkitBackdropFilter: 'blur(28px)',
+                    borderRadius: '16px',
+                    border: '1px solid rgba(17, 17, 17, 0.1)',
+                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.12)',
+                    padding: '1rem',
+                    zIndex: 1000,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
+                      paddingBottom: '0.5rem',
+                      marginBottom: '0.75rem',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <Radio size={13} color="#1E56FF" />
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.68rem',
+                          fontWeight: 700,
+                          textTransform: 'uppercase',
+                          color: '#111111',
+                        }}
+                      >
+                        Global Network Telemetry
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.62rem',
+                        color: '#10B981',
+                        fontWeight: 700,
+                      }}
+                    >
+                      99.8% UPTIME
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
+                    {[
+                      { city: 'London', code: 'LDN', time: timezones.ldn || '12:00', screens: '1,420', status: 'Peak Footfall' },
+                      { city: 'New York', code: 'NYC', time: timezones.nyc || '07:00', screens: '1,850', status: 'Morning Commute' },
+                      { city: 'Dubai', code: 'DXB', time: timezones.dxb || '15:00', screens: '890', status: 'High Traffic' },
+                      { city: 'Tokyo', code: 'TYO', time: timezones.tyo || '20:00', screens: '660', status: 'Prime Nighttime' },
+                    ].map((hub) => (
+                      <div
+                        key={hub.code}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.4rem 0.55rem',
+                          borderRadius: '8px',
+                          backgroundColor: 'rgba(17, 17, 17, 0.03)',
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.66rem',
+                              fontWeight: 700,
+                              color: '#111111',
+                            }}
+                          >
+                            {hub.code}
+                          </span>
+                          <span style={{ fontSize: '0.74rem', color: '#555555' }}>{hub.city}</span>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.68rem',
+                              color: '#888888',
+                            }}
+                          >
+                            {hub.time}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.62rem',
+                              backgroundColor: 'rgba(30, 86, 255, 0.1)',
+                              color: '#1E56FF',
+                              padding: '0.1rem 0.35rem',
+                              borderRadius: '4px',
+                              fontWeight: 700,
+                            }}
+                          >
+                            {hub.screens}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ============================================================ */}
+          {/* CENTER SEGMENT: Navigation Links & Mega-Menus (Desktop) */}
+          {/* ============================================================ */}
+          <div
+            className="nav-desktop-container"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.2rem',
+              position: 'relative',
+            }}
+          >
+            {/* 1. Formats with Mega-Menu */}
+            <div
+              style={{ position: 'relative' }}
+              onMouseEnter={() => handleDropdownEnter('formats')}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <a
+                href="#formats"
+                onClick={() => setActiveLink('Formats')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.45rem 0.85rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  textDecoration: 'none',
+                  color: activeDropdown === 'formats' || activeLink === 'Formats' ? '#111111' : '#444444',
+                  backgroundColor:
+                    activeDropdown === 'formats' || activeLink === 'Formats'
+                      ? 'rgba(17, 17, 17, 0.06)'
+                      : 'transparent',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Formats
+                <ChevronDown
+                  size={12}
+                  style={{
+                    transform: activeDropdown === 'formats' ? 'rotate(180deg)' : 'none',
+                    transition: 'transform 0.2s ease',
+                  }}
+                />
+              </a>
+
+              {/* Formats Mega Menu Dropdown */}
+              {activeDropdown === 'formats' && (
+                <div
+                  className="mega-menu-enter"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 14px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '580px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    backdropFilter: 'blur(30px)',
+                    WebkitBackdropFilter: 'blur(30px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(17, 17, 17, 0.1)',
+                    boxShadow: '0 24px 60px rgba(0, 0, 0, 0.14)',
+                    padding: '1.25rem',
+                    zIndex: 1000,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '0.9rem',
+                      paddingBottom: '0.6rem',
+                      borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        color: '#666666',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      DOOH Screen Formats
+                    </span>
+                    <a
+                      href="#formats"
+                      onClick={() => setActiveDropdown(null)}
+                      style={{
+                        fontSize: '0.72rem',
+                        color: '#1E56FF',
+                        textDecoration: 'none',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px',
+                      }}
+                    >
+                      View All 5 Formats <ArrowUpRight size={12} />
+                    </a>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    {BILLBOARD_FORMATS.slice(0, 4).map((fmt) => (
+                      <a
+                        key={fmt.id}
+                        href="#formats"
+                        onClick={() => setActiveDropdown(null)}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '0.25rem',
+                          padding: '0.75rem 0.85rem',
+                          borderRadius: '12px',
+                          backgroundColor: 'rgba(17, 17, 17, 0.02)',
+                          border: '1px solid rgba(17, 17, 17, 0.05)',
+                          textDecoration: 'none',
+                          color: '#111111',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(30, 86, 255, 0.05)';
+                          e.currentTarget.style.borderColor = 'rgba(30, 86, 255, 0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.02)';
+                          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.05)';
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontWeight: 800,
+                              fontSize: '0.86rem',
+                            }}
+                          >
+                            {fmt.title}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.62rem',
+                              color: '#1E56FF',
+                              fontWeight: 700,
+                            }}
+                          >
+                            {fmt.specs.estimatedReach}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            fontSize: '0.72rem',
+                            color: '#666666',
+                            lineHeight: 1.35,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                          }}
+                        >
+                          {fmt.specs.format}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 2. Locations with Mega-Menu */}
+            <div
+              style={{ position: 'relative' }}
+              onMouseEnter={() => handleDropdownEnter('locations')}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <a
+                href="#locations"
+                onClick={() => setActiveLink('Locations')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.45rem 0.85rem',
+                  borderRadius: '9999px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.04em',
+                  textDecoration: 'none',
+                  color: activeDropdown === 'locations' || activeLink === 'Locations' ? '#111111' : '#444444',
+                  backgroundColor:
+                    activeDropdown === 'locations' || activeLink === 'Locations'
+                      ? 'rgba(17, 17, 17, 0.06)'
+                      : 'transparent',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Locations
+                <ChevronDown
+                  size={12}
+                  style={{
+                    transform: activeDropdown === 'locations' ? 'rotate(180deg)' : 'none',
+                    transition: 'transform 0.2s ease',
+                  }}
+                />
+              </a>
+
+              {/* Locations Mega Menu Dropdown */}
+              {activeDropdown === 'locations' && (
+                <div
+                  className="mega-menu-enter"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 14px)',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: '600px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    backdropFilter: 'blur(30px)',
+                    WebkitBackdropFilter: 'blur(30px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(17, 17, 17, 0.1)',
+                    boxShadow: '0 24px 60px rgba(0, 0, 0, 0.14)',
+                    padding: '1.25rem',
+                    zIndex: 1000,
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: '0.9rem',
+                      paddingBottom: '0.6rem',
+                      borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.06em',
+                        color: '#666666',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Global Billboard Hubs
+                    </span>
+                    <a
+                      href="#locations"
+                      onClick={() => setActiveDropdown(null)}
+                      style={{
+                        fontSize: '0.72rem',
+                        color: '#1E56FF',
+                        textDecoration: 'none',
+                        fontWeight: 700,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '2px',
+                      }}
+                    >
+                      Interactive Map <MapPin size={12} />
+                    </a>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    {GLOBAL_LOCATIONS.slice(0, 4).map((loc) => (
+                      <a
+                        key={loc.id}
+                        href="#locations"
+                        onClick={() => setActiveDropdown(null)}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.75rem 0.85rem',
+                          borderRadius: '12px',
+                          backgroundColor: 'rgba(17, 17, 17, 0.02)',
+                          border: '1px solid rgba(17, 17, 17, 0.05)',
+                          textDecoration: 'none',
+                          color: '#111111',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(36, 87, 255, 0.05)';
+                          e.currentTarget.style.borderColor = 'rgba(36, 87, 255, 0.3)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.02)';
+                          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.05)';
+                        }}
+                      >
+                        <div>
+                          <div
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontWeight: 800,
+                              fontSize: '0.84rem',
+                            }}
+                          >
+                            {loc.name}
+                          </div>
+                          <div style={{ fontSize: '0.7rem', color: '#666666' }}>
+                            {loc.city}, {loc.country}
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.65rem',
+                            fontWeight: 700,
+                            color: '#2457FF',
+                            backgroundColor: 'rgba(36, 87, 255, 0.08)',
+                            padding: '0.15rem 0.4rem',
+                            borderRadius: '4px',
+                          }}
+                        >
+                          {loc.weeklyImpressions}/wk
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 3. Campaigns Link */}
+            <a
+              href="#campaigns"
+              onClick={() => setActiveLink('Campaigns')}
+              style={{
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                textDecoration: 'none',
+                color: activeLink === 'Campaigns' ? '#111111' : '#444444',
+                backgroundColor: activeLink === 'Campaigns' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Campaigns
+            </a>
+
+            {/* 4. Experience Link */}
+            <a
+              href="#experience"
+              onClick={() => setActiveLink('Experience')}
+              style={{
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                textDecoration: 'none',
+                color: activeLink === 'Experience' ? '#111111' : '#444444',
+                backgroundColor: activeLink === 'Experience' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Experience
+            </a>
+
+            {/* 5. Planner Link with Live ROI badge */}
+            <a
+              href="#planner"
+              onClick={() => setActiveLink('Planner')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.35rem',
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                textDecoration: 'none',
+                color: activeLink === 'Planner' ? '#111111' : '#444444',
+                backgroundColor: activeLink === 'Planner' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <span>Planner</span>
+              <span
+                style={{
+                  fontSize: '0.62rem',
+                  fontFamily: 'var(--font-mono)',
+                  backgroundColor: 'rgba(30, 86, 255, 0.1)',
+                  color: '#1E56FF',
+                  padding: '0.08rem 0.35rem',
+                  borderRadius: '9999px',
+                  fontWeight: 800,
+                }}
+              >
+                LIVE
+              </span>
+            </a>
+
+            {/* 6. Insights */}
+            <a
+              href="#insights"
+              onClick={() => setActiveLink('Insights')}
+              style={{
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                fontSize: '0.8rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
+                textDecoration: 'none',
+                color: activeLink === 'Insights' ? '#111111' : '#444444',
+                backgroundColor: activeLink === 'Insights' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Insights
+            </a>
+          </div>
+
+          {/* ============================================================ */}
+          {/* RIGHT SEGMENT: Utility Command & Launch Action */}
+          {/* ============================================================ */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {/* Audio Ambience Synthesizer Toggle */}
+            <button
+              type="button"
+              onClick={toggleSound}
+              aria-label={soundEnabled ? 'Mute ambient sound' : 'Enable ambient sound'}
+              title={soundEnabled ? 'Ambient Audio On' : 'Toggle Ambient Audio'}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                backgroundColor: soundEnabled ? 'rgba(30, 86, 255, 0.12)' : 'rgba(17, 17, 17, 0.04)',
+                border: soundEnabled ? '1px solid rgba(30, 86, 255, 0.35)' : '1px solid rgba(17, 17, 17, 0.07)',
+                color: soundEnabled ? '#1E56FF' : '#666666',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              {soundEnabled ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2px', height: '14px' }}>
+                  <div className="hud-eq-bar-1" style={{ width: '2px', backgroundColor: '#1E56FF', borderRadius: '1px' }} />
+                  <div className="hud-eq-bar-2" style={{ width: '2px', backgroundColor: '#1E56FF', borderRadius: '1px' }} />
+                  <div className="hud-eq-bar-3" style={{ width: '2px', backgroundColor: '#1E56FF', borderRadius: '1px' }} />
+                </div>
+              ) : (
+                <VolumeX size={15} />
+              )}
+            </button>
+
+            {/* Quick ⌘K Search Palette Trigger */}
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Open command palette"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.4rem 0.75rem',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(17, 17, 17, 0.04)',
+                border: '1px solid rgba(17, 17, 17, 0.07)',
+                color: '#555555',
+                cursor: 'pointer',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.08)';
+                e.currentTarget.style.color = '#111111';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.04)';
+                e.currentTarget.style.color = '#555555';
+              }}
+            >
+              <Search size={13} />
+              <span className="search-cmd-label" style={{ fontWeight: 600 }}>Quick Find</span>
+              <kbd
+                style={{
+                  fontSize: '0.58rem',
+                  padding: '0.12rem 0.35rem',
+                  backgroundColor: 'rgba(17, 17, 17, 0.08)',
+                  borderRadius: '4px',
+                  color: '#444444',
+                  fontWeight: 700,
+                }}
+              >
+                ⌘K
+              </kbd>
+            </button>
+
+            {/* Primary Magnetic CTA: START A CAMPAIGN */}
+            <button
+              type="button"
+              onClick={onOpenCampaignModal}
+              className="btn-shimmer"
+              data-cursor="LAUNCH"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: '9999px',
+                padding: '0.62rem 1.35rem',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                cursor: 'pointer',
+                boxShadow: '0 4px 18px rgba(30, 86, 255, 0.32)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(30, 86, 255, 0.45)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 4px 18px rgba(30, 86, 255, 0.32)';
+              }}
+            >
+              <span>START CAMPAIGN</span>
+              <ArrowUpRight size={15} strokeWidth={2.6} />
+            </button>
+
+            {/* Mobile Drawer Hamburger */}
+            <button
+              type="button"
+              className="mobile-toggle"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle mobile menu"
+              style={{
+                display: 'none',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '38px',
+                height: '38px',
+                borderRadius: '50%',
+                backgroundColor: mobileMenuOpen ? '#111111' : 'rgba(17, 17, 17, 0.05)',
+                border: '1px solid rgba(17, 17, 17, 0.08)',
+                color: mobileMenuOpen ? '#FFFFFF' : '#111111',
+                cursor: 'pointer',
+                transition: 'all 0.25s ease',
+              }}
+            >
+              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      {/* ============================================================ */}
+      {/* ⌘K COMMAND SEARCH MODAL DIALOG */}
+      {/* ============================================================ */}
+      {searchOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 1100,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            paddingTop: '12vh',
+            paddingLeft: '1.5rem',
+            paddingRight: '1.5rem',
+          }}
+          onClick={() => setSearchOpen(false)}
+        >
+          <div
+            className="mega-menu-enter"
+            style={{
+              width: '100%',
+              maxWidth: '640px',
+              backgroundColor: '#FFFFFF',
+              borderRadius: '24px',
+              boxShadow: '0 30px 80px rgba(0, 0, 0, 0.25)',
+              border: '1px solid rgba(17, 17, 17, 0.12)',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Search Input Bar */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.85rem',
+                padding: '1.15rem 1.35rem',
+                borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
+              }}
+            >
+              <Search size={18} color="#1E56FF" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search billboard formats, global cities, campaigns..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  fontFamily: 'var(--font-display)',
+                  fontSize: '1.05rem',
+                  fontWeight: 600,
+                  color: '#111111',
+                  background: 'transparent',
+                }}
+              />
+              <kbd
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.65rem',
+                  padding: '0.2rem 0.45rem',
+                  borderRadius: '5px',
+                  backgroundColor: 'rgba(17, 17, 17, 0.06)',
+                  color: '#666666',
+                  fontWeight: 700,
+                }}
+              >
+                ESC
+              </kbd>
+            </div>
+
+            {/* Filtered Results Area */}
+            <div
+              style={{
+                maxHeight: '420px',
+                overflowY: 'auto',
+                padding: '0.9rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+              }}
+            >
+              {/* Quick Actions Shortcuts */}
+              <div style={{ marginBottom: '0.4rem' }}>
+                <span
+                  style={{
+                    fontSize: '0.66rem',
+                    fontFamily: 'var(--font-mono)',
+                    color: '#888888',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    paddingLeft: '0.5rem',
+                  }}
+                >
+                  Quick Actions
+                </span>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', marginTop: '0.35rem' }}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchOpen(false);
+                      onOpenCampaignModal();
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.65rem 0.8rem',
+                      borderRadius: '10px',
+                      backgroundColor: 'rgba(30, 86, 255, 0.06)',
+                      border: '1px solid rgba(30, 86, 255, 0.2)',
+                      color: '#1E56FF',
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 700,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <Sparkles size={14} /> Start Campaign Builder
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleNavigate('#planner')}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.65rem 0.8rem',
+                      borderRadius: '10px',
+                      backgroundColor: 'rgba(17, 17, 17, 0.04)',
+                      border: '1px solid rgba(17, 17, 17, 0.07)',
+                      color: '#111111',
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 700,
+                      fontSize: '0.82rem',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <SlidersHorizontal size={14} /> Open Cost Planner
+                  </button>
+                </div>
+              </div>
+
+              {/* Formats Section */}
+              {filteredFormats.length > 0 && (
+                <div style={{ marginTop: '0.5rem' }}>
+                  <span
+                    style={{
+                      fontSize: '0.66rem',
+                      fontFamily: 'var(--font-mono)',
+                      color: '#888888',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                      paddingLeft: '0.5rem',
+                    }}
+                  >
+                    Billboard Formats
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.35rem' }}>
+                    {filteredFormats.map((fmt) => (
+                      <div
+                        key={fmt.id}
+                        onClick={() => handleNavigate('#formats')}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.6rem 0.8rem',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.04)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <Tv size={15} color="#1E56FF" />
+                          <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{fmt.title}</span>
+                          <span style={{ fontSize: '0.72rem', color: '#666666' }}>{fmt.specs.format}</span>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.68rem',
+                            color: '#1E56FF',
+                            fontWeight: 700,
+                          }}
+                        >
+                          {fmt.specs.estimatedReach}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Locations Section */}
+              {filteredLocations.length > 0 && (
+                <div style={{ marginTop: '0.5rem' }}>
+                  <span
+                    style={{
+                      fontSize: '0.66rem',
+                      fontFamily: 'var(--font-mono)',
+                      color: '#888888',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.06em',
+                      paddingLeft: '0.5rem',
+                    }}
+                  >
+                    Global Locations
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.35rem' }}>
+                    {filteredLocations.map((loc) => (
+                      <div
+                        key={loc.id}
+                        onClick={() => handleNavigate('#locations')}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '0.6rem 0.8rem',
+                          borderRadius: '10px',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.15s ease',
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.04)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <MapPin size={15} color="#2457FF" />
+                          <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>{loc.name}</span>
+                          <span style={{ fontSize: '0.72rem', color: '#666666' }}>
+                            {loc.city}, {loc.country}
+                          </span>
+                        </div>
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.68rem',
+                            color: '#2457FF',
+                            fontWeight: 700,
+                          }}
+                        >
+                          {loc.weeklyImpressions} views
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer Tip */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0.75rem 1.25rem',
+                backgroundColor: 'rgba(17, 17, 17, 0.03)',
+                borderTop: '1px solid rgba(17, 17, 17, 0.06)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.66rem',
+                color: '#888888',
+              }}
+            >
+              <span>Navigation: Click any result to scroll to section</span>
+              <span>Press ESC to close</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================ */}
+      {/* MOBILE FULL-SCREEN ARCHITECTURAL DRAWER */}
+      {/* ============================================================ */}
+      {mobileMenuOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 920,
+            backgroundColor: 'rgba(255, 255, 255, 0.98)',
+            backdropFilter: 'blur(30px)',
+            WebkitBackdropFilter: 'blur(30px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '5.5rem 1.75rem 2.5rem',
+            overflowY: 'auto',
+          }}
+        >
+          {/* Mobile Navigation Links */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {[
+              { num: '01', label: 'Formats', href: '#formats', tag: '5 Options' },
+              { num: '02', label: 'Locations', href: '#locations', tag: 'Interactive Map' },
+              { num: '03', label: 'Campaigns', href: '#campaigns', tag: 'Case Studies' },
+              { num: '04', label: 'Experience', href: '#experience', tag: '3D Simulation' },
+              { num: '05', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
+              { num: '06', label: 'Insights', href: '#insights', tag: 'Whitepapers' },
+            ].map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '0.85rem 0',
+                  borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
+                  textDecoration: 'none',
+                  color: '#111111',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.75rem',
+                      color: '#1E56FF',
+                      fontWeight: 700,
+                    }}
+                  >
+                    {link.num}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 900,
+                      fontSize: '1.65rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {link.label}
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      color: '#666666',
+                    }}
+                  >
+                    {link.tag}
+                  </span>
+                  <ChevronRight size={16} color="#888888" />
+                </div>
+              </a>
+            ))}
+          </div>
+
+          {/* Bottom Drawer Bar */}
+          <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            {/* Live City Times Row */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '0.75rem 1rem',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(17, 17, 17, 0.03)',
+                border: '1px solid rgba(17, 17, 17, 0.06)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.7rem',
+                color: '#555555',
+              }}
+            >
+              <span>LDN {timezones.ldn}</span>
+              <span>NYC {timezones.nyc}</span>
+              <span>DXB {timezones.dxb}</span>
+              <span>TYO {timezones.tyo}</span>
+            </div>
+
+            {/* Quick Find Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setSearchOpen(true);
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                padding: '0.85rem',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(17, 17, 17, 0.05)',
+                border: '1px solid rgba(17, 17, 17, 0.1)',
+                color: '#111111',
+                fontFamily: 'var(--font-display)',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+              }}
+            >
+              <Search size={16} /> Quick Search Hub (⌘K)
+            </button>
+
+            {/* Primary Action Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenCampaignModal();
+              }}
+              className="btn-primary"
+              style={{ width: '100%', padding: '1rem', fontSize: '0.9rem' }}
+            >
+              START A CAMPAIGN ↗
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Responsive Styles */}
+      <style jsx>{`
+        @media (max-width: 1040px) {
+          .nav-desktop-container {
+            display: none !important;
+          }
+          .network-status-pill {
+            display: none !important;
+          }
+          .search-cmd-label {
+            display: none !important;
+          }
+          .mobile-toggle {
+            display: flex !important;
+          }
+        }
+      `}</style>
+    </>
+  );
+}

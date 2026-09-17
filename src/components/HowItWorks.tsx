@@ -1,0 +1,250 @@
+'use client';
+
+import React from 'react';
+import { Sparkles, ArrowRight, Target, MapPin, Sliders, Radio } from 'lucide-react';
+
+const STEPS = [
+  {
+    number: '01',
+    title: 'CHOOSE YOUR AUDIENCE',
+    copy: 'Tell us who needs to see your campaign — from commuters and business leaders to shoppers and festival goers.',
+    icon: Target,
+  },
+  {
+    number: '02',
+    title: 'FIND YOUR LOCATION',
+    copy: 'Discover the places your audience already moves through across iconic central intersections and arterial highways.',
+    icon: MapPin,
+  },
+  {
+    number: '03',
+    title: 'BUILD YOUR CAMPAIGN',
+    copy: 'Choose formats, screen sizes, synchronized dayparts, dynamic triggers, and high-resolution creative direction.',
+    icon: Sliders,
+  },
+  {
+    number: '04',
+    title: 'GO LIVE',
+    copy: 'Watch your brand become part of the city skyline, dominating attention in physical public space.',
+    icon: Radio,
+  },
+];
+
+interface HowItWorksProps {
+  onStartPlanning: () => void;
+}
+
+export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
+  return (
+    <section
+      style={{
+        position: 'relative',
+        backgroundColor: '#F2ECDD', // Soft beige / cream
+        padding: '9rem 0',
+        borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
+        overflow: 'hidden',
+      }}
+    >
+      <div className="container-custom">
+        {/* Header */}
+        <div style={{ maxWidth: '820px', marginBottom: '5rem' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: '#1E56FF',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <Sparkles size={14} />
+            FROM IDEA TO IMPACT.
+          </div>
+
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 900,
+              fontSize: 'clamp(2.6rem, 5.2vw, 4.8rem)',
+              lineHeight: 0.95,
+              letterSpacing: '-0.04em',
+              textTransform: 'uppercase',
+              color: '#111111',
+            }}
+          >
+            FOUR STEPS. <br />
+            ONE BIG <br />
+            <span style={{ color: '#1E56FF' }}>IMPRESSION.</span>
+          </h2>
+        </div>
+
+        {/* 4 Steps Grid with Large Numbers as Graphic Elements */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '1.5rem',
+            marginBottom: '4.5rem',
+          }}
+          className="how-steps-grid"
+        >
+          {STEPS.map((step, idx) => {
+            const Icon = step.icon;
+            return (
+              <div
+                key={step.number}
+                style={{
+                  position: 'relative',
+                  padding: '2.5rem 2rem',
+                  borderRadius: '20px',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid rgba(17, 17, 17, 0.08)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: '340px',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.03)',
+                  transition: 'all 0.3s ease',
+                }}
+                className="step-box"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#1E56FF';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.06)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.08)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.03)';
+                }}
+              >
+                <div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: '1.75rem',
+                    }}
+                  >
+                    {/* Large Number Graphic Element */}
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '3rem',
+                        fontWeight: 900,
+                        color: '#111111',
+                        lineHeight: 0.9,
+                      }}
+                    >
+                      {step.number}
+                    </span>
+                    <div
+                      style={{
+                        width: '42px',
+                        height: '42px',
+                        borderRadius: '50%',
+                        backgroundColor: '#F7F5EF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#1E56FF',
+                      }}
+                    >
+                      <Icon size={18} />
+                    </div>
+                  </div>
+
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 800,
+                      fontSize: '1.2rem',
+                      letterSpacing: '-0.02em',
+                      textTransform: 'uppercase',
+                      color: '#111111',
+                      marginBottom: '0.85rem',
+                      lineHeight: 1.15,
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+
+                  <p style={{ color: '#555555', fontSize: '0.9rem', lineHeight: 1.55 }}>
+                    {step.copy}
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    height: '2px',
+                    width: '100%',
+                    backgroundColor: idx === 0 ? '#1E56FF' : 'rgba(17, 17, 17, 0.1)',
+                    marginTop: '2rem',
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* CTA Banner */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '2rem',
+            padding: '2.5rem',
+            borderRadius: '24px',
+            backgroundColor: '#FFFFFF',
+            border: '1px solid rgba(17, 17, 17, 0.08)',
+            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
+          }}
+        >
+          <div>
+            <h4
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.5rem',
+                fontWeight: 900,
+                color: '#111111',
+                textTransform: 'uppercase',
+                marginBottom: '0.25rem',
+              }}
+            >
+              SIMPLE PLANNING. <span style={{ color: '#1E56FF' }}>UNMISSABLE RESULTS.</span>
+            </h4>
+            <p style={{ color: '#666666', fontSize: '0.95rem' }}>
+              Launch in days, not months. Real-time availability and verified audience analytics.
+            </p>
+          </div>
+
+          <button onClick={onStartPlanning} className="btn-primary" data-cursor="PLAN">
+            START PLANNING
+            <ArrowRight size={16} strokeWidth={2.5} />
+          </button>
+        </div>
+      </div>
+
+      <style jsx>{`
+        @media (max-width: 992px) {
+          .how-steps-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+        }
+        @media (max-width: 640px) {
+          .how-steps-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
