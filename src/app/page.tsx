@@ -8,19 +8,16 @@ import IntroSection from '@/components/IntroSection';
 import ScrollyCanvas from '@/components/ScrollyCanvas';
 import FormatExplorer from '@/components/FormatExplorer';
 import SignProductsDirectory from '@/components/SignProductsDirectory';
-import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
 import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 import ImpactStats from '@/components/ImpactStats';
 import LocationMap from '@/components/LocationMap';
-import LocationCarousel from '@/components/LocationCarousel';
 import HowItWorks from '@/components/HowItWorks';
 import CampaignBuilder from '@/components/CampaignBuilder';
 import WhyOutdoor from '@/components/WhyOutdoor';
 import BrandTrust from '@/components/BrandTrust';
 import TestimonialSection from '@/components/TestimonialSection';
 import InsightsSection from '@/components/InsightsSection';
-import FinalCTA from '@/components/FinalCTA';
 import Footer from '@/components/Footer';
 import CampaignModal from '@/components/CampaignModal';
 import { FeaturedCampaign, BillboardLocation } from '@/types';
@@ -106,8 +103,6 @@ export default function Home() {
       {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." */}
       <IntroSection />
 
-      {/* Attention Contrast Section (Minimal, Stark, Sequential Typographic) */}
-      <AttentionStatement />
 
       {/* Interactive Spotlight Torch Section */}
       <SpotlightSection />
@@ -121,8 +116,6 @@ export default function Home() {
       {/* Interactive Global Network Map */}
       <LocationMap onSelectLocation={handleSelectLocation} />
 
-      {/* Cinematic Location Showcase Scroller */}
-      <LocationCarousel onSelectLocation={handleSelectLocation} />
 
       {/* How It Works Timeline */}
       <HowItWorks onStartPlanning={() => {
@@ -145,8 +138,6 @@ export default function Home() {
       {/* Insights, Stories & Culture */}
       <InsightsSection />
 
-      {/* Final Immersive Full-Screen CTA */}
-      <FinalCTA onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* Oversized Interactive Footer */}
       <Footer />
