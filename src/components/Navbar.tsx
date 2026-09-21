@@ -539,7 +539,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                   transition: 'all 0.2s ease',
                 }}
               >
-                Formats
+                Industries
                 <ChevronDown
                   size={12}
                   style={{
@@ -549,7 +549,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                 />
               </a>
 
-              {/* Formats Mega Menu Dropdown */}
+              {/* Formats / Industries Mega Menu Dropdown */}
               {activeDropdown === 'formats' && (
                 <div
                   className="mega-menu-enter"
@@ -589,10 +589,10 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Custom Signage Formats
+                      Signage By Industry (8 Sectors)
                     </span>
                     <a
-                      href="#formats"
+                      href="#industries"
                       onClick={() => setActiveDropdown(null)}
                       style={{
                         fontSize: '0.72rem',
@@ -604,7 +604,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         gap: '2px',
                       }}
                     >
-                      View All 5 Formats <ArrowUpRight size={12} />
+                      Explore All 8 Sectors <ArrowUpRight size={12} />
                     </a>
                   </div>
 
@@ -1414,7 +1414,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
               { num: '01', label: 'Catalog', href: '#products', tag: '89 Products' },
-              { num: '02', label: 'Formats', href: '#formats', tag: '5 Options' },
+              { num: '02', label: 'Industries', href: '#industries', tag: '8 Sectors' },
               { num: '03', label: 'Locations', href: '#locations', tag: 'Borough Map' },
               { num: '04', label: 'Campaigns', href: '#campaigns', tag: 'Case Studies' },
               { num: '05', label: 'Experience', href: '#experience', tag: '3D Simulation' },

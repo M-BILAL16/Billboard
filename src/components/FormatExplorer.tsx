@@ -1,20 +1,203 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { BILLBOARD_FORMATS } from '../data/billboardData';
+import { ArrowRight, Sparkles, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+
+export interface IndustryItem {
+  id: string;
+  number: string;
+  title: string;
+  category: string;
+  badge: string;
+  tagline: string;
+  description: string;
+  learnMoreUrl: string;
+  image: string;
+  specs: {
+    audience: string;
+    locationType: string;
+    format: string;
+    estimatedReach: string;
+  };
+}
+
+export const INDUSTRIES_DATA: IndustryItem[] = [
+  {
+    id: 'retail',
+    number: '01',
+    title: 'RETAIL',
+    category: 'STOREFRONT VISIBILITY',
+    badge: 'STOREFRONT VISIBILITY',
+    tagline: 'CUSTOMER ENGAGEMENT',
+    description: 'Retail signage enhancing storefront visibility and customer engagement.',
+    learnMoreUrl: 'https://signsny.com/industries/retail/',
+    image: '/images/industry_retail.jpg',
+    specs: {
+      audience: 'NYC Pedestrians & Shoppers',
+      locationType: 'Boutiques, Flagships & Malls',
+      format: '3D Channel Letters & Blade Signs',
+      estimatedReach: 'DOB & LPC Landmark Permitted',
+    },
+  },
+  {
+    id: 'restaurant',
+    number: '02',
+    title: 'RESTAURANT',
+    category: 'HOSPITALITY & DINING',
+    badge: 'ELEVATING DINING PRESENCE',
+    tagline: 'PATRON ATTRACTION',
+    description: 'Restaurant signage attracting customers and elevating dining presence.',
+    learnMoreUrl: 'https://signsny.com/industries/restaurants/',
+    image: '/images/industry_restaurant.jpg',
+    specs: {
+      audience: 'Dining Patrons & Foodies',
+      locationType: 'Bistros, Rooftops & Cafes',
+      format: 'Halo-Lit Letters & Awnings',
+      estimatedReach: 'Sidewalk DCA Clearances',
+    },
+  },
+  {
+    id: 'manufacturing',
+    number: '03',
+    title: 'MANUFACTURING',
+    category: 'INDUSTRIAL SAFETY',
+    badge: 'OPERATIONAL EFFICIENCY',
+    tagline: 'FACILITY INTEGRITY',
+    description: 'Industrial signage improving facility safety and operational efficiency.',
+    learnMoreUrl: 'https://signsny.com/industries/manufacturing-distribution/',
+    image: '/images/industry_manufacturing.jpg',
+    specs: {
+      audience: 'Plant Staff & Logistics Fleets',
+      locationType: 'Warehouses & Distribution Hubs',
+      format: 'OSHA Warning & Directional Signs',
+      estimatedReach: 'ANSI / OSHA / FDNY Certified',
+    },
+  },
+  {
+    id: 'schools-universities',
+    number: '04',
+    title: 'SCHOOLS & UNIVERSITIES',
+    category: 'CAMPUS NAVIGATION',
+    badge: 'SAFETY & BRAND IDENTITY',
+    tagline: 'CAMPUS EXCELLENCE',
+    description: 'Campus signage improving navigation, safety, and brand identity.',
+    learnMoreUrl: 'https://signsny.com/industries/schools-and-universities/',
+    image: '/images/industry_education.jpg',
+    specs: {
+      audience: 'Students, Faculty & Campus Visitors',
+      locationType: 'Colleges, Academies & Dormitories',
+      format: 'Monument Entrances & Wayfinding',
+      estimatedReach: 'ADA Tactile & Braille Required',
+    },
+  },
+  {
+    id: 'hospital',
+    number: '05',
+    title: 'HOSPITAL',
+    category: 'HEALTHCARE COMPLIANCE',
+    badge: 'NAVIGATION & SAFETY',
+    tagline: 'LIFE-SAVING WAYFINDING',
+    description: 'Healthcare signage supporting navigation, compliance, and safety.',
+    learnMoreUrl: 'https://signsny.com/industries/healthcare/',
+    image: '/images/industry_hospital.jpg',
+    specs: {
+      audience: 'Patients, Doctors & Emergency Responders',
+      locationType: 'Medical Centers & Clinics',
+      format: 'Emergency Illuminated Cross & Plaques',
+      estimatedReach: 'Strict ADA & NYC Fire Code 504',
+    },
+  },
+  {
+    id: 'city-government',
+    number: '06',
+    title: 'CITY & GOVERNMENT',
+    category: 'CIVIC REGULATIONS',
+    badge: 'PUBLIC NAVIGATION',
+    tagline: 'MUNICIPAL DIGNITY',
+    description: 'Municipal signage improving public navigation with regulations.',
+    learnMoreUrl: 'https://signsny.com/industries/city-and-government/',
+    image: '/images/industry_government.jpg',
+    specs: {
+      audience: 'NYC Citizens & Civic Visitors',
+      locationType: 'Municipal Halls & Public Agendas',
+      format: 'Cast Bronze Plaques & Crest Seals',
+      estimatedReach: 'Federal & City Code Compliant',
+    },
+  },
+  {
+    id: 'construction',
+    number: '07',
+    title: 'CONSTRUCTION',
+    category: 'JOB SITE SAFETY',
+    badge: 'SITE SAFETY & BRANDING',
+    tagline: 'DOB COMPLIANCE',
+    description: 'Construction signage ensuring site safety, compliance, and branding.',
+    learnMoreUrl: 'https://signsny.com/industries/construction-and-contractors/',
+    image: '/images/industry_construction.jpg',
+    specs: {
+      audience: 'Contractors, Crews & City Inspectors',
+      locationType: 'Scaffoldings, Fences & High-Rises',
+      format: 'DOB Permit Boards & Mesh Wraps',
+      estimatedReach: 'NYC Local Law 11 & Chapter 33',
+    },
+  },
+  {
+    id: 'corporate-offices',
+    number: '08',
+    title: 'CORPORATE OFFICES',
+    category: 'WORKPLACE BRANDING',
+    badge: 'PROFESSIONAL ENVIRONMENT',
+    tagline: 'EXECUTIVE PRESTIGE',
+    description: 'Office signage enhancing workplace branding, and professional environment.',
+    learnMoreUrl: 'https://signsny.com/industries/corporate/',
+    image: '/images/industry_corporate.jpg',
+    specs: {
+      audience: 'Clients, Partners & Staff',
+      locationType: 'Corporate HQs & Boardrooms',
+      format: '3D Lobby Metal Logos & Glass Decals',
+      estimatedReach: 'Class-A Architectural Grade',
+    },
+  },
+];
 
 interface FormatExplorerProps {
-  onSelectFormat?: (formatId: string) => void;
+  onSelectFormat?: (industryId: string) => void;
 }
 
 export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) {
-  const [activeCardId, setActiveCardId] = useState<string>('city-icons');
+  const [activeCardId, setActiveCardId] = useState<string>('retail');
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
+  const currentIndex = INDUSTRIES_DATA.findIndex((ind) => ind.id === activeCardId);
+
+  const handleSelectCard = (id: string, scroll = true) => {
+    setActiveCardId(id);
+    if (onSelectFormat) onSelectFormat(id);
+
+    if (scroll && cardRefs.current[id]) {
+      cardRefs.current[id]?.scrollIntoView({
+        behavior: 'smooth',
+        inline: 'center',
+        block: 'nearest',
+      });
+    }
+  };
+
+  const handlePrev = () => {
+    const prevIndex = (currentIndex - 1 + INDUSTRIES_DATA.length) % INDUSTRIES_DATA.length;
+    handleSelectCard(INDUSTRIES_DATA[prevIndex].id);
+  };
+
+  const handleNext = () => {
+    const nextIndex = (currentIndex + 1) % INDUSTRIES_DATA.length;
+    handleSelectCard(INDUSTRIES_DATA[nextIndex].id);
+  };
 
   return (
     <section
-      id="formats"
+      id="industries"
       style={{
         position: 'relative',
         backgroundColor: '#F7F5EF',
@@ -23,74 +206,188 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
         overflow: 'hidden',
       }}
     >
+      {/* Target anchor for legacy #formats links */}
+      <div id="formats" style={{ position: 'absolute', top: 0, left: 0 }} />
+
       <div className="container-custom">
-        {/* Section Header */}
-        <div style={{ maxWidth: '850px', marginBottom: '4.5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#1E56FF',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-            }}
-          >
-            <Sparkles size={14} />
-            CUSTOM FABRICATION FORMATS.
+        {/* Section Header & Slider Controls */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-end',
+            marginBottom: '3.5rem',
+            gap: '2rem',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div style={{ maxWidth: '820px' }}>
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: '#1E56FF',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                marginBottom: '1.25rem',
+              }}
+            >
+              <Sparkles size={14} />
+              SPECIALIZED SIGNAGE BY INDUSTRY.
+            </div>
+
+            <h2
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontWeight: 900,
+                fontSize: 'clamp(2.6rem, 5.2vw, 4.8rem)',
+                lineHeight: 0.96,
+                letterSpacing: '-0.04em',
+                textTransform: 'uppercase',
+                color: '#111111',
+                marginBottom: '1.5rem',
+              }}
+            >
+              EVERY INDUSTRY <br />
+              DESERVES THE <br />
+              <span style={{ color: '#1E56FF' }}>RIGHT LANDMARK.</span>
+            </h2>
+
+            <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '680px', lineHeight: 1.6 }}>
+              From high-traffic retail storefronts and Michelin-starred dining facades to DOB-permitted construction safety signs, campus wayfinding, and corporate lobby branding. Explore tailored signage solutions engineered for your industry.
+            </p>
           </div>
 
-          <h2
+          {/* Slider Controls & Counter */}
+          <div
             style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              fontSize: 'clamp(2.6rem, 5.2vw, 4.8rem)',
-              lineHeight: 0.96,
-              letterSpacing: '-0.04em',
-              textTransform: 'uppercase',
-              color: '#111111',
-              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+              paddingBottom: '0.5rem',
             }}
           >
-            EVERY STOREFRONT <br />
-            DESERVES THE <br />
-            <span style={{ color: '#1E56FF' }}>RIGHT LANDMARK.</span>
-          </h2>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.8rem',
+                fontWeight: 800,
+                color: '#666666',
+                letterSpacing: '0.08em',
+                backgroundColor: '#FFFFFF',
+                padding: '0.65rem 1.1rem',
+                borderRadius: '9999px',
+                border: '1px solid rgba(17, 17, 17, 0.1)',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
+              }}
+            >
+              <span style={{ color: '#1E56FF' }}>0{currentIndex + 1}</span> / 0{INDUSTRIES_DATA.length}
+            </div>
 
-          <p style={{ color: '#555555', fontSize: '1.2rem', maxWidth: '640px', lineHeight: 1.6 }}>
-            From precision front-lit & halo channel letters and architectural corporate lobbies to DOB-permitted awnings and heavy-duty building wraps. Expand each format to view engineered specs, materials, and lead times.
-          </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={handlePrev}
+                aria-label="Previous Industry"
+                style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '50%',
+                  backgroundColor: '#FFFFFF',
+                  border: '1.5px solid rgba(17, 17, 17, 0.12)',
+                  color: '#111111',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.06)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1E56FF';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.borderColor = '#1E56FF';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#111111';
+                  e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.12)';
+                }}
+              >
+                <ChevronLeft size={20} strokeWidth={2.5} />
+              </button>
+
+              <button
+                onClick={handleNext}
+                aria-label="Next Industry"
+                style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '50%',
+                  backgroundColor: '#FFFFFF',
+                  border: '1.5px solid rgba(17, 17, 17, 0.12)',
+                  color: '#111111',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 14px rgba(0, 0, 0, 0.06)',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1E56FF';
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.borderColor = '#1E56FF';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                  e.currentTarget.style.color = '#111111';
+                  e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.12)';
+                }}
+              >
+                <ChevronRight size={20} strokeWidth={2.5} />
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Interactive Accordion Expanding Cards Row */}
+        {/* Interactive Accordion Expanding Cards Slider Row */}
         <div
+          ref={sliderRef}
           style={{
             display: 'flex',
             gap: '1.25rem',
             minHeight: '660px',
             width: '100%',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            paddingBottom: '1.5rem',
+            paddingTop: '0.5rem',
+            scrollBehavior: 'smooth',
           }}
-          className="format-cards-container"
+          className="format-cards-container no-scrollbar"
         >
-          {BILLBOARD_FORMATS.map((format) => {
-            const isExpanded = activeCardId === format.id;
+          {INDUSTRIES_DATA.map((ind) => {
+            const isExpanded = activeCardId === ind.id;
 
             return (
               <div
-                key={format.id}
-                onMouseEnter={() => setActiveCardId(format.id)}
-                onClick={() => {
-                  setActiveCardId(format.id);
-                  if (onSelectFormat) onSelectFormat(format.id);
+                key={ind.id}
+                ref={(el) => {
+                  cardRefs.current[ind.id] = el;
                 }}
-                data-cursor={isExpanded ? 'ACTIVE STAGE' : 'EXPAND'}
+                onMouseEnter={() => handleSelectCard(ind.id, false)}
+                onClick={() => handleSelectCard(ind.id, true)}
+                data-cursor={isExpanded ? 'ACTIVE INDUSTRY' : 'EXPAND'}
                 style={{
                   position: 'relative',
-                  flex: isExpanded ? '3.5' : '1',
+                  flex: isExpanded
+                    ? '0 0 clamp(540px, 46vw, 680px)'
+                    : '0 0 clamp(160px, 12.5vw, 195px)',
+                  minWidth: isExpanded ? 'clamp(540px, 46vw, 680px)' : 'clamp(160px, 12.5vw, 195px)',
                   borderRadius: '24px',
                   overflow: 'hidden',
                   cursor: 'pointer',
@@ -98,7 +395,7 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                   boxShadow: isExpanded
                     ? '0 25px 60px rgba(30, 86, 255, 0.16), 0 8px 24px rgba(0, 0, 0, 0.06)'
                     : '0 6px 20px rgba(0, 0, 0, 0.03)',
-                  transition: 'flex 0.6s cubic-bezier(0.16, 1, 0.3, 1), border 0.3s ease, box-shadow 0.3s ease',
+                  transition: 'flex 0.6s cubic-bezier(0.16, 1, 0.3, 1), min-width 0.6s cubic-bezier(0.16, 1, 0.3, 1), border 0.3s ease, box-shadow 0.3s ease',
                   backgroundColor: '#FFFFFF',
                   display: 'flex',
                   flexDirection: 'column',
@@ -118,8 +415,8 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                   }}
                 >
                   <Image
-                    src={format.image}
-                    alt={format.title}
+                    src={ind.image}
+                    alt={ind.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     style={{
@@ -130,14 +427,14 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                       transition: 'filter 0.5s ease',
                     }}
                   />
-                  {/* Subtle Light Gradient Overlay for Maximum Readability */}
+                  {/* Subtle Gradient Overlay for High Readability */}
                   <div
                     style={{
                       position: 'absolute',
                       inset: 0,
                       background: isExpanded
-                        ? 'linear-gradient(180deg, rgba(247, 245, 239, 0.3) 0%, rgba(247, 245, 239, 0) 35%, rgba(0, 0, 0, 0.35) 100%)'
-                        : 'linear-gradient(180deg, rgba(247, 245, 239, 0.4) 0%, rgba(0, 0, 0, 0.45) 100%)',
+                        ? 'linear-gradient(180deg, rgba(247, 245, 239, 0.25) 0%, rgba(247, 245, 239, 0) 30%, rgba(0, 0, 0, 0.45) 100%)'
+                        : 'linear-gradient(180deg, rgba(247, 245, 239, 0.35) 0%, rgba(0, 0, 0, 0.5) 100%)',
                       transition: 'background 0.4s ease',
                     }}
                   />
@@ -169,7 +466,7 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                       whiteSpace: 'nowrap',
                     }}
                   >
-                    0{format.number}
+                    {ind.number}
                   </span>
 
                   <span
@@ -187,7 +484,7 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                     }}
                   >
-                    {format.badge}
+                    {ind.badge}
                   </span>
                 </div>
 
@@ -220,7 +517,7 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                           textOverflow: 'ellipsis',
                         }}
                       >
-                        {format.title}
+                        {ind.title}
                       </h3>
                     </div>
                   ) : (
@@ -249,9 +546,9 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                           marginBottom: '0.35rem',
                         }}
                       >
-                        <span>STAGE 0{format.number}</span>
+                        <span>SECTOR {ind.number}</span>
                         <span>•</span>
-                        <span>{format.tagline}</span>
+                        <span>{ind.tagline}</span>
                       </div>
 
                       <h3
@@ -266,19 +563,19 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                           marginBottom: '0.75rem',
                         }}
                       >
-                        {format.title}
+                        {ind.title}
                       </h3>
 
                       <p
                         style={{
                           color: '#555555',
-                          fontSize: '0.95rem',
+                          fontSize: '0.96rem',
                           lineHeight: 1.55,
                           marginBottom: '1.5rem',
                           maxWidth: '560px',
                         }}
                       >
-                        {format.description}
+                        {ind.description}
                       </p>
 
                       {/* Specs 4-Box Grid */}
@@ -304,10 +601,10 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                               marginBottom: '2px',
                             }}
                           >
-                            AUDIENCE
+                            PRIMARY AUDIENCE
                           </span>
                           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111111' }}>
-                            {format.specs.audience}
+                            {ind.specs.audience}
                           </span>
                         </div>
 
@@ -321,10 +618,10 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                               marginBottom: '2px',
                             }}
                           >
-                            LOCATION TYPE
+                            KEY ENVIRONMENTS
                           </span>
                           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111111' }}>
-                            {format.specs.locationType}
+                            {ind.specs.locationType}
                           </span>
                         </div>
 
@@ -338,10 +635,10 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                               marginBottom: '2px',
                             }}
                           >
-                            FORMAT
+                            ENGINEERED FORMAT
                           </span>
                           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#1E56FF' }}>
-                            {format.specs.format}
+                            {ind.specs.format}
                           </span>
                         </div>
 
@@ -355,27 +652,52 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                               marginBottom: '2px',
                             }}
                           >
-                            ESTIMATED REACH
+                            COMPLIANCE / PERMITS
                           </span>
                           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#111111' }}>
-                            {format.specs.estimatedReach}
+                            {ind.specs.estimatedReach}
                           </span>
                         </div>
                       </div>
 
-                      {/* Interactive Button */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      {/* Interactive Learn More Button */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                         <a
-                          href="#planner"
+                          href={ind.learnMoreUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="btn-primary"
                           style={{
                             padding: '0.8rem 1.8rem',
                             fontSize: '0.84rem',
                             gap: '0.6rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
                           }}
                         >
-                          {format.ctaText}
-                          <ArrowRight size={16} strokeWidth={2.5} />
+                          LEARN MORE
+                          <ExternalLink size={15} strokeWidth={2.5} />
+                        </a>
+
+                        <a
+                          href="#quote"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            color: '#111111',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.78rem',
+                            fontWeight: 800,
+                            letterSpacing: '0.04em',
+                            textDecoration: 'none',
+                            padding: '0.65rem 1rem',
+                            borderRadius: '8px',
+                            backgroundColor: 'rgba(17, 17, 17, 0.05)',
+                          }}
+                        >
+                          GET A QUOTE FOR {ind.title}
+                          <ArrowRight size={13} />
                         </a>
                       </div>
                     </div>
@@ -398,14 +720,16 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
             transform: translateY(0);
           }
         }
-        @media (max-width: 992px) {
-          .format-cards-container {
-            flex-direction: column !important;
-            min-height: auto !important;
-          }
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        @media (max-width: 768px) {
           .format-card {
-            min-height: 420px !important;
-            flex: unset !important;
+            min-height: 520px !important;
           }
         }
       `}</style>
