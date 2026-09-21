@@ -9,12 +9,14 @@ import {
   ChevronRight,
   ShieldCheck,
   Building2,
-  Layers,
   Maximize2,
   X,
   PhoneCall,
-  FileText,
   BadgeCheck,
+  FileCheck2,
+  Layers,
+  Sparkle,
+  Compass,
 } from 'lucide-react';
 import { FULL_CATALOG, MainCategory, Subcategory, CatalogItem } from '@/data/catalogTypes';
 
@@ -87,7 +89,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
     const targetCat = FULL_CATALOG.find((c) => c.id === catId);
     if (targetCat && targetCat.subcategories.length > 0) {
       setSelectedSubcatName(targetCat.subcategories[0].name);
-      // Reset tab preference based on first subcat
       if (targetCat.subcategories[0].designs.length > 0) {
         setActiveTab('designs');
       } else if (targetCat.subcategories[0].types.length > 0) {
@@ -99,7 +100,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
   const handleSubcatSelect = (sub: Subcategory) => {
     setSelectedSubcatName(sub.name);
     if (sub.designs.length > 0 && sub.types.length > 0) {
-      // Keep current tab if valid
+      // Keep current tab
     } else if (sub.designs.length > 0) {
       setActiveTab('designs');
     } else if (sub.types.length > 0) {
@@ -112,15 +113,15 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
       id="products"
       style={{
         position: 'relative',
-        backgroundColor: '#FFFFFF',
-        padding: '6rem 0 7rem 0',
+        backgroundColor: '#FBFBFA',
+        padding: '6.5rem 0 7rem 0',
         borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
         overflow: 'hidden',
       }}
     >
       <div className="container-custom">
         {/* Section Header */}
-        <div style={{ maxWidth: '850px', marginBottom: '2.5rem' }}>
+        <div style={{ maxWidth: '880px', marginBottom: '2.5rem' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -132,11 +133,11 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
               fontWeight: 800,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              marginBottom: '1rem',
+              marginBottom: '0.9rem',
             }}
           >
             <Sparkles size={14} />
-            SIGN PRODUCTS CATALOG // 9 CATEGORIES • 89 ARCHITECTURAL LINES
+            NYC PRODUCT CATALOG // 9 CATEGORIES • 89 ARCHITECTURAL PRODUCT LINES
           </div>
 
           <h2
@@ -155,28 +156,31 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
             <span style={{ color: '#1E56FF' }}>FOR YOUR NYC SPACE.</span>
           </h2>
 
-          <p style={{ color: '#555555', fontSize: '1.08rem', maxWidth: '720px', lineHeight: 1.55 }}>
-            Explore every custom sign product, design showcase, and architectural material type.
-            Fabricated in our 10,000 sq ft NYC plant with full DOB permit management.
+          <p style={{ color: '#555555', fontSize: '1.08rem', maxWidth: '720px', lineHeight: 1.6 }}>
+            Browse New York&apos;s most comprehensive commercial signage directory. Built in our 10,000 sq ft NYC fabrication facility with DOB permit expediting and licensed 5-borough installation.
           </p>
         </div>
 
-        {/* 1. Main Category Selector (Top Horizontal Pills) */}
+        {/* 1. Main Category Selector (Top Horizontal Navigation Bar) */}
         <div
           style={{
-            marginBottom: '2.5rem',
-            borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
-            paddingBottom: '1rem',
+            marginBottom: '2.25rem',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '20px',
+            border: '1px solid rgba(17, 17, 17, 0.08)',
+            padding: '0.65rem',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
           }}
         >
           <div
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.65rem',
+              gap: '0.45rem',
               overflowX: 'auto',
-              paddingBottom: '0.5rem',
-              scrollbarWidth: 'thin',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              padding: '0.2rem',
             }}
           >
             {FULL_CATALOG.map((cat) => {
@@ -190,22 +194,22 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.5rem',
-                    padding: '0.65rem 1.15rem',
-                    borderRadius: '9999px',
+                    padding: '0.6rem 1.15rem',
+                    borderRadius: '14px',
                     border: isActive
-                      ? '1.5px solid #1E56FF'
-                      : '1px solid rgba(17, 17, 17, 0.10)',
-                    backgroundColor: isActive ? '#1E56FF' : '#F7F5EF',
-                    color: isActive ? '#FFFFFF' : '#222222',
+                      ? '1px solid #1E56FF'
+                      : '1px solid transparent',
+                    backgroundColor: isActive ? '#1E56FF' : 'transparent',
+                    color: isActive ? '#FFFFFF' : '#444444',
                     fontFamily: 'var(--font-display)',
                     fontSize: '0.88rem',
                     fontWeight: isActive ? 700 : 600,
                     letterSpacing: '-0.01em',
                     whiteSpace: 'nowrap',
                     cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                     boxShadow: isActive
-                      ? '0 4px 14px rgba(30, 86, 255, 0.25)'
+                      ? '0 4px 14px rgba(30, 86, 255, 0.28)'
                       : 'none',
                   }}
                 >
@@ -218,7 +222,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                       borderRadius: '9999px',
                       backgroundColor: isActive
                         ? 'rgba(255, 255, 255, 0.25)'
-                        : 'rgba(17, 17, 17, 0.08)',
+                        : 'rgba(17, 17, 17, 0.07)',
                       color: isActive ? '#FFFFFF' : '#666666',
                     }}
                   >
@@ -230,962 +234,1069 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
           </div>
         </div>
 
-        {/* 2. Main 2-Column Explorer: Left Sidebar (Subcategories) + Right Content (Designs & Types) */}
+        {/* 2. Unified Master Explorer Shell (Sidebar + Content Panel) */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: '320px 1fr',
-            gap: '2.5rem',
-            alignItems: 'start',
+            backgroundColor: '#FFFFFF',
+            borderRadius: '24px',
+            border: '1px solid rgba(17, 17, 17, 0.09)',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.04)',
+            overflow: 'hidden',
           }}
-          className="products-catalog-grid"
+          className="products-catalog-shell"
         >
-          {/* Left Sidebar: Subcategories List */}
+          {/* Left Column: Subcategory Sidebar */}
           <aside
             style={{
-              backgroundColor: '#F7F5EF',
-              borderRadius: '20px',
-              border: '1px solid rgba(17, 17, 17, 0.08)',
-              padding: '1.25rem',
+              backgroundColor: '#FAF9F5',
+              borderRight: '1px solid rgba(17, 17, 17, 0.08)',
+              padding: '1.5rem',
               display: 'flex',
               flexDirection: 'column',
-              maxHeight: '820px',
-              position: 'sticky',
-              top: '90px',
+              boxSizing: 'border-box',
+            }}
+            className="products-catalog-sidebar"
+          >
+            {/* Sidebar Sticky Header */}
+            <div
+              style={{
+                position: 'sticky',
+                top: '90px',
+                display: 'flex',
+                flexDirection: 'column',
+                height: 'calc(100vh - 120px)',
+                maxHeight: '780px',
+              }}
+            >
+              {/* Header Info */}
+              <div style={{ marginBottom: '1rem' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '0.75rem',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: '#666666',
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {activeCategory.name}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      color: '#1E56FF',
+                      fontWeight: 700,
+                      backgroundColor: 'rgba(30, 86, 255, 0.08)',
+                      padding: '0.15rem 0.5rem',
+                      borderRadius: '9999px',
+                    }}
+                  >
+                    {filteredSubcategories.length} SUB-TYPES
+                  </span>
+                </div>
+
+                {/* Instant Search Bar */}
+                <div style={{ position: 'relative' }}>
+                  <Search
+                    size={14}
+                    style={{
+                      position: 'absolute',
+                      left: '0.85rem',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#888888',
+                    }}
+                  />
+                  <input
+                    type="text"
+                    placeholder={`Filter ${activeCategory.name.toLowerCase()}...`}
+                    value={sidebarSearch}
+                    onChange={(e) => setSidebarSearch(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.55rem 0.85rem 0.55rem 2.2rem',
+                      borderRadius: '10px',
+                      border: '1px solid rgba(17, 17, 17, 0.12)',
+                      backgroundColor: '#FFFFFF',
+                      fontSize: '0.84rem',
+                      fontFamily: 'var(--font-body)',
+                      color: '#111111',
+                      outline: 'none',
+                      boxSizing: 'border-box',
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Scrollable Subcategories List */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.35rem',
+                  overflowY: 'auto',
+                  paddingRight: '0.35rem',
+                  flex: 1,
+                }}
+                className="custom-sidebar-scroll"
+              >
+                {filteredSubcategories.map((sub) => {
+                  const isSelected = sub.name.toLowerCase() === activeSubcategory.name.toLowerCase();
+
+                  return (
+                    <button
+                      key={sub.name}
+                      onClick={() => handleSubcatSelect(sub)}
+                      type="button"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.6rem 0.75rem',
+                        borderRadius: '12px',
+                        border: isSelected
+                          ? '1px solid #1E56FF'
+                          : '1px solid transparent',
+                        backgroundColor: isSelected ? '#FFFFFF' : 'transparent',
+                        color: isSelected ? '#111111' : '#444444',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        transition: 'all 0.18s ease',
+                        boxShadow: isSelected
+                          ? '0 4px 12px rgba(30, 86, 255, 0.08)'
+                          : 'none',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        {/* Subcategory Thumbnail */}
+                        <div
+                          style={{
+                            width: '38px',
+                            height: '38px',
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            backgroundColor: '#EBEBEB',
+                            flexShrink: 0,
+                            position: 'relative',
+                            border: isSelected ? '1px solid rgba(30, 86, 255, 0.3)' : '1px solid rgba(17, 17, 17, 0.06)',
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={sub.image || '/images/hero_storefront.jpg'}
+                            alt={sub.name}
+                            loading="lazy"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                            }}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = '/images/hero_storefront.jpg';
+                            }}
+                          />
+                        </div>
+
+                        <div>
+                          <div
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontSize: '0.86rem',
+                              fontWeight: isSelected ? 800 : 600,
+                              lineHeight: 1.25,
+                              color: isSelected ? '#1E56FF' : '#111111',
+                            }}
+                          >
+                            {sub.name}
+                          </div>
+                          <div
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.66rem',
+                              color: isSelected ? '#555555' : '#888888',
+                              marginTop: '0.15rem',
+                            }}
+                          >
+                            {sub.designs.length > 0 && `${sub.designs.length} Designs`}
+                            {sub.designs.length > 0 && sub.types.length > 0 && ' • '}
+                            {sub.types.length > 0 && `${sub.types.length} Types`}
+                            {sub.designs.length === 0 && sub.types.length === 0 && 'Custom Specs'}
+                          </div>
+                        </div>
+                      </div>
+
+                      <ChevronRight
+                        size={14}
+                        style={{
+                          color: isSelected ? '#1E56FF' : 'rgba(17, 17, 17, 0.25)',
+                          transform: isSelected ? 'translateX(2px)' : 'none',
+                          transition: 'transform 0.2s ease',
+                          flexShrink: 0,
+                        }}
+                      />
+                    </button>
+                  );
+                })}
+
+                {filteredSubcategories.length === 0 && (
+                  <div style={{ textAlign: 'center', padding: '2.5rem 1rem', color: '#888888', fontSize: '0.85rem' }}>
+                    No subcategory found matching &ldquo;{sidebarSearch}&rdquo;
+                  </div>
+                )}
+              </div>
+            </div>
+          </aside>
+
+          {/* Right Column: Selected Subcategory & Cards Grid */}
+          <main
+            style={{
+              padding: 'clamp(1.5rem, 3vw, 2.5rem)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              minWidth: 0,
+              boxSizing: 'border-box',
             }}
           >
-            {/* Sidebar Title & Search Input */}
-            <div style={{ marginBottom: '1rem' }}>
+            <div>
+              {/* Subcategory Hero Header Banner */}
+              <div
+                style={{
+                  backgroundColor: '#FDF7E7',
+                  borderRadius: '20px',
+                  border: '1px solid rgba(17, 17, 17, 0.08)',
+                  padding: 'clamp(1.4rem, 2.5vw, 2rem)',
+                  marginBottom: '2rem',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                <div style={{ position: 'relative', zIndex: 2 }}>
+                  {/* Breadcrumb */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.72rem',
+                      color: '#666666',
+                      marginBottom: '0.6rem',
+                    }}
+                  >
+                    <span>{activeCategory.name}</span>
+                    <span>/</span>
+                    <span style={{ color: '#1E56FF', fontWeight: 700 }}>
+                      {activeSubcategory.name}
+                    </span>
+                  </div>
+
+                  {/* Title & Instant Quote CTA */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      flexWrap: 'wrap',
+                      gap: '1rem',
+                      marginBottom: '0.85rem',
+                    }}
+                  >
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 900,
+                        fontSize: 'clamp(1.8rem, 2.8vw, 2.6rem)',
+                        lineHeight: 1.05,
+                        letterSpacing: '-0.03em',
+                        textTransform: 'uppercase',
+                        color: '#111111',
+                        margin: 0,
+                      }}
+                    >
+                      {activeSubcategory.name}
+                    </h3>
+
+                    <button
+                      type="button"
+                      onClick={onOpenCampaignModal}
+                      className="btn-primary"
+                      style={{
+                        padding: '0.65rem 1.25rem',
+                        fontSize: '0.82rem',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.45rem',
+                      }}
+                    >
+                      REQUEST A FREE QUOTE
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+
+                  {/* Subcategory Official Description */}
+                  <p
+                    style={{
+                      color: '#444444',
+                      fontSize: '0.98rem',
+                      lineHeight: 1.55,
+                      maxWidth: '820px',
+                      marginBottom: '1.25rem',
+                    }}
+                  >
+                    {activeSubcategory.description}
+                  </p>
+
+                  {/* Architectural Standards Bar */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem' }}>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.3rem 0.75rem',
+                        borderRadius: '9999px',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid rgba(17, 17, 17, 0.08)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        color: '#111111',
+                      }}
+                    >
+                      <Building2 size={12} style={{ color: '#1E56FF' }} />
+                      10,000 SQ FT NYC FABRICATION
+                    </span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.3rem 0.75rem',
+                        borderRadius: '9999px',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid rgba(17, 17, 17, 0.08)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        color: '#059669',
+                      }}
+                    >
+                      <ShieldCheck size={12} />
+                      NYC DOB EXPEDITED & COMPLIANT
+                    </span>
+                    <span
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        padding: '0.3rem 0.75rem',
+                        borderRadius: '9999px',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid rgba(17, 17, 17, 0.08)',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        color: '#666666',
+                      }}
+                    >
+                      <BadgeCheck size={12} style={{ color: '#1E56FF' }} />
+                      5-BOROUGH LICENSED INSTALLATION
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. The 2 TABS: Designs & Types (Clean Segmented Control) */}
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  marginBottom: '0.75rem',
+                  borderBottom: '1.5px solid rgba(17, 17, 17, 0.08)',
+                  marginBottom: '1.75rem',
+                  flexWrap: 'wrap',
+                  gap: '1rem',
                 }}
               >
-                <span
+                {/* Tab Pill Buttons */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  {/* Tab 1: Designs */}
+                  {hasDesigns && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('designs')}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.8rem 1.25rem',
+                        borderBottom: effectiveTab === 'designs' ? '3px solid #1E56FF' : '3px solid transparent',
+                        marginBottom: '-2px',
+                        background: 'none',
+                        borderTop: 'none',
+                        borderLeft: 'none',
+                        borderRight: 'none',
+                        color: effectiveTab === 'designs' ? '#1E56FF' : '#666666',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '0.96rem',
+                        fontWeight: effectiveTab === 'designs' ? 800 : 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <span>DESIGNS</span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '9999px',
+                          backgroundColor: effectiveTab === 'designs' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
+                          color: effectiveTab === 'designs' ? '#FFFFFF' : '#666666',
+                          fontWeight: 700,
+                        }}
+                      >
+                        {activeSubcategory.designs.length}
+                      </span>
+                    </button>
+                  )}
+
+                  {/* Tab 2: Types (Only if types exist) */}
+                  {hasTypes && (
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab('types')}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.8rem 1.25rem',
+                        borderBottom: effectiveTab === 'types' ? '3px solid #1E56FF' : '3px solid transparent',
+                        marginBottom: '-2px',
+                        background: 'none',
+                        borderTop: 'none',
+                        borderLeft: 'none',
+                        borderRight: 'none',
+                        color: effectiveTab === 'types' ? '#1E56FF' : '#666666',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '0.96rem',
+                        fontWeight: effectiveTab === 'types' ? 800 : 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <span>TYPES & MATERIALS</span>
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.72rem',
+                          padding: '0.15rem 0.5rem',
+                          borderRadius: '9999px',
+                          backgroundColor: effectiveTab === 'types' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
+                          color: effectiveTab === 'types' ? '#FFFFFF' : '#666666',
+                          fontWeight: 700,
+                        }}
+                      >
+                        {activeSubcategory.types.length}
+                      </span>
+                    </button>
+                  )}
+                </div>
+
+                {/* Subtext info */}
+                <div
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '0.72rem',
-                    fontWeight: 700,
-                    color: '#666666',
-                    letterSpacing: '0.06em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {activeCategory.name} ({activeCategory.subcategories.length})
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.68rem',
-                    color: '#1E56FF',
-                    fontWeight: 600,
-                  }}
-                >
-                  SUB-CATEGORIES
-                </span>
-              </div>
-
-              <div style={{ position: 'relative' }}>
-                <Search
-                  size={14}
-                  style={{
-                    position: 'absolute',
-                    left: '0.85rem',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
                     color: '#888888',
                   }}
-                />
-                <input
-                  type="text"
-                  placeholder={`Search ${activeCategory.name.toLowerCase()}...`}
-                  value={sidebarSearch}
-                  onChange={(e) => setSidebarSearch(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.55rem 0.85rem 0.55rem 2.2rem',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(17, 17, 17, 0.12)',
-                    backgroundColor: '#FFFFFF',
-                    fontSize: '0.85rem',
-                    fontFamily: 'var(--font-body)',
-                    color: '#111111',
-                    outline: 'none',
-                  }}
-                />
+                >
+                  SHOWING {effectiveTab === 'designs' ? 'REAL CLIENT FABRICATION DESIGNS' : 'ARCHITECTURAL TYPE SPECIFICATIONS'}
+                </div>
               </div>
-            </div>
 
-            {/* Scrollable Subcategories List */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.35rem',
-                overflowY: 'auto',
-                paddingRight: '0.25rem',
-                flex: 1,
-              }}
-            >
-              {filteredSubcategories.map((sub) => {
-                const isSelected = sub.name.toLowerCase() === activeSubcategory.name.toLowerCase();
-                const totalItems = (sub.designs?.length || 0) + (sub.types?.length || 0);
-
-                return (
-                  <button
-                    key={sub.name}
-                    onClick={() => handleSubcatSelect(sub)}
-                    type="button"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '0.65rem 0.75rem',
-                      borderRadius: '12px',
-                      border: isSelected
-                        ? '1.5px solid #1E56FF'
-                        : '1px solid transparent',
-                      backgroundColor: isSelected ? '#FFFFFF' : 'transparent',
-                      color: isSelected ? '#111111' : '#444444',
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'all 0.18s ease',
-                      boxShadow: isSelected
-                        ? '0 4px 12px rgba(30, 86, 255, 0.08)'
-                        : 'none',
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      {/* Subcategory Thumbnail */}
+              {/* 4. The Unified Card Grid: Designs */}
+              {effectiveTab === 'designs' && hasDesigns && (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                    gap: '1.5rem',
+                  }}
+                >
+                  {activeSubcategory.designs.map((design) => (
+                    <div
+                      key={design.id + design.name}
+                      style={{
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(17, 17, 17, 0.09)',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        height: '380px', // Uniform height across all cards
+                        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                      }}
+                      className="catalog-card-hover"
+                    >
+                      {/* Image Frame */}
                       <div
                         style={{
-                          width: '38px',
-                          height: '38px',
-                          borderRadius: '8px',
-                          overflow: 'hidden',
-                          backgroundColor: '#EBEBEB',
-                          flexShrink: 0,
                           position: 'relative',
+                          width: '100%',
+                          height: '190px',
+                          backgroundColor: '#F3F3F3',
+                          overflow: 'hidden',
+                          cursor: 'pointer',
                         }}
+                        onClick={() =>
+                          setInspectedItem({
+                            item: design,
+                            type: 'design',
+                            subcatName: activeSubcategory.name,
+                            catName: activeCategory.name,
+                          })
+                        }
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={sub.image || '/images/hero_storefront.jpg'}
-                          alt={sub.name}
+                          src={design.image || design.remoteImage || activeSubcategory.image}
+                          alt={design.name}
                           loading="lazy"
                           style={{
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
+                            transition: 'transform 0.4s ease',
                           }}
+                          className="catalog-card-img"
                           onError={(e) => {
-                            (e.currentTarget as HTMLImageElement).src = '/images/hero_storefront.jpg';
+                            (e.currentTarget as HTMLImageElement).src =
+                              activeSubcategory.image || '/images/hero_storefront.jpg';
                           }}
                         />
+
+                        {/* Top Badge */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                            padding: '0.2rem 0.55rem',
+                            borderRadius: '6px',
+                            backgroundColor: 'rgba(17, 17, 17, 0.78)',
+                            backdropFilter: 'blur(6px)',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.04em',
+                            textTransform: 'uppercase',
+                          }}
+                        >
+                          DESIGN SHOWCASE
+                        </div>
+
+                        {/* Inspect Zoom Pill */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: '10px',
+                            right: '10px',
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                            backdropFilter: 'blur(6px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#111111',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                          }}
+                          title="Click to view full image"
+                        >
+                          <Maximize2 size={13} />
+                        </div>
                       </div>
 
-                      <div>
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontSize: '0.88rem',
-                            fontWeight: isSelected ? 700 : 500,
-                            lineHeight: 1.25,
-                            color: isSelected ? '#1E56FF' : '#111111',
-                          }}
-                        >
-                          {sub.name}
+                      {/* Uniform Card Body */}
+                      <div
+                        style={{
+                          padding: '1.1rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          flex: 1,
+                        }}
+                      >
+                        <div>
+                          {/* Clamped Title */}
+                          <h4
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontWeight: 700,
+                              fontSize: '0.96rem',
+                              color: '#111111',
+                              margin: '0 0 0.35rem 0',
+                              lineHeight: 1.3,
+                              textTransform: 'capitalize',
+                              height: '2.5rem',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {design.name}
+                          </h4>
+
+                          {/* Clamped Description */}
+                          <p
+                            style={{
+                              color: '#666666',
+                              fontSize: '0.8rem',
+                              lineHeight: 1.45,
+                              margin: 0,
+                              height: '2.35rem',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {design.description ||
+                              `Custom fabricated ${design.name} built in our NYC plant with custom mounting.`}
+                          </p>
                         </div>
+
+                        {/* Card Baseline Action Bar */}
                         <div
                           style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.66rem',
-                            color: '#777777',
-                            marginTop: '0.15rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            paddingTop: '0.75rem',
+                            borderTop: '1px solid rgba(17, 17, 17, 0.07)',
                           }}
                         >
-                          {sub.designs.length > 0 && `${sub.designs.length} Designs`}
-                          {sub.designs.length > 0 && sub.types.length > 0 && ' • '}
-                          {sub.types.length > 0 && `${sub.types.length} Types`}
-                          {totalItems === 0 && 'Architectural Line'}
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.66rem',
+                              color: '#059669',
+                              fontWeight: 700,
+                            }}
+                          >
+                            ✓ IN-HOUSE NYC BUILD
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setInspectedItem({
+                                item: design,
+                                type: 'design',
+                                subcatName: activeSubcategory.name,
+                                catName: activeCategory.name,
+                              });
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#1E56FF',
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.2rem',
+                              padding: '0.2rem 0.4rem',
+                            }}
+                          >
+                            DETAILS
+                            <ArrowRight size={12} />
+                          </button>
                         </div>
                       </div>
                     </div>
-
-                    <ChevronRight
-                      size={14}
-                      style={{
-                        color: isSelected ? '#1E56FF' : 'rgba(17, 17, 17, 0.25)',
-                        transform: isSelected ? 'translateX(2px)' : 'none',
-                        transition: 'transform 0.2s ease',
-                      }}
-                    />
-                  </button>
-                );
-              })}
-
-              {filteredSubcategories.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#888888', fontSize: '0.85rem' }}>
-                  No subcategory matching &ldquo;{sidebarSearch}&rdquo;
+                  ))}
                 </div>
               )}
-            </div>
-          </aside>
 
-          {/* Right Side: Selected Subcategory Canvas */}
-          <main style={{ minWidth: 0 }}>
-            {/* Subcategory Hero Header Banner */}
-            <div
-              style={{
-                backgroundColor: '#FDF7E7',
-                borderRadius: '24px',
-                border: '1px solid rgba(17, 17, 17, 0.08)',
-                padding: 'clamp(1.5rem, 3vw, 2.25rem)',
-                marginBottom: '2rem',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Background ambient watermarks */}
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '-20px',
-                  bottom: '-20px',
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 900,
-                  fontSize: '8rem',
-                  lineHeight: 0.8,
-                  color: 'rgba(17, 17, 17, 0.03)',
-                  pointerEvents: 'none',
-                  textTransform: 'uppercase',
-                  userSelect: 'none',
-                }}
-              >
-                NYC
-              </div>
-
-              <div style={{ position: 'relative', zIndex: 2 }}>
-                {/* Breadcrumb */}
+              {/* Content Grid: Types */}
+              {effectiveTab === 'types' && hasTypes && (
                 <div
                   style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.72rem',
-                    color: '#666666',
-                    marginBottom: '0.75rem',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                    gap: '1.5rem',
                   }}
                 >
-                  <span>{activeCategory.name}</span>
-                  <span>/</span>
-                  <span style={{ color: '#1E56FF', fontWeight: 700 }}>
-                    {activeSubcategory.name}
-                  </span>
+                  {activeSubcategory.types.map((typeItem) => (
+                    <div
+                      key={typeItem.id + typeItem.name}
+                      style={{
+                        backgroundColor: '#FFFFFF',
+                        borderRadius: '16px',
+                        border: '1px solid rgba(17, 17, 17, 0.09)',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        height: '380px', // Uniform height across all cards
+                        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                      }}
+                      className="catalog-card-hover"
+                    >
+                      {/* Image Frame */}
+                      <div
+                        style={{
+                          position: 'relative',
+                          width: '100%',
+                          height: '190px',
+                          backgroundColor: '#F3F3F3',
+                          overflow: 'hidden',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() =>
+                          setInspectedItem({
+                            item: typeItem,
+                            type: 'type',
+                            subcatName: activeSubcategory.name,
+                            catName: activeCategory.name,
+                          })
+                        }
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={typeItem.image || typeItem.remoteImage || activeSubcategory.image}
+                          alt={typeItem.name}
+                          loading="lazy"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            transition: 'transform 0.4s ease',
+                          }}
+                          className="catalog-card-img"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src =
+                              activeSubcategory.image || '/images/hero_storefront.jpg';
+                          }}
+                        />
+
+                        {/* Type Tag */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '10px',
+                            left: '10px',
+                            padding: '0.2rem 0.55rem',
+                            borderRadius: '6px',
+                            backgroundColor: '#1E56FF',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.62rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.04em',
+                            textTransform: 'uppercase',
+                          }}
+                        >
+                          ARCHITECTURAL TYPE
+                        </div>
+
+                        {/* Inspect Zoom Pill */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: '10px',
+                            right: '10px',
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                            backdropFilter: 'blur(6px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#111111',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                          }}
+                          title="Click to view full image"
+                        >
+                          <Maximize2 size={13} />
+                        </div>
+                      </div>
+
+                      {/* Uniform Card Body */}
+                      <div
+                        style={{
+                          padding: '1.1rem',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          flex: 1,
+                        }}
+                      >
+                        <div>
+                          {/* Clamped Title */}
+                          <h4
+                            style={{
+                              fontFamily: 'var(--font-display)',
+                              fontWeight: 700,
+                              fontSize: '0.96rem',
+                              color: '#111111',
+                              margin: '0 0 0.35rem 0',
+                              lineHeight: 1.3,
+                              height: '2.5rem',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {typeItem.name}
+                          </h4>
+
+                          {/* Clamped Description */}
+                          <p
+                            style={{
+                              color: '#666666',
+                              fontSize: '0.8rem',
+                              lineHeight: 1.45,
+                              margin: 0,
+                              height: '2.35rem',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {typeItem.description ||
+                              `Architectural grade ${typeItem.name} engineered for commercial NYC environments.`}
+                          </p>
+                        </div>
+
+                        {/* Card Baseline Action Bar */}
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            paddingTop: '0.75rem',
+                            borderTop: '1px solid rgba(17, 17, 17, 0.07)',
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.66rem',
+                              color: '#1E56FF',
+                              fontWeight: 700,
+                            }}
+                          >
+                            ✓ DOB APPROVED
+                          </span>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setInspectedItem({
+                                item: typeItem,
+                                type: 'type',
+                                subcatName: activeSubcategory.name,
+                                catName: activeCategory.name,
+                              });
+                            }}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#1E56FF',
+                              fontFamily: 'var(--font-mono)',
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.2rem',
+                              padding: '0.2rem 0.4rem',
+                            }}
+                          >
+                            SPECS
+                            <ArrowRight size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
+              )}
 
-                {/* Subcategory Title */}
+              {/* Fallback if product only has main showcase */}
+              {!hasDesigns && !hasTypes && (
                 <div
                   style={{
+                    backgroundColor: '#FAF9F5',
+                    borderRadius: '16px',
+                    border: '1.5px dashed rgba(17, 17, 17, 0.15)',
+                    padding: '3.5rem 2rem',
+                    textAlign: 'center',
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                    flexWrap: 'wrap',
-                    gap: '1.25rem',
-                    marginBottom: '1rem',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '1rem',
                   }}
                 >
-                  <h3
+                  <div
+                    style={{
+                      width: '180px',
+                      height: '140px',
+                      borderRadius: '12px',
+                      overflow: 'hidden',
+                      backgroundColor: '#FFFFFF',
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                    }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={activeSubcategory.image || '/images/hero_storefront.jpg'}
+                      alt={activeSubcategory.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+
+                  <h4
                     style={{
                       fontFamily: 'var(--font-display)',
-                      fontWeight: 900,
-                      fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
-                      lineHeight: 1.05,
-                      letterSpacing: '-0.03em',
-                      textTransform: 'uppercase',
+                      fontWeight: 800,
+                      fontSize: '1.25rem',
                       color: '#111111',
                       margin: 0,
                     }}
                   >
-                    {activeSubcategory.name}
-                  </h3>
+                    Custom Engineering & Fabrication for {activeSubcategory.name}
+                  </h4>
 
-                  {/* Primary Quote CTA */}
+                  <p style={{ color: '#666666', fontSize: '0.92rem', maxWidth: '540px', lineHeight: 1.5 }}>
+                    {activeSubcategory.description}
+                  </p>
+
                   <button
                     type="button"
                     onClick={onOpenCampaignModal}
                     className="btn-primary"
-                    style={{
-                      padding: '0.65rem 1.25rem',
-                      fontSize: '0.82rem',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                    }}
+                    style={{ marginTop: '0.5rem' }}
                   >
-                    REQUEST A FREE QUOTE
-                    <ArrowRight size={14} />
+                    REQUEST ARCHITECTURAL SPEC & ESTIMATE
                   </button>
                 </div>
-
-                {/* Subcategory Description */}
-                <p
-                  style={{
-                    color: '#444444',
-                    fontSize: '1rem',
-                    lineHeight: 1.6,
-                    maxWidth: '820px',
-                    marginBottom: '1.25rem',
-                  }}
-                >
-                  {activeSubcategory.description}
-                </p>
-
-                {/* Architectural Quality Badges */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      padding: '0.3rem 0.75rem',
-                      borderRadius: '9999px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(17, 17, 17, 0.08)',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      color: '#111111',
-                    }}
-                  >
-                    <Building2 size={12} style={{ color: '#1E56FF' }} />
-                    10,000 SQ FT NYC IN-HOUSE FABRICATION
-                  </span>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      padding: '0.3rem 0.75rem',
-                      borderRadius: '9999px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(17, 17, 17, 0.08)',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      color: '#059669',
-                    }}
-                  >
-                    <ShieldCheck size={12} />
-                    DOB PERMIT COMPLIANT
-                  </span>
-                  <span
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                      padding: '0.3rem 0.75rem',
-                      borderRadius: '9999px',
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(17, 17, 17, 0.08)',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      color: '#666666',
-                    }}
-                  >
-                    <BadgeCheck size={12} style={{ color: '#1E56FF' }} />
-                    LICENSED 5-BOROUGH INSTALLATION
-                  </span>
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* 3. The 2 TABS: Designs & Types (exactly as requested) */}
+            {/* Bottom Even Baseline Dock (Guarantees Perfectly Level Section Bottom) */}
             <div
               style={{
+                marginTop: '2.5rem',
+                paddingTop: '1.5rem',
+                borderTop: '1px solid rgba(17, 17, 17, 0.08)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                borderBottom: '2px solid rgba(17, 17, 17, 0.08)',
-                marginBottom: '2rem',
                 flexWrap: 'wrap',
                 gap: '1rem',
               }}
             >
-              {/* Tab Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                {/* 1. Designs Tab */}
-                {hasDesigns && (
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('designs')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.85rem 1.25rem',
-                      borderBottom: effectiveTab === 'designs' ? '3px solid #1E56FF' : '3px solid transparent',
-                      marginBottom: '-2px',
-                      background: 'none',
-                      borderTop: 'none',
-                      borderLeft: 'none',
-                      borderRight: 'none',
-                      color: effectiveTab === 'designs' ? '#1E56FF' : '#666666',
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '1rem',
-                      fontWeight: effectiveTab === 'designs' ? 800 : 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    <span>DESIGNS</span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.72rem',
-                        padding: '0.15rem 0.5rem',
-                        borderRadius: '9999px',
-                        backgroundColor: effectiveTab === 'designs' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
-                        color: effectiveTab === 'designs' ? '#FFFFFF' : '#666666',
-                        fontWeight: 700,
-                      }}
-                    >
-                      {activeSubcategory.designs.length}
-                    </span>
-                  </button>
-                )}
-
-                {/* 2. Types Tab (Shows if types exist) */}
-                {hasTypes && (
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('types')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      padding: '0.85rem 1.25rem',
-                      borderBottom: effectiveTab === 'types' ? '3px solid #1E56FF' : '3px solid transparent',
-                      marginBottom: '-2px',
-                      background: 'none',
-                      borderTop: 'none',
-                      borderLeft: 'none',
-                      borderRight: 'none',
-                      color: effectiveTab === 'types' ? '#1E56FF' : '#666666',
-                      fontFamily: 'var(--font-display)',
-                      fontSize: '1rem',
-                      fontWeight: effectiveTab === 'types' ? 800 : 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    <span>TYPES & MATERIALS</span>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.72rem',
-                        padding: '0.15rem 0.5rem',
-                        borderRadius: '9999px',
-                        backgroundColor: effectiveTab === 'types' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
-                        color: effectiveTab === 'types' ? '#FFFFFF' : '#666666',
-                        fontWeight: 700,
-                      }}
-                    >
-                      {activeSubcategory.types.length}
-                    </span>
-                  </button>
-                )}
-              </div>
-
-              {/* Quick Tab Info Label */}
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.74rem',
-                  color: '#888888',
-                }}
-              >
-                SHOWING {effectiveTab === 'designs' ? 'CUSTOM DESIGN SHOWCASES' : 'ARCHITECTURAL TYPES & SPECS'}
-              </div>
-            </div>
-
-            {/* 4. The Content Grid: Designs OR Types */}
-            {effectiveTab === 'designs' && hasDesigns && (
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '1.5rem',
-                }}
-              >
-                {activeSubcategory.designs.map((design) => (
-                  <div
-                    key={design.id + design.name}
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(17, 17, 17, 0.09)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-                    }}
-                    className="card-hover-effect"
-                  >
-                    {/* Image Container with Inspect Button */}
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        aspectRatio: '16 / 11',
-                        backgroundColor: '#F2F2F2',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() =>
-                        setInspectedItem({
-                          item: design,
-                          type: 'design',
-                          subcatName: activeSubcategory.name,
-                          catName: activeCategory.name,
-                        })
-                      }
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={design.image || design.remoteImage || activeSubcategory.image}
-                        alt={design.name}
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 0.4s ease',
-                        }}
-                        className="zoom-on-hover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src =
-                            activeSubcategory.image || '/images/hero_storefront.jpg';
-                        }}
-                      />
-
-                      {/* Design Tag */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '10px',
-                          left: '10px',
-                          padding: '0.2rem 0.55rem',
-                          borderRadius: '6px',
-                          backgroundColor: 'rgba(17, 17, 17, 0.75)',
-                          backdropFilter: 'blur(8px)',
-                          color: '#FFFFFF',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.64rem',
-                          fontWeight: 700,
-                          letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        DESIGN SHOWCASE
-                      </div>
-
-                      {/* Zoom Icon Button */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          bottom: '10px',
-                          right: '10px',
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                          backdropFilter: 'blur(6px)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#111111',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                        }}
-                        title="Click to inspect"
-                      >
-                        <Maximize2 size={13} />
-                      </div>
-                    </div>
-
-                    {/* Card Content */}
-                    <div
-                      style={{
-                        padding: '1.1rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <h4
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontWeight: 700,
-                            fontSize: '1rem',
-                            color: '#111111',
-                            margin: '0 0 0.4rem 0',
-                            lineHeight: 1.3,
-                            textTransform: 'capitalize',
-                          }}
-                        >
-                          {design.name}
-                        </h4>
-
-                        {design.description && (
-                          <p
-                            style={{
-                              color: '#666666',
-                              fontSize: '0.82rem',
-                              lineHeight: 1.45,
-                              margin: '0 0 0.9rem 0',
-                            }}
-                          >
-                            {design.description}
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Card Footer Actions */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          paddingTop: '0.85rem',
-                          borderTop: '1px solid rgba(17, 17, 17, 0.06)',
-                          marginTop: '0.6rem',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.68rem',
-                            color: '#059669',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ✓ CUSTOM FABRICATION
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setInspectedItem({
-                              item: design,
-                              type: 'design',
-                              subcatName: activeSubcategory.name,
-                              catName: activeCategory.name,
-                            });
-                          }}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#1E56FF',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.74rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '6px',
-                          }}
-                        >
-                          DETAILS
-                          <ArrowRight size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Content Grid: Types */}
-            {effectiveTab === 'types' && hasTypes && (
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '1.5rem',
-                }}
-              >
-                {activeSubcategory.types.map((typeItem) => (
-                  <div
-                    key={typeItem.id + typeItem.name}
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      borderRadius: '16px',
-                      border: '1px solid rgba(17, 17, 17, 0.09)',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
-                    }}
-                    className="card-hover-effect"
-                  >
-                    {/* Image Container with Inspect Button */}
-                    <div
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        aspectRatio: '16 / 11',
-                        backgroundColor: '#F2F2F2',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() =>
-                        setInspectedItem({
-                          item: typeItem,
-                          type: 'type',
-                          subcatName: activeSubcategory.name,
-                          catName: activeCategory.name,
-                        })
-                      }
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={typeItem.image || typeItem.remoteImage || activeSubcategory.image}
-                        alt={typeItem.name}
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          transition: 'transform 0.4s ease',
-                        }}
-                        className="zoom-on-hover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src =
-                            activeSubcategory.image || '/images/hero_storefront.jpg';
-                        }}
-                      />
-
-                      {/* Type Tag */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '10px',
-                          left: '10px',
-                          padding: '0.2rem 0.55rem',
-                          borderRadius: '6px',
-                          backgroundColor: '#1E56FF',
-                          color: '#FFFFFF',
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.64rem',
-                          fontWeight: 700,
-                          letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        SIGN TYPE / SPEC
-                      </div>
-
-                      {/* Zoom Icon Button */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          bottom: '10px',
-                          right: '10px',
-                          width: '30px',
-                          height: '30px',
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                          backdropFilter: 'blur(6px)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: '#111111',
-                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                        }}
-                        title="Click to inspect"
-                      >
-                        <Maximize2 size={13} />
-                      </div>
-                    </div>
-
-                    {/* Card Content */}
-                    <div
-                      style={{
-                        padding: '1.1rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        flex: 1,
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <h4
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            fontWeight: 700,
-                            fontSize: '1rem',
-                            color: '#111111',
-                            margin: '0 0 0.4rem 0',
-                            lineHeight: 1.3,
-                          }}
-                        >
-                          {typeItem.name}
-                        </h4>
-
-                        <p
-                          style={{
-                            color: '#666666',
-                            fontSize: '0.82rem',
-                            lineHeight: 1.45,
-                            margin: '0 0 0.9rem 0',
-                          }}
-                        >
-                          {typeItem.description ||
-                            `Custom engineered ${typeItem.name} for high-traffic NYC commercial environments.`}
-                        </p>
-                      </div>
-
-                      {/* Card Footer Actions */}
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          paddingTop: '0.85rem',
-                          borderTop: '1px solid rgba(17, 17, 17, 0.06)',
-                          marginTop: '0.6rem',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.68rem',
-                            color: '#1E56FF',
-                            fontWeight: 700,
-                          }}
-                        >
-                          ✓ DOB APPROVED
-                        </span>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setInspectedItem({
-                              item: typeItem,
-                              type: 'type',
-                              subcatName: activeSubcategory.name,
-                              catName: activeCategory.name,
-                            });
-                          }}
-                          style={{
-                            background: 'none',
-                            border: 'none',
-                            color: '#1E56FF',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.74rem',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.25rem',
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '6px',
-                          }}
-                        >
-                          DETAILS
-                          <ArrowRight size={12} />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Fallback if no designs and no types: Product Showcase Banner */}
-            {!hasDesigns && !hasTypes && (
-              <div
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  border: '1.5px dashed rgba(17, 17, 17, 0.15)',
-                  padding: '3rem 2rem',
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem',
-                }}
-              >
-                <div
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <span
                   style={{
-                    width: '180px',
-                    height: '140px',
-                    borderRadius: '12px',
-                    overflow: 'hidden',
-                    backgroundColor: '#F2F2F2',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: '#10B981',
+                    display: 'inline-block',
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.74rem',
+                    color: '#666666',
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={activeSubcategory.image || '/images/hero_storefront.jpg'}
-                    alt={activeSubcategory.name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </div>
+                  NYC SIGN FACILITY ACTIVE // 10,000 SQ FT SHOP IN FULL PRODUCTION
+                </span>
+              </div>
 
-                <h4
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+                <a
+                  href="tel:7184538300"
                   style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 800,
-                    fontSize: '1.3rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
                     color: '#111111',
-                    margin: 0,
+                    textDecoration: 'none',
                   }}
                 >
-                  Custom Architectural Fabrication for {activeSubcategory.name}
-                </h4>
-
-                <p style={{ color: '#666666', fontSize: '0.95rem', maxWidth: '580px', lineHeight: 1.5 }}>
-                  {activeSubcategory.description}
-                </p>
+                  <PhoneCall size={13} style={{ color: '#1E56FF' }} />
+                  (718) 453-8300
+                </a>
 
                 <button
                   type="button"
                   onClick={onOpenCampaignModal}
-                  className="btn-primary"
-                  style={{ marginTop: '0.5rem' }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#1E56FF',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                  }}
                 >
-                  REQUEST SPEC & QUOTE FOR {activeSubcategory.name.toUpperCase()}
+                  CUSTOM SPECIFICATIONS INQUIRY →
                 </button>
               </div>
-            )}
+            </div>
           </main>
         </div>
       </div>
 
-      {/* Item Lightbox Modal / Inspector */}
+      {/* Full-Scale Item Lightbox Modal */}
       {inspectedItem && (
         <div
           style={{
             position: 'fixed',
             inset: 0,
             zIndex: 9999,
-            backgroundColor: 'rgba(0, 0, 0, 0.75)',
-            backdropFilter: 'blur(8px)',
+            backgroundColor: 'rgba(0, 0, 0, 0.78)',
+            backdropFilter: 'blur(10px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1198,11 +1309,11 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: '24px',
-              maxWidth: '860px',
+              maxWidth: '840px',
               width: '100%',
               maxHeight: '90vh',
               overflowY: 'auto',
-              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.3)',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.35)',
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
@@ -1218,28 +1329,32 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 top: '16px',
                 right: '16px',
                 zIndex: 10,
-                width: '36px',
-                height: '36px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                backgroundColor: 'rgba(0, 0, 0, 0.65)',
                 color: '#FFFFFF',
                 border: 'none',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                transition: 'background-color 0.2s',
               }}
             >
               <X size={18} />
             </button>
 
-            {/* Modal Image Header */}
+            {/* Modal Image Display */}
             <div
               style={{
                 position: 'relative',
                 width: '100%',
                 height: '380px',
-                backgroundColor: '#111111',
+                backgroundColor: '#0F172A',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1257,7 +1372,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                   position: 'absolute',
                   top: '16px',
                   left: '16px',
-                  padding: '0.3rem 0.8rem',
+                  padding: '0.35rem 0.85rem',
                   borderRadius: '9999px',
                   backgroundColor: '#1E56FF',
                   color: '#FFFFFF',
@@ -1288,7 +1403,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 style={{
                   fontFamily: 'var(--font-display)',
                   fontWeight: 900,
-                  fontSize: '1.8rem',
+                  fontSize: '1.75rem',
                   color: '#111111',
                   margin: '0 0 1rem 0',
                   textTransform: 'capitalize',
@@ -1301,7 +1416,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 <p
                   style={{
                     color: '#444444',
-                    fontSize: '1.05rem',
+                    fontSize: '1.02rem',
                     lineHeight: 1.6,
                     marginBottom: '1.5rem',
                   }}
@@ -1310,7 +1425,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 </p>
               )}
 
-              {/* Specs & Highlights */}
+              {/* Architectural Highlights */}
               <div
                 style={{
                   display: 'grid',
@@ -1318,8 +1433,9 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                   gap: '1rem',
                   padding: '1.25rem',
                   borderRadius: '12px',
-                  backgroundColor: '#F7F5EF',
+                  backgroundColor: '#FDF7E7',
                   marginBottom: '1.5rem',
+                  border: '1px solid rgba(17, 17, 17, 0.06)',
                 }}
               >
                 <div>
@@ -1327,7 +1443,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     MANUFACTURING
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
-                    10,000 sq ft NYC Facility
+                    10,000 sq ft NYC Plant
                   </div>
                 </div>
                 <div>
@@ -1343,7 +1459,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     INSTALLATION
                   </div>
                   <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
-                    5 Boroughs (Manhattan, BK, QNS, BX, SI)
+                    All 5 NYC Boroughs
                   </div>
                 </div>
               </div>
@@ -1386,17 +1502,31 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
             opacity: 1;
           }
         }
-        .card-hover-effect:hover {
+        .catalog-card-hover:hover {
           transform: translateY(-4px);
           box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08) !important;
-          border-color: rgba(30, 86, 255, 0.3) !important;
+          border-color: rgba(30, 86, 255, 0.35) !important;
         }
-        .card-hover-effect:hover .zoom-on-hover {
+        .catalog-card-hover:hover .catalog-card-img {
           transform: scale(1.05);
         }
+        .custom-sidebar-scroll::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+          background: rgba(17, 17, 17, 0.12);
+          border-radius: 9999px;
+        }
         @media (max-width: 960px) {
-          .products-catalog-grid {
+          .products-catalog-shell {
             grid-template-columns: 1fr !important;
+          }
+          .products-catalog-sidebar {
+            border-right: none !important;
+            border-bottom: 1px solid rgba(17, 17, 17, 0.08) !important;
           }
         }
       `}</style>
