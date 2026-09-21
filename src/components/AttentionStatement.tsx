@@ -53,55 +53,71 @@ const STATEMENTS: StatementItem[] = [
   },
 ];
 
-const ZONES = [
-  { enter: -0.1, peakStart: 0.0, peakEnd: 0.16, exit: 0.28 }, // Item 0
-  { enter: 0.16, peakStart: 0.28, peakEnd: 0.44, exit: 0.56 }, // Item 1
-  { enter: 0.44, peakStart: 0.56, peakEnd: 0.72, exit: 0.84 }, // Item 2
-  { enter: 0.72, peakStart: 0.84, peakEnd: 1.0, exit: 1.1 }, // Item 3
-];
+/**
+ * Calculates smooth cross-fade and subtle vertical translate for each statement.
+ * Guaranteed that text never disappears or blurs during transition.
+ */
+function getItemState(index: number, p: number) {
+  // Range partitions across scroll progress [0, 1]
+  // Item 0: 0.00 - 0.25 (dwell: 0.00 - 0.18, fade out: 0.18 - 0.25)
+  // Item 1: 0.18 - 0.50 (fade in: 0.18 - 0.25, dwell: 0.25 - 0.43, fade out: 0.43 - 0.50)
+  // Item 2: 0.43 - 0.75 (fade in: 0.43 - 0.50, dwell: 0.50 - 0.68, fade out: 0.68 - 0.75)
+  // Item 3: 0.68 - 1.00 (fade in: 0.68 - 0.75, dwell: 0.75 - 1.00)
 
-function getParallaxItemState(index: number, progress: number) {
-  const z = ZONES[index];
-
-  // Outside active window
-  if (progress < z.enter || progress > z.exit) {
-    return {
-      opacity: 0,
-      scale: progress < z.enter ? 0.93 : 1.07,
-      blur: 8,
-      isVisible: false,
-    };
+  if (index === 0) {
+    if (p <= 0.18) {
+      return { opacity: 1, translateY: 0, isVisible: true };
+    }
+    if (p <= 0.25) {
+      const r = (p - 0.18) / (0.25 - 0.18);
+      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
+    }
+    return { opacity: 0, translateY: -24, isVisible: false };
   }
 
-  // Steady peak focus (locked dead-center, crisp)
-  if (progress >= z.peakStart && progress <= z.peakEnd) {
-    return {
-      opacity: 1,
-      scale: 1,
-      blur: 0,
-      isVisible: true,
-    };
+  if (index === 1) {
+    if (p < 0.18) return { opacity: 0, translateY: 24, isVisible: false };
+    if (p <= 0.25) {
+      const r = (p - 0.18) / (0.25 - 0.18);
+      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    }
+    if (p <= 0.43) {
+      return { opacity: 1, translateY: 0, isVisible: true };
+    }
+    if (p <= 0.50) {
+      const r = (p - 0.43) / (0.50 - 0.43);
+      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
+    }
+    return { opacity: 0, translateY: -24, isVisible: false };
   }
 
-  // Transitioning in from depth
-  if (progress < z.peakStart) {
-    const ratio = Math.max(0, Math.min(1, (progress - z.enter) / (z.peakStart - z.enter)));
-    return {
-      opacity: ratio,
-      scale: 0.93 + ratio * 0.07,
-      blur: (1 - ratio) * 8,
-      isVisible: true,
-    };
-  } else {
-    // Transitioning out forward into parallax depth
-    const ratio = Math.max(0, Math.min(1, (progress - z.peakEnd) / (z.exit - z.peakEnd)));
-    return {
-      opacity: 1 - ratio,
-      scale: 1.0 + ratio * 0.07,
-      blur: ratio * 8,
-      isVisible: true,
-    };
+  if (index === 2) {
+    if (p < 0.43) return { opacity: 0, translateY: 24, isVisible: false };
+    if (p <= 0.50) {
+      const r = (p - 0.43) / (0.50 - 0.43);
+      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    }
+    if (p <= 0.68) {
+      return { opacity: 1, translateY: 0, isVisible: true };
+    }
+    if (p <= 0.75) {
+      const r = (p - 0.68) / (0.75 - 0.68);
+      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
+    }
+    return { opacity: 0, translateY: -24, isVisible: false };
   }
+
+  if (index === 3) {
+    if (p < 0.68) return { opacity: 0, translateY: 24, isVisible: false };
+    if (p <= 0.75) {
+      const r = (p - 0.68) / (0.75 - 0.68);
+      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    }
+    // Stays locked in crisp focus through the entire end of the section
+    return { opacity: 1, translateY: 0, isVisible: true };
+  }
+
+  return { opacity: 0, translateY: 0, isVisible: false };
 }
 
 export default function AttentionStatement() {
@@ -124,8 +140,8 @@ export default function AttentionStatement() {
 
       // Determine active indicator step
       if (progress < 0.22) setActiveStep(0);
-      else if (progress < 0.5) setActiveStep(1);
-      else if (progress < 0.78) setActiveStep(2);
+      else if (progress < 0.47) setActiveStep(1);
+      else if (progress < 0.72) setActiveStep(2);
       else setActiveStep(3);
     };
 
@@ -144,8 +160,8 @@ export default function AttentionStatement() {
     const currentScrollY = window.scrollY;
     const sectionTop = currentScrollY + rect.top;
     const totalScrollable = rect.height - window.innerHeight;
-    const centers = [0.08, 0.36, 0.64, 0.92];
-    const targetY = sectionTop + centers[stepIndex] * totalScrollable;
+    const stepCenters = [0.08, 0.34, 0.58, 0.85];
+    const targetY = sectionTop + stepCenters[stepIndex] * totalScrollable;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
   };
 
@@ -155,7 +171,7 @@ export default function AttentionStatement() {
       id="attention-statement"
       style={{
         position: 'relative',
-        height: '350vh',
+        height: '400vh',
         backgroundColor: '#FDF7E7',
       }}
     >
@@ -172,17 +188,15 @@ export default function AttentionStatement() {
           justifyContent: 'center',
         }}
       >
-        {/* Parallax Background Streetscape Layer */}
+        {/* Completely Fixed / Locked Background Streetscape (Same View Throughout) */}
         <div
           style={{
             position: 'absolute',
-            inset: '-15% -6%',
-            width: '112%',
-            height: '130%',
+            inset: 0,
+            width: '100%',
+            height: '100%',
             zIndex: 0,
             pointerEvents: 'none',
-            transform: `translate3d(0, ${(scrollProgress - 0.5) * -120}px, 0) scale(${1.03 + scrollProgress * 0.04})`,
-            transition: 'transform 0.08s ease-out',
           }}
         >
           <Image
@@ -192,14 +206,14 @@ export default function AttentionStatement() {
             sizes="100vw"
             style={{
               objectFit: 'cover',
-              objectPosition: 'center 42%',
-              filter: `brightness(${0.98 + (activeStep === 3 ? 0.05 : 0)}) contrast(0.96) saturate(1.05)`,
-              transition: 'filter 0.5s ease',
+              objectPosition: 'center 45%',
+              filter: `brightness(${0.98 + (activeStep === 3 ? 0.04 : 0)}) contrast(0.97) saturate(1.05)`,
+              transition: 'filter 0.4s ease',
             }}
-            priority={false}
+            priority
           />
 
-          {/* Sunlight Atmospheric Gradient Wash for 100% Text Legibility */}
+          {/* Sunlight Warm Ambient Gradient Wash for 100% Text Legibility */}
           <div
             style={{
               position: 'absolute',
@@ -280,7 +294,7 @@ export default function AttentionStatement() {
           </div>
         </div>
 
-        {/* Center Stage: Dead-Centered Stacked Words with Parallax Transition */}
+        {/* Center Stage: Dead-Centered Stacked Typography with Clean Cross-Fade */}
         <div
           style={{
             position: 'relative',
@@ -291,7 +305,7 @@ export default function AttentionStatement() {
           }}
         >
           {STATEMENTS.map((item, idx) => {
-            const state = getParallaxItemState(idx, scrollProgress);
+            const state = getItemState(idx, scrollProgress);
             if (!state.isVisible) return null;
 
             return (
@@ -301,7 +315,7 @@ export default function AttentionStatement() {
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
-                  transform: `translate(-50%, -50%) scale(${state.scale})`,
+                  transform: `translate(-50%, calc(-50% + ${state.translateY}px))`,
                   width: '92%',
                   maxWidth: '1050px',
                   display: 'flex',
@@ -310,13 +324,12 @@ export default function AttentionStatement() {
                   justifyContent: 'center',
                   textAlign: 'center',
                   opacity: state.opacity,
-                  filter: state.blur > 0 ? `blur(${state.blur.toFixed(1)}px)` : 'none',
-                  transition: 'opacity 0.08s linear, filter 0.08s linear, transform 0.08s linear',
+                  transition: 'opacity 0.05s linear, transform 0.05s linear',
                   pointerEvents: state.opacity > 0.6 ? 'auto' : 'none',
                   boxSizing: 'border-box',
                 }}
               >
-                {/* Chapter Label Stacked on Top */}
+                {/* Chapter Label */}
                 <div
                   style={{
                     fontFamily: 'var(--font-mono)',
@@ -390,7 +403,7 @@ export default function AttentionStatement() {
                   {item.subtext}
                 </p>
 
-                {/* Climax Badges Stacked on Step 4 */}
+                {/* Climax Badges on Step 4 */}
                 {item.isClimax && (
                   <div
                     style={{
@@ -454,7 +467,7 @@ export default function AttentionStatement() {
           })}
         </div>
 
-        {/* Bottom Minimal Interactive Progress Dots */}
+        {/* Bottom Minimal Interactive Progress Indicators */}
         <div
           style={{
             position: 'absolute',
