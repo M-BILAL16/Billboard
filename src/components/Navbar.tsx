@@ -871,25 +871,6 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               )}
             </div>
 
-            {/* 3. Campaigns Link */}
-            <a
-              href="#campaigns"
-              onClick={() => setActiveLink('Campaigns')}
-              style={{
-                padding: '0.45rem 0.85rem',
-                borderRadius: '9999px',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                textDecoration: 'none',
-                color: activeLink === 'Campaigns' ? '#111111' : '#444444',
-                backgroundColor: activeLink === 'Campaigns' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Campaigns
-            </a>
 
             {/* 4. Experience Link */}
             <a
@@ -1416,10 +1397,9 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               { num: '01', label: 'Catalog', href: '#products', tag: '89 Products' },
               { num: '02', label: 'Industries', href: '#industries', tag: '8 Sectors' },
               { num: '03', label: 'Locations', href: '#locations', tag: 'Borough Map' },
-              { num: '04', label: 'Campaigns', href: '#campaigns', tag: 'Case Studies' },
-              { num: '05', label: 'Experience', href: '#experience', tag: '3D Simulation' },
-              { num: '06', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
-              { num: '07', label: 'Insights', href: '#insights', tag: 'Sign Guides' },
+              { num: '04', label: 'Experience', href: '#experience', tag: '3D Simulation' },
+              { num: '05', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
+              { num: '06', label: 'Insights', href: '#insights', tag: 'Sign Guides' },
             ].map((link) => (
               <a
                 key={link.label}

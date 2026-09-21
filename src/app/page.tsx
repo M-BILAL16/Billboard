@@ -10,7 +10,6 @@ import FormatExplorer from '@/components/FormatExplorer';
 import SignProductsDirectory from '@/components/SignProductsDirectory';
 import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
-import CampaignShowcase from '@/components/CampaignShowcase';
 import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 import ImpactStats from '@/components/ImpactStats';
 import LocationMap from '@/components/LocationMap';
@@ -112,9 +111,6 @@ export default function Home() {
 
       {/* Interactive Spotlight Torch Section */}
       <SpotlightSection />
-
-      {/* Featured Campaigns - "Seen in the Wild" */}
-      <CampaignShowcase onSelectCampaign={handleSelectCampaign} />
 
       {/* Before / After Billboard Experience */}
       <BeforeAfterSlider onOpenCampaignModal={handleOpenCampaignModal} />
