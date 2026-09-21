@@ -1,22 +1,21 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import {
   Sparkles,
   ArrowRight,
   Search,
-  CheckCircle2,
   ChevronRight,
+  ChevronLeft,
   ShieldCheck,
   Building2,
   Maximize2,
   X,
   PhoneCall,
   BadgeCheck,
-  FileCheck2,
-  Layers,
-  Sparkle,
-  Compass,
+  Filter,
+  Grid,
+  List,
 } from 'lucide-react';
 import { FULL_CATALOG, MainCategory, Subcategory, CatalogItem } from '@/data/catalogTypes';
 
@@ -34,6 +33,9 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
   // Search filter for subcategories
   const [sidebarSearch, setSidebarSearch] = useState<string>('');
 
+  // Search filter inside Types / Mini-categories
+  const [typesSearch, setTypesSearch] = useState<string>('');
+
   // Active Tab ('designs' | 'types')
   const [activeTab, setActiveTab] = useState<'designs' | 'types'>('designs');
 
@@ -44,6 +46,9 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
     subcatName: string;
     catName: string;
   } | null>(null);
+
+  // Scroll ref for top categories navigation
+  const categoriesScrollRef = useRef<HTMLDivElement>(null);
 
   // Active Category
   const activeCategory: MainCategory = useMemo(() => {
@@ -71,6 +76,17 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
     return found || filteredSubcategories[0] || activeCategory.subcategories[0];
   }, [activeCategory, selectedSubcatName, filteredSubcategories]);
 
+  // Filtered Types & Mini-Categories based on mini-search
+  const filteredTypes = useMemo(() => {
+    const q = typesSearch.trim().toLowerCase();
+    if (!q) return activeSubcategory.types;
+    return activeSubcategory.types.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q)
+    );
+  }, [activeSubcategory, typesSearch]);
+
   // Determine available tabs for active subcategory
   const hasDesigns = activeSubcategory.designs && activeSubcategory.designs.length > 0;
   const hasTypes = activeSubcategory.types && activeSubcategory.types.length > 0;
@@ -86,6 +102,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
   const handleCategorySelect = (catId: string) => {
     setActiveCategoryId(catId);
     setSidebarSearch('');
+    setTypesSearch('');
     const targetCat = FULL_CATALOG.find((c) => c.id === catId);
     if (targetCat && targetCat.subcategories.length > 0) {
       setSelectedSubcatName(targetCat.subcategories[0].name);
@@ -99,6 +116,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
 
   const handleSubcatSelect = (sub: Subcategory) => {
     setSelectedSubcatName(sub.name);
+    setTypesSearch('');
     if (sub.designs.length > 0 && sub.types.length > 0) {
       // Keep current tab
     } else if (sub.designs.length > 0) {
@@ -106,6 +124,13 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
     } else if (sub.types.length > 0) {
       setActiveTab('types');
     }
+  };
+
+  // Scroll Category pills left/right
+  const scrollCategories = (direction: 'left' | 'right') => {
+    if (!categoriesScrollRef.current) return;
+    const amount = direction === 'left' ? -320 : 320;
+    categoriesScrollRef.current.scrollBy({ left: amount, behavior: 'smooth' });
   };
 
   return (
@@ -137,7 +162,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
             }}
           >
             <Sparkles size={14} />
-            NYC PRODUCT CATALOG // 9 CATEGORIES • 89 ARCHITECTURAL PRODUCT LINES
+            NYC PRODUCT CATALOG // 9 CATEGORIES • 89 SUBCATEGORIES • 410 MINI-CATEGORIES
           </div>
 
           <h2
@@ -157,31 +182,61 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
           </h2>
 
           <p style={{ color: '#555555', fontSize: '1.08rem', maxWidth: '720px', lineHeight: 1.6 }}>
-            Browse New York&apos;s most comprehensive commercial signage directory. Built in our 10,000 sq ft NYC fabrication facility with DOB permit expediting and licensed 5-borough installation.
+            Browse New York&apos;s most comprehensive commercial signage database. Search across all 9 major categories, 89 product lines, design showcases, and over 400 architectural material types &amp; mini-categories.
           </p>
         </div>
 
-        {/* 1. Main Category Selector (Top Horizontal Navigation Bar) */}
+        {/* 1. Main Category Selector (Interactive Left/Right Scroll with Visible Navigation) */}
         <div
           style={{
             marginBottom: '2.25rem',
             backgroundColor: '#FFFFFF',
             borderRadius: '20px',
             border: '1px solid rgba(17, 17, 17, 0.08)',
-            padding: '0.65rem',
+            padding: '0.65rem 0.85rem',
             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
           }}
         >
+          {/* Scroll Left Button */}
+          <button
+            type="button"
+            onClick={() => scrollCategories('left')}
+            aria-label="Scroll categories left"
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              backgroundColor: '#F7F5EF',
+              border: '1px solid rgba(17, 17, 17, 0.09)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#222222',
+              cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.2s ease',
+            }}
+            className="hover-bg-blue"
+          >
+            <ChevronLeft size={18} />
+          </button>
+
+          {/* Scrollable Container with Visible Sleek Scrollbar */}
           <div
+            ref={categoriesScrollRef}
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.45rem',
+              gap: '0.5rem',
               overflowX: 'auto',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              padding: '0.2rem',
+              scrollBehavior: 'smooth',
+              padding: '0.35rem 0.2rem 0.6rem 0.2rem',
+              flex: 1,
             }}
+            className="styled-categories-scroll"
           >
             {FULL_CATALOG.map((cat) => {
               const isActive = cat.id === activeCategoryId;
@@ -198,9 +253,9 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     borderRadius: '14px',
                     border: isActive
                       ? '1px solid #1E56FF'
-                      : '1px solid transparent',
-                    backgroundColor: isActive ? '#1E56FF' : 'transparent',
-                    color: isActive ? '#FFFFFF' : '#444444',
+                      : '1px solid rgba(17, 17, 17, 0.08)',
+                    backgroundColor: isActive ? '#1E56FF' : '#F7F5EF',
+                    color: isActive ? '#FFFFFF' : '#333333',
                     fontFamily: 'var(--font-display)',
                     fontSize: '0.88rem',
                     fontWeight: isActive ? 700 : 600,
@@ -211,6 +266,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     boxShadow: isActive
                       ? '0 4px 14px rgba(30, 86, 255, 0.28)'
                       : 'none',
+                    flexShrink: 0,
                   }}
                 >
                   <span>{cat.name}</span>
@@ -232,6 +288,30 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
               );
             })}
           </div>
+
+          {/* Scroll Right Button */}
+          <button
+            type="button"
+            onClick={() => scrollCategories('right')}
+            aria-label="Scroll categories right"
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              backgroundColor: '#F7F5EF',
+              border: '1px solid rgba(17, 17, 17, 0.09)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#222222',
+              cursor: 'pointer',
+              flexShrink: 0,
+              transition: 'all 0.2s ease',
+            }}
+            className="hover-bg-blue"
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
 
         {/* 2. Unified Master Explorer Shell (Sidebar + Content Panel) */}
@@ -303,7 +383,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                       borderRadius: '9999px',
                     }}
                   >
-                    {filteredSubcategories.length} SUB-TYPES
+                    {filteredSubcategories.length} SUBCATEGORIES
                   </span>
                 </div>
 
@@ -431,7 +511,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           >
                             {sub.designs.length > 0 && `${sub.designs.length} Designs`}
                             {sub.designs.length > 0 && sub.types.length > 0 && ' • '}
-                            {sub.types.length > 0 && `${sub.types.length} Types`}
+                            {sub.types.length > 0 && `${sub.types.length} Types & Mini-Cats`}
                             {sub.designs.length === 0 && sub.types.length === 0 && 'Custom Specs'}
                           </div>
                         </div>
@@ -619,7 +699,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 </div>
               </div>
 
-              {/* 3. The 2 TABS: Designs & Types (Clean Segmented Control) */}
+              {/* 3. The 2 TABS: Designs & (Types / Mini-Categories) */}
               <div
                 style={{
                   display: 'flex',
@@ -674,7 +754,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     </button>
                   )}
 
-                  {/* Tab 2: Types (Only if types exist) */}
+                  {/* Tab 2: Types & Mini-Categories (Only if types exist) */}
                   {hasTypes && (
                     <button
                       type="button"
@@ -698,7 +778,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                         transition: 'all 0.2s ease',
                       }}
                     >
-                      <span>TYPES & MATERIALS</span>
+                      <span>TYPES &amp; MINI-CATEGORIES</span>
                       <span
                         style={{
                           fontFamily: 'var(--font-mono)',
@@ -724,9 +804,53 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     color: '#888888',
                   }}
                 >
-                  SHOWING {effectiveTab === 'designs' ? 'REAL CLIENT FABRICATION DESIGNS' : 'ARCHITECTURAL TYPE SPECIFICATIONS'}
+                  SHOWING {effectiveTab === 'designs' ? 'REAL CLIENT FABRICATION DESIGNS' : `${activeSubcategory.types.length} ARCHITECTURAL TYPES & MINI-CATEGORIES`}
                 </div>
               </div>
+
+              {/* Sub-filter bar inside Types & Mini-Categories tab if there are many items */}
+              {effectiveTab === 'types' && hasTypes && activeSubcategory.types.length > 6 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    marginBottom: '1.5rem',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '12px',
+                    backgroundColor: '#FAF9F5',
+                    border: '1px solid rgba(17, 17, 17, 0.07)',
+                    flexWrap: 'wrap',
+                    gap: '0.75rem',
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#555555', fontSize: '0.82rem', fontFamily: 'var(--font-mono)' }}>
+                    <Filter size={13} style={{ color: '#1E56FF' }} />
+                    <span>FILTER MINI-CATEGORIES:</span>
+                  </div>
+
+                  <div style={{ position: 'relative', minWidth: '260px', flex: 1, maxWidth: '400px' }}>
+                    <Search size={13} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#888888' }} />
+                    <input
+                      type="text"
+                      placeholder={`Search ${activeSubcategory.name} types & materials...`}
+                      value={typesSearch}
+                      onChange={(e) => setTypesSearch(e.target.value)}
+                      style={{
+                        width: '100%',
+                        padding: '0.4rem 0.75rem 0.4rem 2rem',
+                        borderRadius: '8px',
+                        border: '1px solid rgba(17, 17, 17, 0.12)',
+                        backgroundColor: '#FFFFFF',
+                        fontSize: '0.82rem',
+                        fontFamily: 'var(--font-body)',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* 4. The Unified Card Grid: Designs */}
               {effectiveTab === 'designs' && hasDesigns && (
@@ -748,7 +872,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        height: '380px', // Uniform height across all cards
+                        height: '380px',
                         transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
                       }}
@@ -940,7 +1064,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 </div>
               )}
 
-              {/* Content Grid: Types */}
+              {/* Content Grid: Types & Mini-Categories */}
               {effectiveTab === 'types' && hasTypes && (
                 <div
                   style={{
@@ -949,7 +1073,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     gap: '1.5rem',
                   }}
                 >
-                  {activeSubcategory.types.map((typeItem) => (
+                  {filteredTypes.map((typeItem) => (
                     <div
                       key={typeItem.id + typeItem.name}
                       style={{
@@ -960,7 +1084,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'space-between',
-                        height: '380px', // Uniform height across all cards
+                        height: '380px',
                         transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
                       }}
@@ -1003,7 +1127,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           }}
                         />
 
-                        {/* Type Tag */}
+                        {/* Tag: Mini-Category vs Type */}
                         <div
                           style={{
                             position: 'absolute',
@@ -1011,7 +1135,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                             left: '10px',
                             padding: '0.2rem 0.55rem',
                             borderRadius: '6px',
-                            backgroundColor: '#1E56FF',
+                            backgroundColor: typeItem.isMiniCategory ? '#0F172A' : '#1E56FF',
                             color: '#FFFFFF',
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.62rem',
@@ -1020,7 +1144,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                             textTransform: 'uppercase',
                           }}
                         >
-                          ARCHITECTURAL TYPE
+                          {typeItem.isMiniCategory ? 'MINI-CATEGORY // SPEC' : 'ARCHITECTURAL TYPE'}
                         </div>
 
                         {/* Inspect Zoom Pill */}
@@ -1147,6 +1271,12 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                       </div>
                     </div>
                   ))}
+
+                  {filteredTypes.length === 0 && (
+                    <div style={{ gridColumn: '1 / -1', padding: '3rem 1rem', textAlign: 'center', color: '#888888' }}>
+                      No type or mini-category found matching &ldquo;{typesSearch}&rdquo;.
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1382,7 +1512,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                   textTransform: 'uppercase',
                 }}
               >
-                {inspectedItem.type === 'design' ? 'DESIGN SHOWCASE' : 'ARCHITECTURAL TYPE'}
+                {inspectedItem.type === 'design' ? 'DESIGN SHOWCASE' : 'ARCHITECTURAL TYPE / MINI-CATEGORY'}
               </div>
             </div>
 
@@ -1509,6 +1639,26 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
         }
         .catalog-card-hover:hover .catalog-card-img {
           transform: scale(1.05);
+        }
+        .hover-bg-blue:hover {
+          background-color: #1E56FF !important;
+          color: #FFFFFF !important;
+          border-color: #1E56FF !important;
+        }
+        .styled-categories-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: #1E56FF rgba(17, 17, 17, 0.08);
+        }
+        .styled-categories-scroll::-webkit-scrollbar {
+          height: 4px;
+        }
+        .styled-categories-scroll::-webkit-scrollbar-track {
+          background: rgba(17, 17, 17, 0.05);
+          border-radius: 9999px;
+        }
+        .styled-categories-scroll::-webkit-scrollbar-thumb {
+          background: #1E56FF;
+          border-radius: 9999px;
         }
         .custom-sidebar-scroll::-webkit-scrollbar {
           width: 5px;

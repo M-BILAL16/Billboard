@@ -6,6 +6,7 @@ export interface CatalogItem {
   description: string;
   image: string;
   remoteImage: string;
+  isMiniCategory?: boolean;
 }
 
 export interface Subcategory {
@@ -16,6 +17,7 @@ export interface Subcategory {
   image: string;
   designsCount: number;
   typesCount: number;
+  miniCategoriesCount?: number;
   designs: CatalogItem[];
   types: CatalogItem[];
 }
