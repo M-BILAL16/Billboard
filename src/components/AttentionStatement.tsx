@@ -54,66 +54,58 @@ const STATEMENTS: StatementItem[] = [
 ];
 
 /**
- * Calculates smooth cross-fade and subtle vertical translate for each statement.
- * Guaranteed that text never disappears or blurs during transition.
+ * Calculates smooth continuous cross-fade and subtle vertical translate for each statement.
+ * Guaranteed that text never disappears, flashes, or blurs during transition.
  */
 function getItemState(index: number, p: number) {
-  // Range partitions across scroll progress [0, 1]
-  // Item 0: 0.00 - 0.25 (dwell: 0.00 - 0.18, fade out: 0.18 - 0.25)
-  // Item 1: 0.18 - 0.50 (fade in: 0.18 - 0.25, dwell: 0.25 - 0.43, fade out: 0.43 - 0.50)
-  // Item 2: 0.43 - 0.75 (fade in: 0.43 - 0.50, dwell: 0.50 - 0.68, fade out: 0.68 - 0.75)
-  // Item 3: 0.68 - 1.00 (fade in: 0.68 - 0.75, dwell: 0.75 - 1.00)
-
+  // Statement 0 (0.00 - 0.26)
   if (index === 0) {
-    if (p <= 0.18) {
-      return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.18) return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.26) {
+      const r = (p - 0.18) / 0.08;
+      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
     }
-    if (p <= 0.25) {
-      const r = (p - 0.18) / (0.25 - 0.18);
-      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
-    }
-    return { opacity: 0, translateY: -24, isVisible: false };
+    return { opacity: 0, translateY: -22, isVisible: false };
   }
 
+  // Statement 1 (0.18 - 0.51)
   if (index === 1) {
-    if (p < 0.18) return { opacity: 0, translateY: 24, isVisible: false };
-    if (p <= 0.25) {
-      const r = (p - 0.18) / (0.25 - 0.18);
-      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    if (p < 0.18) return { opacity: 0, translateY: 22, isVisible: false };
+    if (p <= 0.26) {
+      const r = (p - 0.18) / 0.08;
+      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
     }
-    if (p <= 0.43) {
-      return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.43) return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.51) {
+      const r = (p - 0.43) / 0.08;
+      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
     }
-    if (p <= 0.50) {
-      const r = (p - 0.43) / (0.50 - 0.43);
-      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
-    }
-    return { opacity: 0, translateY: -24, isVisible: false };
+    return { opacity: 0, translateY: -22, isVisible: false };
   }
 
+  // Statement 2 (0.43 - 0.76)
   if (index === 2) {
-    if (p < 0.43) return { opacity: 0, translateY: 24, isVisible: false };
-    if (p <= 0.50) {
-      const r = (p - 0.43) / (0.50 - 0.43);
-      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    if (p < 0.43) return { opacity: 0, translateY: 22, isVisible: false };
+    if (p <= 0.51) {
+      const r = (p - 0.43) / 0.08;
+      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
     }
-    if (p <= 0.68) {
-      return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.68) return { opacity: 1, translateY: 0, isVisible: true };
+    if (p <= 0.76) {
+      const r = (p - 0.68) / 0.08;
+      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
     }
-    if (p <= 0.75) {
-      const r = (p - 0.68) / (0.75 - 0.68);
-      return { opacity: 1 - r, translateY: -r * 24, isVisible: true };
-    }
-    return { opacity: 0, translateY: -24, isVisible: false };
+    return { opacity: 0, translateY: -22, isVisible: false };
   }
 
+  // Statement 3 (0.68 - 1.00)
   if (index === 3) {
-    if (p < 0.68) return { opacity: 0, translateY: 24, isVisible: false };
-    if (p <= 0.75) {
-      const r = (p - 0.68) / (0.75 - 0.68);
-      return { opacity: r, translateY: (1 - r) * 24, isVisible: true };
+    if (p < 0.68) return { opacity: 0, translateY: 22, isVisible: false };
+    if (p <= 0.76) {
+      const r = (p - 0.68) / 0.08;
+      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
     }
-    // Stays locked in crisp focus through the entire end of the section
+    // Stays locked in full contrast and clarity until user finishes scrolling this section
     return { opacity: 1, translateY: 0, isVisible: true };
   }
 
@@ -171,24 +163,59 @@ export default function AttentionStatement() {
       id="attention-statement"
       style={{
         position: 'relative',
-        height: '400vh',
+        height: '260vh',
         backgroundColor: '#FDF7E7',
       }}
     >
+      {/* Background Streetscape Fallback Layer on Section Parent (Ensures image is always visible) */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      >
+        <Image
+          src="/images/nyc_attention_bg.jpg"
+          alt="New York City architectural avenue streetscape"
+          fill
+          sizes="100vw"
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center 45%',
+            filter: 'brightness(0.97) contrast(0.97) saturate(1.05)',
+          }}
+          priority
+        />
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background:
+              'radial-gradient(ellipse at 50% 50%, rgba(253, 247, 231, 0.88) 0%, rgba(248, 243, 227, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
+          }}
+        />
+      </div>
+
       {/* Sticky Fullscreen Viewport Stage */}
       <div
         style={{
           position: 'sticky',
           top: 0,
+          left: 0,
           height: '100vh',
           width: '100%',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          zIndex: 2,
         }}
       >
-        {/* Completely Fixed / Locked Background Streetscape (Same View Throughout) */}
+        {/* Stationary Stage Background Streetscape */}
         <div
           style={{
             position: 'absolute',
@@ -213,7 +240,7 @@ export default function AttentionStatement() {
             priority
           />
 
-          {/* Sunlight Warm Ambient Gradient Wash for 100% Text Legibility */}
+          {/* Sunlight Warm Ambient Gradient Wash */}
           <div
             style={{
               position: 'absolute',
