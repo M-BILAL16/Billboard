@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { ChevronDown, ArrowDown, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 interface StatementItem {
   id: number;
   num: string;
   tag: string;
+  shortLabel: string;
   line1: string;
   line2: string;
   subtext: string;
@@ -18,6 +20,7 @@ const STATEMENTS: StatementItem[] = [
     id: 1,
     num: '01',
     tag: 'DIGITAL NOISE',
+    shortLabel: 'SKIP AN AD',
     line1: 'YOU CAN',
     line2: 'SKIP AN AD.',
     subtext: 'Filtered by ad-blockers. Dismissed in five seconds.',
@@ -27,6 +30,7 @@ const STATEMENTS: StatementItem[] = [
     id: 2,
     num: '02',
     tag: 'DIGITAL NOISE',
+    shortLabel: 'CLOSE A TAB',
     line1: 'YOU CAN',
     line2: 'CLOSE A TAB.',
     subtext: 'Buried under dozens of windows. Closed in a single keystroke.',
@@ -36,6 +40,7 @@ const STATEMENTS: StatementItem[] = [
     id: 3,
     num: '03',
     tag: 'DIGITAL NOISE',
+    shortLabel: 'MUTE A VIDEO',
     line1: 'YOU CAN',
     line2: 'MUTE A VIDEO.',
     subtext: 'Silenced in autoplay. Scrolled past in an endless feed.',
@@ -45,6 +50,7 @@ const STATEMENTS: StatementItem[] = [
     id: 4,
     num: '04',
     tag: 'PHYSICAL REALITY',
+    shortLabel: 'REAL SIGN',
     line1: 'BUT YOU CAN’T',
     line2: 'IGNORE A REAL SIGN.',
     subtext:
@@ -53,68 +59,9 @@ const STATEMENTS: StatementItem[] = [
   },
 ];
 
-/**
- * Calculates smooth continuous cross-fade and subtle vertical translate for each statement.
- * Guaranteed that text never disappears, flashes, or blurs during transition.
- */
-function getItemState(index: number, p: number) {
-  // Statement 0 (0.00 - 0.26)
-  if (index === 0) {
-    if (p <= 0.18) return { opacity: 1, translateY: 0, isVisible: true };
-    if (p <= 0.26) {
-      const r = (p - 0.18) / 0.08;
-      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
-    }
-    return { opacity: 0, translateY: -22, isVisible: false };
-  }
-
-  // Statement 1 (0.18 - 0.51)
-  if (index === 1) {
-    if (p < 0.18) return { opacity: 0, translateY: 22, isVisible: false };
-    if (p <= 0.26) {
-      const r = (p - 0.18) / 0.08;
-      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
-    }
-    if (p <= 0.43) return { opacity: 1, translateY: 0, isVisible: true };
-    if (p <= 0.51) {
-      const r = (p - 0.43) / 0.08;
-      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
-    }
-    return { opacity: 0, translateY: -22, isVisible: false };
-  }
-
-  // Statement 2 (0.43 - 0.76)
-  if (index === 2) {
-    if (p < 0.43) return { opacity: 0, translateY: 22, isVisible: false };
-    if (p <= 0.51) {
-      const r = (p - 0.43) / 0.08;
-      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
-    }
-    if (p <= 0.68) return { opacity: 1, translateY: 0, isVisible: true };
-    if (p <= 0.76) {
-      const r = (p - 0.68) / 0.08;
-      return { opacity: 1 - r, translateY: -r * 22, isVisible: true };
-    }
-    return { opacity: 0, translateY: -22, isVisible: false };
-  }
-
-  // Statement 3 (0.68 - 1.00)
-  if (index === 3) {
-    if (p < 0.68) return { opacity: 0, translateY: 22, isVisible: false };
-    if (p <= 0.76) {
-      const r = (p - 0.68) / 0.08;
-      return { opacity: r, translateY: (1 - r) * 22, isVisible: true };
-    }
-    // Stays locked in full contrast and clarity until user finishes scrolling this section
-    return { opacity: 1, translateY: 0, isVisible: true };
-  }
-
-  return { opacity: 0, translateY: 0, isVisible: false };
-}
-
 export default function AttentionStatement() {
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -126,35 +73,59 @@ export default function AttentionStatement() {
 
       if (totalScrollable <= 0) return;
 
-      const scrolled = -rect.top;
-      const progress = Math.min(1, Math.max(0, scrolled / totalScrollable));
+      // Calculate progress strictly from 0 to 1
+      const progress = Math.min(1, Math.max(0, -rect.top / totalScrollable));
       setScrollProgress(progress);
 
-      // Determine active indicator step
-      if (progress < 0.22) setActiveStep(0);
-      else if (progress < 0.47) setActiveStep(1);
-      else if (progress < 0.72) setActiveStep(2);
-      else setActiveStep(3);
+      // Clean 4-step discrete segmentation with generous dwell per step:
+      // Step 0: 0.00 to 0.24
+      // Step 1: 0.25 to 0.49
+      // Step 2: 0.50 to 0.74
+      // Step 3: 0.75 to 1.00
+      let step = 0;
+      if (progress >= 0.75) {
+        step = 3;
+      } else if (progress >= 0.50) {
+        step = 2;
+      } else if (progress >= 0.25) {
+        step = 1;
+      } else {
+        step = 0;
+      }
+      setActiveStep(step);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
-  const scrollToStep = (stepIndex: number) => {
+  const scrollToStep = (targetIndex: number) => {
     if (!sectionRef.current) return;
     const rect = sectionRef.current.getBoundingClientRect();
     const currentScrollY = window.scrollY;
     const sectionTop = currentScrollY + rect.top;
     const totalScrollable = rect.height - window.innerHeight;
-    const stepCenters = [0.08, 0.34, 0.58, 0.85];
-    const targetY = sectionTop + stepCenters[stepIndex] * totalScrollable;
+    
+    // Centers for each step in scroll distance
+    const stepCenters = [0.10, 0.35, 0.60, 0.88];
+    const targetY = sectionTop + stepCenters[targetIndex] * totalScrollable;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
+  };
+
+  const handlePrev = () => {
+    const prev = Math.max(0, activeStep - 1);
+    scrollToStep(prev);
+  };
+
+  const handleNext = () => {
+    const next = Math.min(STATEMENTS.length - 1, activeStep + 1);
+    scrollToStep(next);
   };
 
   return (
@@ -164,10 +135,10 @@ export default function AttentionStatement() {
       style={{
         position: 'relative',
         height: '260vh',
-        backgroundColor: '#FDF7E7',
+        backgroundColor: '#F7F5EF',
       }}
     >
-      {/* Background Streetscape Fallback Layer on Section Parent (Ensures image is always visible) */}
+      {/* Permanent Static Streetscape Base Layer (Never blank, never empty) */}
       <div
         style={{
           position: 'absolute',
@@ -185,29 +156,30 @@ export default function AttentionStatement() {
           sizes="100vw"
           style={{
             objectFit: 'cover',
-            objectPosition: 'center 45%',
-            filter: 'brightness(0.97) contrast(0.97) saturate(1.05)',
+            objectPosition: 'center 42%',
+            filter: 'brightness(0.96) contrast(0.98) saturate(1.05)',
           }}
           priority
         />
+        {/* Soft Warm Radial Gradient Wash for Legibility */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse at 50% 50%, rgba(253, 247, 231, 0.88) 0%, rgba(248, 243, 227, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
+              'radial-gradient(ellipse at 50% 50%, rgba(247, 245, 239, 0.88) 0%, rgba(247, 245, 239, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
           }}
         />
       </div>
 
-      {/* Sticky Fullscreen Viewport Stage */}
+      {/* Sticky Fullscreen Stage (Pinned 100vh viewport) */}
       <div
         style={{
           position: 'sticky',
           top: 0,
           left: 0,
-          height: '100vh',
           width: '100%',
+          height: '100vh',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'center',
@@ -215,7 +187,7 @@ export default function AttentionStatement() {
           zIndex: 2,
         }}
       >
-        {/* Stationary Stage Background Streetscape */}
+        {/* Locked Stationary Background Inside Sticky Stage */}
         <div
           style={{
             position: 'absolute',
@@ -233,8 +205,8 @@ export default function AttentionStatement() {
             sizes="100vw"
             style={{
               objectFit: 'cover',
-              objectPosition: 'center 45%',
-              filter: `brightness(${0.98 + (activeStep === 3 ? 0.04 : 0)}) contrast(0.97) saturate(1.05)`,
+              objectPosition: 'center 42%',
+              filter: `brightness(${0.97 + (activeStep === 3 ? 0.03 : 0)}) contrast(0.98) saturate(1.05)`,
               transition: 'filter 0.4s ease',
             }}
             priority
@@ -246,46 +218,51 @@ export default function AttentionStatement() {
               position: 'absolute',
               inset: 0,
               background:
-                'radial-gradient(ellipse at 50% 50%, rgba(253, 247, 231, 0.88) 0%, rgba(248, 243, 227, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
+                'radial-gradient(ellipse at 50% 50%, rgba(247, 245, 239, 0.88) 0%, rgba(247, 245, 239, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
             }}
           />
 
-          {/* Seamless Top & Bottom Section Blend */}
+          {/* Top & Bottom Seamless Section Blend */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
               background:
-                'linear-gradient(to bottom, rgba(247, 245, 239, 1) 0%, rgba(247, 245, 239, 0.3) 12%, transparent 30%, transparent 70%, rgba(247, 245, 239, 0.4) 88%, rgba(247, 245, 239, 1) 100%)',
+                'linear-gradient(to bottom, rgba(247, 245, 239, 1) 0%, rgba(247, 245, 239, 0.25) 12%, transparent 28%, transparent 72%, rgba(247, 245, 239, 0.35) 88%, rgba(247, 245, 239, 1) 100%)',
             }}
           />
         </div>
 
-        {/* Top Minimal Telemetry Bar */}
+        {/* Top Telemetry & Interactive Step Tabs */}
         <div
           style={{
             position: 'absolute',
-            top: 'clamp(20px, 3.5vh, 36px)',
-            left: 'clamp(20px, 4vw, 44px)',
-            right: 'clamp(20px, 4vw, 44px)',
+            top: 'clamp(18px, 3vh, 32px)',
+            left: 'clamp(16px, 3.5vw, 40px)',
+            right: 'clamp(16px, 3.5vw, 40px)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            maxWidth: '1200px',
+            maxWidth: '1240px',
             margin: '0 auto',
-            pointerEvents: 'none',
+            gap: '1rem',
           }}
         >
+          {/* Status Badge */}
           <div
             style={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.6rem',
               fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.65rem, 0.9vw, 0.75rem)',
-              color: '#333333',
-              letterSpacing: '0.04em',
+              fontSize: 'clamp(0.65rem, 0.85vw, 0.74rem)',
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              backdropFilter: 'blur(10px)',
+              padding: '0.45rem 0.9rem',
+              borderRadius: '9999px',
+              border: '1px solid rgba(17, 17, 17, 0.08)',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
             }}
           >
             <span
@@ -294,7 +271,7 @@ export default function AttentionStatement() {
                 height: '7px',
                 borderRadius: '50%',
                 backgroundColor: activeStep === 3 ? '#1E56FF' : '#10B981',
-                boxShadow: `0 0 10px ${activeStep === 3 ? 'rgba(30, 86, 255, 0.8)' : 'rgba(16, 185, 129, 0.8)'}`,
+                boxShadow: `0 0 10px ${activeStep === 3 ? '#1E56FF' : '#10B981'}`,
                 display: 'inline-block',
                 transition: 'all 0.3s ease',
               }}
@@ -303,37 +280,116 @@ export default function AttentionStatement() {
               {activeStep === 3 ? 'PHYSICAL REALITY' : 'DIGITAL NOISE'}
             </span>
             <span style={{ opacity: 0.35 }}>//</span>
-            <span style={{ opacity: 0.7 }}>NYC STREET VIEW</span>
+            <span style={{ opacity: 0.65 }}>STEP 0{activeStep + 1} OF 04</span>
           </div>
 
+          {/* Interactive Step Switcher (Visible on medium+ screens) */}
           <div
             style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.65rem, 0.9vw, 0.75rem)',
-              fontWeight: 700,
-              color: '#111111',
-              letterSpacing: '0.04em',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              backgroundColor: 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(10px)',
+              padding: '0.3rem',
+              borderRadius: '9999px',
+              border: '1px solid rgba(17, 17, 17, 0.08)',
             }}
+            className="attention-step-tabs"
           >
-            <span style={{ color: '#1E56FF' }}>0{activeStep + 1}</span>
-            <span style={{ opacity: 0.35 }}> / </span>
-            <span style={{ opacity: 0.6 }}>04</span>
+            {STATEMENTS.map((item, idx) => {
+              const isActive = idx === activeStep;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToStep(idx)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '9999px',
+                    backgroundColor: isActive ? (idx === 3 ? '#1E56FF' : '#111111') : 'transparent',
+                    color: isActive ? '#FFFFFF' : '#666666',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.66rem',
+                    fontWeight: 800,
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'all 0.25s ease',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <span>0{idx + 1}.</span>
+                  <span>{item.shortLabel}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Prev / Next Quick Nav Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <button
+              onClick={handlePrev}
+              disabled={activeStep === 0}
+              aria-label="Previous statement"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid rgba(17, 17, 17, 0.12)',
+                color: activeStep === 0 ? '#CCCCCC' : '#111111',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: activeStep === 0 ? 'default' : 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              }}
+            >
+              <ChevronLeft size={16} strokeWidth={2.5} />
+            </button>
+
+            <button
+              onClick={handleNext}
+              disabled={activeStep === 3}
+              aria-label="Next statement"
+              style={{
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: activeStep === 3 ? '#FFFFFF' : '#1E56FF',
+                border: activeStep === 3 ? '1px solid rgba(17, 17, 17, 0.12)' : '1px solid #1E56FF',
+                color: activeStep === 3 ? '#CCCCCC' : '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: activeStep === 3 ? 'default' : 'pointer',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+              }}
+            >
+              <ChevronRight size={16} strokeWidth={2.5} />
+            </button>
           </div>
         </div>
 
-        {/* Center Stage: Dead-Centered Stacked Typography with Clean Cross-Fade */}
+        {/* Center Stage: Guaranteed Persistent Text Container with Smooth CSS Transitions */}
         <div
           style={{
             position: 'relative',
             zIndex: 5,
             width: '100%',
             height: '100%',
+            maxWidth: '1100px',
+            margin: '0 auto',
             pointerEvents: 'none',
           }}
         >
           {STATEMENTS.map((item, idx) => {
-            const state = getItemState(idx, scrollProgress);
-            if (!state.isVisible) return null;
+            const isActive = idx === activeStep;
+            const isPast = idx < activeStep;
 
             return (
               <div
@@ -342,30 +398,36 @@ export default function AttentionStatement() {
                   position: 'absolute',
                   top: '50%',
                   left: '50%',
-                  transform: `translate(-50%, calc(-50% + ${state.translateY}px))`,
                   width: '92%',
-                  maxWidth: '1050px',
+                  maxWidth: '1020px',
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
                   textAlign: 'center',
-                  opacity: state.opacity,
-                  transition: 'opacity 0.05s linear, transform 0.05s linear',
-                  pointerEvents: state.opacity > 0.6 ? 'auto' : 'none',
                   boxSizing: 'border-box',
+                  // Guaranteed transitions: element is never removed from DOM!
+                  opacity: isActive ? 1 : 0,
+                  transform: isActive
+                    ? 'translate(-50%, -50%) scale(1)'
+                    : isPast
+                    ? 'translate(-50%, calc(-50% - 28px)) scale(0.96)'
+                    : 'translate(-50%, calc(-50% + 28px)) scale(0.96)',
+                  transition:
+                    'opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
+                  pointerEvents: isActive ? 'auto' : 'none',
                 }}
               >
                 {/* Chapter Label */}
                 <div
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(0.7rem, 1vw, 0.85rem)',
+                    fontSize: 'clamp(0.72rem, 1vw, 0.88rem)',
                     fontWeight: 800,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     color: item.isClimax ? '#1E56FF' : '#777777',
-                    marginBottom: 'clamp(0.75rem, 1.6vh, 1.4rem)',
+                    marginBottom: 'clamp(0.75rem, 1.6vh, 1.3rem)',
                     transition: 'color 0.3s ease',
                   }}
                 >
@@ -377,14 +439,14 @@ export default function AttentionStatement() {
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 800,
-                    fontSize: 'clamp(2.3rem, 5.6vw, 4.8rem)',
+                    fontSize: 'clamp(2.4rem, 5.8vw, 5rem)',
                     letterSpacing: '-0.035em',
                     lineHeight: 1.05,
                     textTransform: 'uppercase',
                     color: '#111111',
                     margin: 0,
                     padding: '0 0.5rem',
-                    textShadow: '0 2px 24px rgba(253, 247, 231, 0.9)',
+                    textShadow: '0 2px 24px rgba(247, 245, 239, 0.9)',
                   }}
                 >
                   {item.line1}
@@ -396,16 +458,16 @@ export default function AttentionStatement() {
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
                     fontSize: item.isClimax
-                      ? 'clamp(2.7rem, 6.8vw, 5.8rem)'
-                      : 'clamp(2.5rem, 6.2vw, 5.2rem)',
+                      ? 'clamp(2.8rem, 7vw, 6rem)'
+                      : 'clamp(2.6rem, 6.4vw, 5.4rem)',
                     letterSpacing: '-0.045em',
                     lineHeight: 1.0,
                     textTransform: 'uppercase',
                     color: item.isClimax ? '#1E56FF' : '#111111',
                     textShadow: item.isClimax
-                      ? '0 0 45px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(253, 247, 231, 0.9)'
-                      : '0 2px 24px rgba(253, 247, 231, 0.9)',
-                    margin: '0.15rem 0 0 0',
+                      ? '0 0 50px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(247, 245, 239, 0.9)'
+                      : '0 2px 24px rgba(247, 245, 239, 0.9)',
+                    margin: '0.2rem 0 0 0',
                     padding: '0 0.5rem',
                   }}
                 >
@@ -419,9 +481,9 @@ export default function AttentionStatement() {
                     fontFamily: 'var(--font-serif)',
                     fontStyle: 'italic',
                     fontSize: 'clamp(1.1rem, 1.6vw, 1.45rem)',
-                    color: '#555555',
-                    maxWidth: '620px',
-                    lineHeight: 1.35,
+                    color: '#444444',
+                    maxWidth: '640px',
+                    lineHeight: 1.38,
                     marginRight: 'auto',
                     marginLeft: 'auto',
                     padding: '0 1rem',
@@ -438,19 +500,19 @@ export default function AttentionStatement() {
                       flexWrap: 'wrap',
                       justifyContent: 'center',
                       gap: '0.5rem',
-                      marginTop: 'clamp(0.9rem, 1.8vh, 1.35rem)',
+                      marginTop: 'clamp(1rem, 2vh, 1.5rem)',
                       padding: '0 1rem',
                     }}
                   >
                     <span
                       style={{
-                        padding: '0.3rem 0.75rem',
+                        padding: '0.35rem 0.85rem',
                         borderRadius: '9999px',
                         backgroundColor: 'rgba(30, 86, 255, 0.08)',
-                        border: '1px solid rgba(30, 86, 255, 0.28)',
+                        border: '1.5px solid rgba(30, 86, 255, 0.3)',
                         color: '#1E56FF',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
+                        fontSize: 'clamp(0.65rem, 0.88vw, 0.74rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
                       }}
@@ -459,28 +521,29 @@ export default function AttentionStatement() {
                     </span>
                     <span
                       style={{
-                        padding: '0.3rem 0.75rem',
+                        padding: '0.35rem 0.85rem',
                         borderRadius: '9999px',
-                        backgroundColor: 'rgba(17, 17, 17, 0.05)',
-                        border: '1px solid rgba(17, 17, 17, 0.14)',
+                        backgroundColor: '#FFFFFF',
+                        border: '1.5px solid rgba(17, 17, 17, 0.12)',
                         color: '#111111',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
+                        fontSize: 'clamp(0.65rem, 0.88vw, 0.74rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
                       }}
                     >
                       ✓ 24/7/365 STREET PRESENCE
                     </span>
                     <span
                       style={{
-                        padding: '0.3rem 0.75rem',
+                        padding: '0.35rem 0.85rem',
                         borderRadius: '9999px',
                         backgroundColor: 'rgba(16, 185, 129, 0.08)',
-                        border: '1px solid rgba(16, 185, 129, 0.28)',
+                        border: '1.5px solid rgba(16, 185, 129, 0.3)',
                         color: '#059669',
                         fontFamily: 'var(--font-mono)',
-                        fontSize: 'clamp(0.62rem, 0.85vw, 0.7rem)',
+                        fontSize: 'clamp(0.65rem, 0.88vw, 0.74rem)',
                         fontWeight: 700,
                         letterSpacing: '0.04em',
                       }}
@@ -489,49 +552,146 @@ export default function AttentionStatement() {
                     </span>
                   </div>
                 )}
+
+                {/* Quick Advance Button directly under the statement */}
+                <div style={{ marginTop: 'clamp(1rem, 2vh, 1.5rem)' }}>
+                  {idx < 3 ? (
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.5rem 1.1rem',
+                        borderRadius: '9999px',
+                        backgroundColor: 'rgba(255, 255, 255, 0.92)',
+                        border: '1px solid rgba(17, 17, 17, 0.12)',
+                        color: '#111111',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <span>NEXT STATEMENT</span>
+                      <ChevronRight size={14} />
+                    </button>
+                  ) : (
+                    <a
+                      href="#spotlight"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.55rem 1.3rem',
+                        borderRadius: '9999px',
+                        backgroundColor: '#1E56FF',
+                        border: '1px solid #1E56FF',
+                        color: '#FFFFFF',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 16px rgba(30, 86, 255, 0.3)',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      <span>CONTINUE TO SPOTLIGHT</span>
+                      <ArrowDown size={14} />
+                    </a>
+                  )}
+                </div>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom Minimal Interactive Progress Indicators */}
+        {/* Bottom Indicator Bar */}
         <div
           style={{
             position: 'absolute',
-            bottom: 'clamp(20px, 3.5vh, 36px)',
+            bottom: 'clamp(18px, 3vh, 32px)',
+            left: 'clamp(16px, 3.5vw, 40px)',
+            right: 'clamp(16px, 3.5vw, 40px)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',
-            gap: '0.65rem',
+            justifyContent: 'space-between',
+            maxWidth: '1240px',
+            margin: '0 auto',
           }}
         >
-          {STATEMENTS.map((_, i) => {
-            const isActive = i === activeStep;
-            return (
-              <button
-                key={i}
-                onClick={() => scrollToStep(i)}
-                aria-label={`Scroll to statement ${i + 1}`}
-                type="button"
-                style={{
-                  width: isActive ? '32px' : '8px',
-                  height: '5px',
-                  borderRadius: '3px',
-                  backgroundColor: isActive
-                    ? i === 3
-                      ? '#1E56FF'
-                      : '#111111'
-                    : 'rgba(17, 17, 17, 0.20)',
-                  border: 'none',
-                  padding: 0,
-                  cursor: 'pointer',
-                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              />
-            );
-          })}
+          {/* Scroll Direction / Status Hint */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: activeStep === 3 ? '#1E56FF' : '#666666',
+              letterSpacing: '0.06em',
+            }}
+          >
+            {activeStep === 3 ? (
+              <>
+                <Check size={14} color="#1E56FF" />
+                <span>FINAL STATEMENT • SCROLL DOWN FOR NEXT SECTION</span>
+              </>
+            ) : (
+              <>
+                <ArrowDown size={14} color="#1E56FF" />
+                <span>SCROLL DOWN TO ADVANCE STATEMENTS ({activeStep + 1}/4)</span>
+              </>
+            )}
+          </div>
+
+          {/* Stepper Progress Bar Segments */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {STATEMENTS.map((_, i) => {
+              const isPassed = i <= activeStep;
+              const isCurrent = i === activeStep;
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => scrollToStep(i)}
+                  aria-label={`Jump to statement ${i + 1}`}
+                  type="button"
+                  style={{
+                    width: isCurrent ? '38px' : '22px',
+                    height: '6px',
+                    borderRadius: '9999px',
+                    backgroundColor: isCurrent
+                      ? i === 3
+                        ? '#1E56FF'
+                        : '#111111'
+                      : isPassed
+                      ? 'rgba(30, 86, 255, 0.4)'
+                      : 'rgba(17, 17, 17, 0.16)',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @media (max-width: 820px) {
+          .attention-step-tabs {
+            display: none !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
