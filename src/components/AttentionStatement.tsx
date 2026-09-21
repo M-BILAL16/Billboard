@@ -157,7 +157,7 @@ export default function AttentionStatement() {
           style={{
             objectFit: 'cover',
             objectPosition: 'center 42%',
-            filter: 'brightness(0.96) contrast(0.98) saturate(1.05)',
+            filter: 'brightness(1) contrast(0.98) saturate(1.05) blur(3px)',
           }}
           priority
         />
@@ -166,8 +166,7 @@ export default function AttentionStatement() {
           style={{
             position: 'absolute',
             inset: 0,
-            background:
-              'radial-gradient(ellipse at 50% 50%, rgba(247, 245, 239, 0.88) 0%, rgba(247, 245, 239, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
+            background: '#ffffffcf',
           }}
         />
       </div>
@@ -206,19 +205,18 @@ export default function AttentionStatement() {
             style={{
               objectFit: 'cover',
               objectPosition: 'center 42%',
-              filter: `brightness(${0.97 + (activeStep === 3 ? 0.03 : 0)}) contrast(0.98) saturate(1.05)`,
+              filter: 'brightness(1) contrast(0.98) saturate(1.05) blur(3px)',
               transition: 'filter 0.4s ease',
             }}
             priority
           />
 
-          {/* Sunlight Warm Ambient Gradient Wash */}
+          {/* Frosted Overlay */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background:
-                'radial-gradient(ellipse at 50% 50%, rgba(247, 245, 239, 0.88) 0%, rgba(247, 245, 239, 0.94) 55%, rgba(247, 245, 239, 0.99) 85%, rgba(247, 245, 239, 1) 100%)',
+              background: '#ffffffcf',
             }}
           />
 
