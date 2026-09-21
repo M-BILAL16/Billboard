@@ -14,7 +14,6 @@ import ImpactStats from '@/components/ImpactStats';
 import LocationMap from '@/components/LocationMap';
 import HowItWorks from '@/components/HowItWorks';
 import CampaignBuilder from '@/components/CampaignBuilder';
-import WhyOutdoor from '@/components/WhyOutdoor';
 import BrandTrust from '@/components/BrandTrust';
 import TestimonialSection from '@/components/TestimonialSection';
 import InsightsSection from '@/components/InsightsSection';
@@ -126,8 +125,7 @@ export default function Home() {
       {/* Interactive Campaign Planner & Builder */}
       <CampaignBuilder onComplete={handleBuilderComplete} />
 
-      {/* Why Outdoor Manifesto */}
-      <WhyOutdoor />
+
 
       {/* Brand Trust Monochrome Logo Wall */}
       <BrandTrust />
