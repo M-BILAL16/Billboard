@@ -49,9 +49,10 @@ export default function SpotlightSection() {
 
   return (
     <section
+      id="spotlight"
       style={{
         position: 'relative',
-        backgroundColor: '#F7F5EF',
+        backgroundColor: '#F2ECDD',
         padding: '9rem 0',
         borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
         overflow: 'hidden',
