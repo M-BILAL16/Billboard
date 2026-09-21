@@ -140,11 +140,12 @@ export default function IntroSection() {
           data-cursor="VIEW ARCHITECTURE"
         >
           <Image
-            src="/images/daylight_arch_vertical.jpg"
-            alt="Custom storefront architectural sign in New York City"
+            src="/images/intro_real_signs.jpg"
+            alt="Custom illuminated luxury storefront architectural sign on Manhattan avenue"
             fill
-            sizes="1080px"
+            sizes="(max-width: 1200px) 100vw, 1080px"
             style={{ objectFit: 'cover' }}
+            priority
           />
 
           {/* Floating Editorial Corner Tag */}
