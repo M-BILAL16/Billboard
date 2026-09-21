@@ -9,7 +9,7 @@ export default function IntroSection() {
     <section
       style={{
         position: 'relative',
-        backgroundColor: '#F7F5EF',
+        backgroundColor: '#fffef9',
         padding: '9rem 0 6rem',
         borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
         overflow: 'visible',
