@@ -1,0 +1,1 @@
+Transparent base that blends seamlessly onto surfaces, great for minimalist or no-background looks.

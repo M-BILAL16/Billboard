@@ -1,0 +1,1 @@
+Breaks a single image into multiple panels for a modern display.

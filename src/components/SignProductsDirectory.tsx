@@ -3,62 +3,108 @@
 import React, { useState, useMemo } from 'react';
 import {
   Sparkles,
-  ArrowUpRight,
+  ArrowRight,
   Search,
-  ExternalLink,
-  Layers,
-  Columns,
-  Grid,
   CheckCircle2,
   ChevronRight,
-  Shield,
-  Clock,
-  Hammer,
+  ShieldCheck,
+  Building2,
+  Layers,
+  Maximize2,
   X,
+  PhoneCall,
+  FileText,
+  BadgeCheck,
 } from 'lucide-react';
-import { SIGN_PRODUCTS_CATALOG, SignProductItem, SignProductCategory } from '@/data/categoriesData';
+import { FULL_CATALOG, MainCategory, Subcategory, CatalogItem } from '@/data/catalogTypes';
 
 interface SignProductsDirectoryProps {
   onOpenCampaignModal: () => void;
 }
 
 export default function SignProductsDirectory({ onOpenCampaignModal }: SignProductsDirectoryProps) {
+  // Main Category State
   const [activeCategoryId, setActiveCategoryId] = useState<string>('indoor-signs');
-  const [selectedItemName, setSelectedItemName] = useState<string>('Office Signs');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [viewMode, setViewMode] = useState<'split' | 'grid'>('split');
 
-  // Active Category Data
-  const activeCategory = useMemo(() => {
+  // Selected Subcategory State
+  const [selectedSubcatName, setSelectedSubcatName] = useState<string>('Office Signs');
+
+  // Search filter for subcategories
+  const [sidebarSearch, setSidebarSearch] = useState<string>('');
+
+  // Active Tab ('designs' | 'types')
+  const [activeTab, setActiveTab] = useState<'designs' | 'types'>('designs');
+
+  // Modal Lightbox for item detail / inspection
+  const [inspectedItem, setInspectedItem] = useState<{
+    item: CatalogItem | { name: string; description: string; image: string };
+    type: 'design' | 'type' | 'product';
+    subcatName: string;
+    catName: string;
+  } | null>(null);
+
+  // Active Category
+  const activeCategory: MainCategory = useMemo(() => {
     return (
-      SIGN_PRODUCTS_CATALOG.find((cat) => cat.id === activeCategoryId) ||
-      SIGN_PRODUCTS_CATALOG[0]
+      FULL_CATALOG.find((cat) => cat.id === activeCategoryId) ||
+      FULL_CATALOG[0]
     );
   }, [activeCategoryId]);
 
-  // Filtered subcategories based on search
-  const filteredItems = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
+  // Filtered subcategories in sidebar
+  const filteredSubcategories = useMemo(() => {
+    const q = sidebarSearch.trim().toLowerCase();
     if (!q) return activeCategory.subcategories;
-    return activeCategory.subcategories.filter(
-      (item) =>
-        item.name.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        (item.highlight && item.highlight.toLowerCase().includes(q))
+    return activeCategory.subcategories.filter((sub) =>
+      sub.name.toLowerCase().includes(q) ||
+      sub.description.toLowerCase().includes(q)
     );
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, sidebarSearch]);
 
-  // Selected item object
-  const activeItem: SignProductItem = useMemo(() => {
-    const found = filteredItems.find((item) => item.name === selectedItemName);
-    if (found) return found;
-    return filteredItems[0] || activeCategory.subcategories[0];
-  }, [filteredItems, selectedItemName, activeCategory]);
+  // Active Subcategory
+  const activeSubcategory: Subcategory = useMemo(() => {
+    const found = activeCategory.subcategories.find(
+      (sub) => sub.name.toLowerCase() === selectedSubcatName.toLowerCase()
+    );
+    return found || filteredSubcategories[0] || activeCategory.subcategories[0];
+  }, [activeCategory, selectedSubcatName, filteredSubcategories]);
 
-  const handleCategoryChange = (cat: SignProductCategory) => {
-    setActiveCategoryId(cat.id);
-    setSearchQuery('');
-    setSelectedItemName(cat.subcategories[0]?.name || '');
+  // Determine available tabs for active subcategory
+  const hasDesigns = activeSubcategory.designs && activeSubcategory.designs.length > 0;
+  const hasTypes = activeSubcategory.types && activeSubcategory.types.length > 0;
+
+  // Sync activeTab when subcategory changes
+  const effectiveTab: 'designs' | 'types' = useMemo(() => {
+    if (hasDesigns && hasTypes) return activeTab;
+    if (hasDesigns && !hasTypes) return 'designs';
+    if (!hasDesigns && hasTypes) return 'types';
+    return 'designs';
+  }, [hasDesigns, hasTypes, activeTab]);
+
+  const handleCategorySelect = (catId: string) => {
+    setActiveCategoryId(catId);
+    setSidebarSearch('');
+    const targetCat = FULL_CATALOG.find((c) => c.id === catId);
+    if (targetCat && targetCat.subcategories.length > 0) {
+      setSelectedSubcatName(targetCat.subcategories[0].name);
+      // Reset tab preference based on first subcat
+      if (targetCat.subcategories[0].designs.length > 0) {
+        setActiveTab('designs');
+      } else if (targetCat.subcategories[0].types.length > 0) {
+        setActiveTab('types');
+      }
+    }
+  };
+
+  const handleSubcatSelect = (sub: Subcategory) => {
+    setSelectedSubcatName(sub.name);
+    if (sub.designs.length > 0 && sub.types.length > 0) {
+      // Keep current tab if valid
+    } else if (sub.designs.length > 0) {
+      setActiveTab('designs');
+    } else if (sub.types.length > 0) {
+      setActiveTab('types');
+    }
   };
 
   return (
@@ -67,219 +113,113 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
       style={{
         position: 'relative',
         backgroundColor: '#FFFFFF',
-        padding: '7.5rem 0',
+        padding: '6rem 0 7rem 0',
         borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
         overflow: 'hidden',
       }}
     >
       <div className="container-custom">
         {/* Section Header */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            marginBottom: '3rem',
-            flexWrap: 'wrap',
-            gap: '2rem',
-          }}
-        >
-          <div style={{ maxWidth: '820px' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                color: '#1E56FF',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                marginBottom: '1.1rem',
-              }}
-            >
-              <Sparkles size={14} />
-              PRODUCT CATALOG // 9 CATEGORIES • 89 ARCHITECTURAL TYPES
-            </div>
-
-            <h2
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontWeight: 900,
-                fontSize: 'clamp(2.4rem, 4.6vw, 4.2rem)',
-                lineHeight: 0.95,
-                letterSpacing: '-0.04em',
-                textTransform: 'uppercase',
-                color: '#111111',
-                marginBottom: '1.25rem',
-              }}
-            >
-              FIND THE EXACT SIGN <br />
-              <span style={{ color: '#1E56FF' }}>FOR YOUR NYC SPACE.</span>
-            </h2>
-
-            <p style={{ color: '#555555', fontSize: '1.1rem', maxWidth: '680px', lineHeight: 1.6 }}>
-              Browse New York&apos;s most comprehensive commercial signage directory. Produced in our 10,000 sq ft NYC plant with DOB expediting and licensed 5-borough installation.
-            </p>
+        <div style={{ maxWidth: '850px', marginBottom: '2.5rem' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              color: '#1E56FF',
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.74rem',
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              marginBottom: '1rem',
+            }}
+          >
+            <Sparkles size={14} />
+            SIGN PRODUCTS CATALOG // 9 CATEGORIES • 89 ARCHITECTURAL LINES
           </div>
 
-          {/* Right Header Actions: External Catalog Link & View Mode Toggle */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            {/* View Mode Toggle */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                backgroundColor: '#F7F5EF',
-                padding: '0.25rem',
-                borderRadius: '9999px',
-                border: '1px solid rgba(17, 17, 17, 0.08)',
-              }}
-            >
-              <button
-                type="button"
-                onClick={() => setViewMode('split')}
-                title="Split Inspector View"
-                aria-label="Split Inspector View"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.45rem 0.9rem',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  backgroundColor: viewMode === 'split' ? '#111111' : 'transparent',
-                  color: viewMode === 'split' ? '#FFFFFF' : '#666666',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <Columns size={13} />
-                <span>Inspector</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                title="Compact Grid View"
-                aria-label="Compact Grid View"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.35rem',
-                  padding: '0.45rem 0.9rem',
-                  borderRadius: '9999px',
-                  border: 'none',
-                  backgroundColor: viewMode === 'grid' ? '#111111' : 'transparent',
-                  color: viewMode === 'grid' ? '#FFFFFF' : '#666666',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                <Grid size={13} />
-                <span>Grid</span>
-              </button>
-            </div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontWeight: 900,
+              fontSize: 'clamp(2.4rem, 4.4vw, 4rem)',
+              lineHeight: 0.95,
+              letterSpacing: '-0.04em',
+              textTransform: 'uppercase',
+              color: '#111111',
+              marginBottom: '1rem',
+            }}
+          >
+            FIND THE EXACT SIGN <br />
+            <span style={{ color: '#1E56FF' }}>FOR YOUR NYC SPACE.</span>
+          </h2>
 
-            <a
-              href="https://signsny.com/sign-products/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-secondary"
-              data-cursor="CATALOG"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                fontSize: '0.82rem',
-                padding: '0.65rem 1.25rem',
-              }}
-            >
-              Official Catalog ↗
-            </a>
-          </div>
+          <p style={{ color: '#555555', fontSize: '1.08rem', maxWidth: '720px', lineHeight: 1.55 }}>
+            Explore every custom sign product, design showcase, and architectural material type.
+            Fabricated in our 10,000 sq ft NYC plant with full DOB permit management.
+          </p>
         </div>
 
-        {/* 9 Category Tabs Navigation Bar (Scrollable horizontally on mobile, clean wrap on desktop) */}
+        {/* 1. Main Category Selector (Top Horizontal Pills) */}
         <div
           style={{
-            position: 'relative',
-            marginBottom: '1.75rem',
+            marginBottom: '2.5rem',
             borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
-            paddingBottom: '1.25rem',
+            paddingBottom: '1rem',
           }}
         >
           <div
-            className="category-pills-bar"
             style={{
               display: 'flex',
-              gap: '0.55rem',
+              alignItems: 'center',
+              gap: '0.65rem',
               overflowX: 'auto',
               paddingBottom: '0.5rem',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
+              scrollbarWidth: 'thin',
             }}
           >
-            {SIGN_PRODUCTS_CATALOG.map((cat) => {
+            {FULL_CATALOG.map((cat) => {
               const isActive = cat.id === activeCategoryId;
               return (
                 <button
                   key={cat.id}
+                  onClick={() => handleCategorySelect(cat.id)}
                   type="button"
-                  onClick={() => handleCategoryChange(cat)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '0.55rem',
-                    padding: '0.6rem 1.15rem',
+                    gap: '0.5rem',
+                    padding: '0.65rem 1.15rem',
                     borderRadius: '9999px',
                     border: isActive
-                      ? '1px solid #1E56FF'
-                      : '1px solid rgba(17, 17, 17, 0.08)',
+                      ? '1.5px solid #1E56FF'
+                      : '1px solid rgba(17, 17, 17, 0.10)',
                     backgroundColor: isActive ? '#1E56FF' : '#F7F5EF',
                     color: isActive ? '#FFFFFF' : '#222222',
                     fontFamily: 'var(--font-display)',
-                    fontWeight: 800,
-                    fontSize: '0.82rem',
-                    letterSpacing: '0.01em',
-                    cursor: 'pointer',
+                    fontSize: '0.88rem',
+                    fontWeight: isActive ? 700 : 600,
+                    letterSpacing: '-0.01em',
                     whiteSpace: 'nowrap',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                    boxShadow: isActive ? '0 4px 14px rgba(30, 86, 255, 0.28)' : 'none',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = '#FFFFFF';
-                      e.currentTarget.style.borderColor = 'rgba(30, 86, 255, 0.4)';
-                      e.currentTarget.style.color = '#1E56FF';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isActive) {
-                      e.currentTarget.style.backgroundColor = '#F7F5EF';
-                      e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.08)';
-                      e.currentTarget.style.color = '#222222';
-                    }
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    boxShadow: isActive
+                      ? '0 4px 14px rgba(30, 86, 255, 0.25)'
+                      : 'none',
                   }}
                 >
-                  <span>{cat.category}</span>
+                  <span>{cat.name}</span>
                   <span
                     style={{
+                      fontSize: '0.72rem',
                       fontFamily: 'var(--font-mono)',
-                      fontSize: '0.65rem',
-                      padding: '0.1rem 0.4rem',
+                      padding: '0.1rem 0.45rem',
                       borderRadius: '9999px',
                       backgroundColor: isActive
                         ? 'rgba(255, 255, 255, 0.25)'
                         : 'rgba(17, 17, 17, 0.08)',
                       color: isActive ? '#FFFFFF' : '#666666',
-                      fontWeight: 700,
                     }}
                   >
                     {cat.subcategories.length}
@@ -290,699 +230,1173 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
           </div>
         </div>
 
-        {/* Sub-Header & Live Filter Bar for Active Category */}
+        {/* 2. Main 2-Column Explorer: Left Sidebar (Subcategories) + Right Content (Designs & Types) */}
         <div
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: '#F7F5EF',
-            borderRadius: '16px',
-            padding: '0.85rem 1.4rem',
-            marginBottom: '1.5rem',
-            border: '1px solid rgba(17, 17, 17, 0.06)',
-            flexWrap: 'wrap',
-            gap: '1rem',
+            display: 'grid',
+            gridTemplateColumns: '320px 1fr',
+            gap: '2.5rem',
+            alignItems: 'start',
           }}
+          className="products-catalog-grid"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                fontWeight: 800,
-                color: '#1E56FF',
-                backgroundColor: 'rgba(30, 86, 255, 0.1)',
-                padding: '0.2rem 0.55rem',
-                borderRadius: '6px',
-              }}
-            >
-              CAT {activeCategory.code}
-            </span>
-            <div>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontWeight: 900,
-                  fontSize: '1.05rem',
-                  color: '#111111',
-                  textTransform: 'uppercase',
-                  marginRight: '0.6rem',
-                }}
-              >
-                {activeCategory.category}
-              </span>
-              <span
-                className="category-tagline"
-                style={{
-                  fontSize: '0.8rem',
-                  color: '#666666',
-                  fontFamily: 'var(--font-sans)',
-                }}
-              >
-                {activeCategory.tagline}
-              </span>
-            </div>
-          </div>
-
-          {/* Quick Filter Box */}
-          <div
+          {/* Left Sidebar: Subcategories List */}
+          <aside
             style={{
-              position: 'relative',
-              display: 'flex',
-              alignItems: 'center',
-              width: '280px',
-              maxWidth: '100%',
-            }}
-          >
-            <Search
-              size={14}
-              color="#888888"
-              style={{ position: 'absolute', left: '12px', pointerEvents: 'none' }}
-            />
-            <input
-              type="text"
-              placeholder={`Filter in ${activeCategory.category}...`}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem 2rem 0.5rem 2.1rem',
-                borderRadius: '9999px',
-                border: '1px solid rgba(17, 17, 17, 0.12)',
-                backgroundColor: '#FFFFFF',
-                fontSize: '0.8rem',
-                fontFamily: 'var(--font-sans)',
-                color: '#111111',
-                outline: 'none',
-                transition: 'border-color 0.2s ease',
-              }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = '#1E56FF')}
-              onBlur={(e) => (e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.12)')}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => setSearchQuery('')}
-                aria-label="Clear filter"
-                style={{
-                  position: 'absolute',
-                  right: '10px',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  color: '#888888',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <X size={13} />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* ================================================================ */}
-        {/* COMPACT VIEWPORT CONTAINER: Strictly capped height (~540px) */}
-        {/* ================================================================ */}
-        {viewMode === 'split' ? (
-          /* SPLIT MASTER-DETAIL VIEW */
-          <div
-            className="split-catalog-container"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '40% 60%',
-              gap: '1.5rem',
-              height: '530px',
               backgroundColor: '#F7F5EF',
-              borderRadius: '24px',
-              padding: '1.25rem',
+              borderRadius: '20px',
               border: '1px solid rgba(17, 17, 17, 0.08)',
-              boxShadow: '0 16px 40px rgba(0, 0, 0, 0.03)',
+              padding: '1.25rem',
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: '820px',
+              position: 'sticky',
+              top: '90px',
             }}
           >
-            {/* Left Column: Scrollable Subcategories List */}
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '16px',
-                border: '1px solid rgba(17, 17, 17, 0.06)',
-                overflow: 'hidden',
-              }}
-            >
+            {/* Sidebar Title & Search Input */}
+            <div style={{ marginBottom: '1rem' }}>
               <div
                 style={{
-                  padding: '0.85rem 1.1rem',
-                  borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
                   display: 'flex',
-                  justifyContent: 'space-between',
                   alignItems: 'center',
-                  backgroundColor: '#FAF9F5',
+                  justifyContent: 'space-between',
+                  marginBottom: '0.75rem',
                 }}
               >
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: '0.68rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.08em',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
                     color: '#666666',
+                    letterSpacing: '0.06em',
                     textTransform: 'uppercase',
                   }}
                 >
-                  Select Subcategory ({filteredItems.length})
+                  {activeCategory.name} ({activeCategory.subcategories.length})
                 </span>
-                <span style={{ fontSize: '0.68rem', color: '#1E56FF', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
-                  Click to inspect
+                <span
+                  style={{
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.68rem',
+                    color: '#1E56FF',
+                    fontWeight: 600,
+                  }}
+                >
+                  SUB-CATEGORIES
                 </span>
               </div>
 
-              {/* Scrollable list items */}
-              <div
-                className="custom-catalog-scroll"
-                style={{
-                  flex: 1,
-                  overflowY: 'auto',
-                  padding: '0.6rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.35rem',
-                }}
-              >
-                {filteredItems.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#888888', fontSize: '0.85rem' }}>
-                    No products matched &quot;{searchQuery}&quot;
-                  </div>
-                ) : (
-                  filteredItems.map((item, idx) => {
-                    const isSelected = item.name === activeItem.name;
-                    const numStr = (idx + 1).toString().padStart(2, '0');
-
-                    return (
-                      <button
-                        key={item.name}
-                        type="button"
-                        onClick={() => setSelectedItemName(item.name)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '0.65rem 0.85rem',
-                          borderRadius: '10px',
-                          border: isSelected
-                            ? '1.5px solid #1E56FF'
-                            : '1px solid transparent',
-                          backgroundColor: isSelected ? 'rgba(30, 86, 255, 0.06)' : 'transparent',
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                          transition: 'all 0.18s ease',
-                          width: '100%',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isSelected) {
-                            e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.03)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isSelected) {
-                            e.currentTarget.style.backgroundColor = 'transparent';
-                          }
-                        }}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.68rem',
-                              color: isSelected ? '#1E56FF' : '#999999',
-                              fontWeight: 700,
-                              width: '20px',
-                            }}
-                          >
-                            {numStr}
-                          </span>
-                          <div>
-                            <div
-                              style={{
-                                fontFamily: 'var(--font-display)',
-                                fontWeight: 800,
-                                fontSize: '0.88rem',
-                                color: isSelected ? '#1E56FF' : '#111111',
-                              }}
-                            >
-                              {item.name}
-                            </div>
-                            {item.highlight && (
-                              <div
-                                style={{
-                                  fontSize: '0.66rem',
-                                  fontFamily: 'var(--font-mono)',
-                                  color: '#777777',
-                                  marginTop: '1px',
-                                }}
-                              >
-                                {item.highlight}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <ChevronRight
-                          size={15}
-                          color={isSelected ? '#1E56FF' : '#CCCCCC'}
-                          style={{
-                            transform: isSelected ? 'translateX(2px)' : 'none',
-                            transition: 'transform 0.2s ease',
-                          }}
-                        />
-                      </button>
-                    );
-                  })
-                )}
+              <div style={{ position: 'relative' }}>
+                <Search
+                  size={14}
+                  style={{
+                    position: 'absolute',
+                    left: '0.85rem',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    color: '#888888',
+                  }}
+                />
+                <input
+                  type="text"
+                  placeholder={`Search ${activeCategory.name.toLowerCase()}...`}
+                  value={sidebarSearch}
+                  onChange={(e) => setSidebarSearch(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.55rem 0.85rem 0.55rem 2.2rem',
+                    borderRadius: '10px',
+                    border: '1px solid rgba(17, 17, 17, 0.12)',
+                    backgroundColor: '#FFFFFF',
+                    fontSize: '0.85rem',
+                    fontFamily: 'var(--font-body)',
+                    color: '#111111',
+                    outline: 'none',
+                  }}
+                />
               </div>
             </div>
 
-            {/* Right Column: Detailed Spotlight Card for Selected Subcategory */}
+            {/* Scrollable Subcategories List */}
             <div
               style={{
-                height: '100%',
-                backgroundColor: '#FFFFFF',
-                borderRadius: '16px',
-                border: '1px solid rgba(17, 17, 17, 0.06)',
-                padding: 'clamp(1.25rem, 2.5vw, 2.25rem)',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.02)',
-                position: 'relative',
+                gap: '0.35rem',
                 overflowY: 'auto',
+                paddingRight: '0.25rem',
+                flex: 1,
               }}
             >
-              <div>
-                {/* Top badges */}
+              {filteredSubcategories.map((sub) => {
+                const isSelected = sub.name.toLowerCase() === activeSubcategory.name.toLowerCase();
+                const totalItems = (sub.designs?.length || 0) + (sub.types?.length || 0);
+
+                return (
+                  <button
+                    key={sub.name}
+                    onClick={() => handleSubcatSelect(sub)}
+                    type="button"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.65rem 0.75rem',
+                      borderRadius: '12px',
+                      border: isSelected
+                        ? '1.5px solid #1E56FF'
+                        : '1px solid transparent',
+                      backgroundColor: isSelected ? '#FFFFFF' : 'transparent',
+                      color: isSelected ? '#111111' : '#444444',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      transition: 'all 0.18s ease',
+                      boxShadow: isSelected
+                        ? '0 4px 12px rgba(30, 86, 255, 0.08)'
+                        : 'none',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      {/* Subcategory Thumbnail */}
+                      <div
+                        style={{
+                          width: '38px',
+                          height: '38px',
+                          borderRadius: '8px',
+                          overflow: 'hidden',
+                          backgroundColor: '#EBEBEB',
+                          flexShrink: 0,
+                          position: 'relative',
+                        }}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={sub.image || '/images/hero_storefront.jpg'}
+                          alt={sub.name}
+                          loading="lazy"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/images/hero_storefront.jpg';
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <div
+                          style={{
+                            fontFamily: 'var(--font-display)',
+                            fontSize: '0.88rem',
+                            fontWeight: isSelected ? 700 : 500,
+                            lineHeight: 1.25,
+                            color: isSelected ? '#1E56FF' : '#111111',
+                          }}
+                        >
+                          {sub.name}
+                        </div>
+                        <div
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.66rem',
+                            color: '#777777',
+                            marginTop: '0.15rem',
+                          }}
+                        >
+                          {sub.designs.length > 0 && `${sub.designs.length} Designs`}
+                          {sub.designs.length > 0 && sub.types.length > 0 && ' • '}
+                          {sub.types.length > 0 && `${sub.types.length} Types`}
+                          {totalItems === 0 && 'Architectural Line'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <ChevronRight
+                      size={14}
+                      style={{
+                        color: isSelected ? '#1E56FF' : 'rgba(17, 17, 17, 0.25)',
+                        transform: isSelected ? 'translateX(2px)' : 'none',
+                        transition: 'transform 0.2s ease',
+                      }}
+                    />
+                  </button>
+                );
+              })}
+
+              {filteredSubcategories.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '2rem 1rem', color: '#888888', fontSize: '0.85rem' }}>
+                  No subcategory matching &ldquo;{sidebarSearch}&rdquo;
+                </div>
+              )}
+            </div>
+          </aside>
+
+          {/* Right Side: Selected Subcategory Canvas */}
+          <main style={{ minWidth: 0 }}>
+            {/* Subcategory Hero Header Banner */}
+            <div
+              style={{
+                backgroundColor: '#FDF7E7',
+                borderRadius: '24px',
+                border: '1px solid rgba(17, 17, 17, 0.08)',
+                padding: 'clamp(1.5rem, 3vw, 2.25rem)',
+                marginBottom: '2rem',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Background ambient watermarks */}
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '-20px',
+                  bottom: '-20px',
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 900,
+                  fontSize: '8rem',
+                  lineHeight: 0.8,
+                  color: 'rgba(17, 17, 17, 0.03)',
+                  pointerEvents: 'none',
+                  textTransform: 'uppercase',
+                  userSelect: 'none',
+                }}
+              >
+                NYC
+              </div>
+
+              <div style={{ position: 'relative', zIndex: 2 }}>
+                {/* Breadcrumb */}
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '1rem',
+                    gap: '0.4rem',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    color: '#666666',
+                    marginBottom: '0.75rem',
                   }}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        fontWeight: 800,
-                        color: '#1E56FF',
-                        backgroundColor: 'rgba(30, 86, 255, 0.09)',
-                        padding: '0.2rem 0.55rem',
-                        borderRadius: '6px',
-                      }}
-                    >
-                      {activeCategory.category.toUpperCase()}
-                    </span>
-                    {activeItem.highlight && (
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          fontSize: '0.68rem',
-                          fontWeight: 700,
-                          color: '#111111',
-                          backgroundColor: '#F7F5EF',
-                          padding: '0.2rem 0.55rem',
-                          borderRadius: '6px',
-                        }}
-                      >
-                        {activeItem.highlight}
-                      </span>
-                    )}
-                  </div>
-
-                  <a
-                    href={activeCategory.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={`View ${activeCategory.category} on SignsNY.com`}
-                    style={{
-                      fontSize: '0.72rem',
-                      fontFamily: 'var(--font-mono)',
-                      color: '#1E56FF',
-                      textDecoration: 'none',
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '3px',
-                    }}
-                  >
-                    signsny.com <ExternalLink size={12} />
-                  </a>
+                  <span>{activeCategory.name}</span>
+                  <span>/</span>
+                  <span style={{ color: '#1E56FF', fontWeight: 700 }}>
+                    {activeSubcategory.name}
+                  </span>
                 </div>
 
                 {/* Subcategory Title */}
-                <h3
+                <div
                   style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 900,
-                    fontSize: 'clamp(1.75rem, 2.5vw, 2.4rem)',
-                    lineHeight: 1.05,
-                    letterSpacing: '-0.03em',
-                    textTransform: 'uppercase',
-                    color: '#111111',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    flexWrap: 'wrap',
+                    gap: '1.25rem',
                     marginBottom: '1rem',
                   }}
                 >
-                  {activeItem.name}
-                </h3>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 900,
+                      fontSize: 'clamp(1.8rem, 3vw, 2.8rem)',
+                      lineHeight: 1.05,
+                      letterSpacing: '-0.03em',
+                      textTransform: 'uppercase',
+                      color: '#111111',
+                      margin: 0,
+                    }}
+                  >
+                    {activeSubcategory.name}
+                  </h3>
 
-                {/* Direct description from Signs NY */}
+                  {/* Primary Quote CTA */}
+                  <button
+                    type="button"
+                    onClick={onOpenCampaignModal}
+                    className="btn-primary"
+                    style={{
+                      padding: '0.65rem 1.25rem',
+                      fontSize: '0.82rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}
+                  >
+                    REQUEST A FREE QUOTE
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+
+                {/* Subcategory Description */}
                 <p
                   style={{
                     color: '#444444',
-                    fontSize: 'clamp(0.95rem, 1.2vw, 1.12rem)',
-                    lineHeight: 1.65,
-                    marginBottom: '1.75rem',
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    maxWidth: '820px',
+                    marginBottom: '1.25rem',
                   }}
                 >
-                  {activeItem.description}
+                  {activeSubcategory.description}
                 </p>
 
-                {/* 3 Engineered Value Points */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '0.85rem',
-                    marginBottom: '2rem',
-                  }}
-                  className="spotlight-features-grid"
-                >
-                  <div
+                {/* Architectural Quality Badges */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+                  <span
                     style={{
-                      padding: '0.85rem',
-                      borderRadius: '12px',
-                      backgroundColor: '#FAF9F5',
-                      border: '1px solid rgba(17, 17, 17, 0.05)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '9999px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(17, 17, 17, 0.08)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      color: '#111111',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-                      <Hammer size={14} color="#1E56FF" />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', fontWeight: 800, color: '#888888', textTransform: 'uppercase' }}>
-                        Production
-                      </span>
-                    </div>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#111111', display: 'block' }}>
-                      In-House NYC Plant
-                    </span>
-                  </div>
-
-                  <div
+                    <Building2 size={12} style={{ color: '#1E56FF' }} />
+                    10,000 SQ FT NYC IN-HOUSE FABRICATION
+                  </span>
+                  <span
                     style={{
-                      padding: '0.85rem',
-                      borderRadius: '12px',
-                      backgroundColor: '#FAF9F5',
-                      border: '1px solid rgba(17, 17, 17, 0.05)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '9999px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(17, 17, 17, 0.08)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      color: '#059669',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-                      <Shield size={14} color="#10B981" />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', fontWeight: 800, color: '#888888', textTransform: 'uppercase' }}>
-                        Compliance
-                      </span>
-                    </div>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#111111', display: 'block' }}>
-                      DOB & Code Verified
-                    </span>
-                  </div>
-
-                  <div
+                    <ShieldCheck size={12} />
+                    DOB PERMIT COMPLIANT
+                  </span>
+                  <span
                     style={{
-                      padding: '0.85rem',
-                      borderRadius: '12px',
-                      backgroundColor: '#FAF9F5',
-                      border: '1px solid rgba(17, 17, 17, 0.05)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '9999px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(17, 17, 17, 0.08)',
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      color: '#666666',
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
-                      <Clock size={14} color="#F59E0B" />
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.64rem', fontWeight: 800, color: '#888888', textTransform: 'uppercase' }}>
-                        Lead Time
-                      </span>
-                    </div>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#111111', display: 'block' }}>
-                      Standard & Rush
-                    </span>
-                  </div>
+                    <BadgeCheck size={12} style={{ color: '#1E56FF' }} />
+                    LICENSED 5-BOROUGH INSTALLATION
+                  </span>
                 </div>
               </div>
-
-              {/* Action Buttons Row */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  paddingTop: '1.25rem',
-                  borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={onOpenCampaignModal}
-                  className="btn-primary"
-                  style={{
-                    padding: '0.75rem 1.6rem',
-                    fontSize: '0.82rem',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                  }}
-                >
-                  <span>Request Quote For {activeItem.name}</span>
-                  <ArrowUpRight size={15} strokeWidth={2.5} />
-                </button>
-
-                <a
-                  href={activeItem.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-secondary"
-                  style={{
-                    padding: '0.75rem 1.35rem',
-                    fontSize: '0.82rem',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                  }}
-                >
-                  <span>View on SignsNY.com</span>
-                  <ExternalLink size={13} />
-                </a>
-              </div>
             </div>
-          </div>
-        ) : (
-          /* COMPACT GRID VIEW (Max Height 530px with custom scrollbar) */
-          <div
-            className="custom-catalog-scroll"
-            style={{
-              height: '530px',
-              overflowY: 'auto',
-              backgroundColor: '#F7F5EF',
-              borderRadius: '24px',
-              padding: '1.5rem',
-              border: '1px solid rgba(17, 17, 17, 0.08)',
-            }}
-          >
+
+            {/* 3. The 2 TABS: Designs & Types (exactly as requested) */}
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                gap: '1.25rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                borderBottom: '2px solid rgba(17, 17, 17, 0.08)',
+                marginBottom: '2rem',
+                flexWrap: 'wrap',
+                gap: '1rem',
               }}
             >
-              {filteredItems.map((item, idx) => {
-                const numStr = (idx + 1).toString().padStart(2, '0');
+              {/* Tab Buttons */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {/* 1. Designs Tab */}
+                {hasDesigns && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('designs')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.85rem 1.25rem',
+                      borderBottom: effectiveTab === 'designs' ? '3px solid #1E56FF' : '3px solid transparent',
+                      marginBottom: '-2px',
+                      background: 'none',
+                      borderTop: 'none',
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      color: effectiveTab === 'designs' ? '#1E56FF' : '#666666',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '1rem',
+                      fontWeight: effectiveTab === 'designs' ? 800 : 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <span>DESIGNS</span>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '9999px',
+                        backgroundColor: effectiveTab === 'designs' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
+                        color: effectiveTab === 'designs' ? '#FFFFFF' : '#666666',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {activeSubcategory.designs.length}
+                    </span>
+                  </button>
+                )}
 
-                return (
+                {/* 2. Types Tab (Shows if types exist) */}
+                {hasTypes && (
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('types')}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      padding: '0.85rem 1.25rem',
+                      borderBottom: effectiveTab === 'types' ? '3px solid #1E56FF' : '3px solid transparent',
+                      marginBottom: '-2px',
+                      background: 'none',
+                      borderTop: 'none',
+                      borderLeft: 'none',
+                      borderRight: 'none',
+                      color: effectiveTab === 'types' ? '#1E56FF' : '#666666',
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '1rem',
+                      fontWeight: effectiveTab === 'types' ? 800 : 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <span>TYPES & MATERIALS</span>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '0.72rem',
+                        padding: '0.15rem 0.5rem',
+                        borderRadius: '9999px',
+                        backgroundColor: effectiveTab === 'types' ? '#1E56FF' : 'rgba(17, 17, 17, 0.08)',
+                        color: effectiveTab === 'types' ? '#FFFFFF' : '#666666',
+                        fontWeight: 700,
+                      }}
+                    >
+                      {activeSubcategory.types.length}
+                    </span>
+                  </button>
+                )}
+              </div>
+
+              {/* Quick Tab Info Label */}
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.74rem',
+                  color: '#888888',
+                }}
+              >
+                SHOWING {effectiveTab === 'designs' ? 'CUSTOM DESIGN SHOWCASES' : 'ARCHITECTURAL TYPES & SPECS'}
+              </div>
+            </div>
+
+            {/* 4. The Content Grid: Designs OR Types */}
+            {effectiveTab === 'designs' && hasDesigns && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '1.5rem',
+                }}
+              >
+                {activeSubcategory.designs.map((design) => (
                   <div
-                    key={item.name}
+                    key={design.id + design.name}
                     style={{
                       backgroundColor: '#FFFFFF',
                       borderRadius: '16px',
-                      padding: '1.35rem',
-                      border: '1px solid rgba(17, 17, 17, 0.07)',
+                      border: '1px solid rgba(17, 17, 17, 0.09)',
+                      overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      boxShadow: '0 4px 14px rgba(0, 0, 0, 0.02)',
-                      transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
                     }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                      e.currentTarget.style.boxShadow = '0 12px 28px rgba(30, 86, 255, 0.1)';
-                      e.currentTarget.style.borderColor = 'rgba(30, 86, 255, 0.3)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 4px 14px rgba(0, 0, 0, 0.02)';
-                      e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.07)';
-                    }}
+                    className="card-hover-effect"
                   >
-                    <div>
+                    {/* Image Container with Inspect Button */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '16 / 11',
+                        backgroundColor: '#F2F2F2',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        setInspectedItem({
+                          item: design,
+                          type: 'design',
+                          subcatName: activeSubcategory.name,
+                          catName: activeCategory.name,
+                        })
+                      }
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={design.image || design.remoteImage || activeSubcategory.image}
+                        alt={design.name}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.4s ease',
+                        }}
+                        className="zoom-on-hover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            activeSubcategory.image || '/images/hero_storefront.jpg';
+                        }}
+                      />
+
+                      {/* Design Tag */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '6px',
+                          backgroundColor: 'rgba(17, 17, 17, 0.75)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.64rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        DESIGN SHOWCASE
+                      </div>
+
+                      {/* Zoom Icon Button */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '10px',
+                          right: '10px',
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          backdropFilter: 'blur(6px)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#111111',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        }}
+                        title="Click to inspect"
+                      >
+                        <Maximize2 size={13} />
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div
+                      style={{
+                        padding: '1.1rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div>
+                        <h4
+                          style={{
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            fontSize: '1rem',
+                            color: '#111111',
+                            margin: '0 0 0.4rem 0',
+                            lineHeight: 1.3,
+                            textTransform: 'capitalize',
+                          }}
+                        >
+                          {design.name}
+                        </h4>
+
+                        {design.description && (
+                          <p
+                            style={{
+                              color: '#666666',
+                              fontSize: '0.82rem',
+                              lineHeight: 1.45,
+                              margin: '0 0 0.9rem 0',
+                            }}
+                          >
+                            {design.description}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Card Footer Actions */}
                       <div
                         style={{
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
-                          marginBottom: '0.65rem',
+                          paddingTop: '0.85rem',
+                          borderTop: '1px solid rgba(17, 17, 17, 0.06)',
+                          marginTop: '0.6rem',
                         }}
                       >
                         <span
                           style={{
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '0.66rem',
+                            fontSize: '0.68rem',
+                            color: '#059669',
                             fontWeight: 700,
-                            color: '#1E56FF',
                           }}
                         >
-                          {activeCategory.code}.{numStr}
+                          ✓ CUSTOM FABRICATION
                         </span>
-                        {item.highlight && (
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.62rem',
-                              fontWeight: 700,
-                              color: '#555555',
-                              backgroundColor: '#F7F5EF',
-                              padding: '0.12rem 0.45rem',
-                              borderRadius: '4px',
-                            }}
-                          >
-                            {item.highlight}
-                          </span>
-                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setInspectedItem({
+                              item: design,
+                              type: 'design',
+                              subcatName: activeSubcategory.name,
+                              catName: activeCategory.name,
+                            });
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#1E56FF',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.74rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '6px',
+                          }}
+                        >
+                          DETAILS
+                          <ArrowRight size={12} />
+                        </button>
                       </div>
-
-                      <h4
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 900,
-                          fontSize: '1.08rem',
-                          color: '#111111',
-                          textTransform: 'uppercase',
-                          marginBottom: '0.5rem',
-                        }}
-                      >
-                        {item.name}
-                      </h4>
-
-                      <p
-                        style={{
-                          fontSize: '0.82rem',
-                          color: '#555555',
-                          lineHeight: 1.5,
-                          marginBottom: '1.25rem',
-                          display: '-webkit-box',
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingTop: '0.85rem',
-                        borderTop: '1px solid rgba(17, 17, 17, 0.06)',
-                      }}
-                    >
-                      <button
-                        type="button"
-                        onClick={onOpenCampaignModal}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          padding: 0,
-                          fontFamily: 'var(--font-display)',
-                          fontWeight: 800,
-                          fontSize: '0.74rem',
-                          color: '#1E56FF',
-                          cursor: 'pointer',
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Get Quote ↗
-                      </button>
-
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          fontSize: '0.72rem',
-                          fontFamily: 'var(--font-mono)',
-                          color: '#888888',
-                          textDecoration: 'none',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '2px',
-                        }}
-                      >
-                        Details <ExternalLink size={11} />
-                      </a>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                ))}
+              </div>
+            )}
+
+            {/* Content Grid: Types */}
+            {effectiveTab === 'types' && hasTypes && (
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: '1.5rem',
+                }}
+              >
+                {activeSubcategory.types.map((typeItem) => (
+                  <div
+                    key={typeItem.id + typeItem.name}
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '16px',
+                      border: '1px solid rgba(17, 17, 17, 0.09)',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                    }}
+                    className="card-hover-effect"
+                  >
+                    {/* Image Container with Inspect Button */}
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '16 / 11',
+                        backgroundColor: '#F2F2F2',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() =>
+                        setInspectedItem({
+                          item: typeItem,
+                          type: 'type',
+                          subcatName: activeSubcategory.name,
+                          catName: activeCategory.name,
+                        })
+                      }
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={typeItem.image || typeItem.remoteImage || activeSubcategory.image}
+                        alt={typeItem.name}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.4s ease',
+                        }}
+                        className="zoom-on-hover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src =
+                            activeSubcategory.image || '/images/hero_storefront.jpg';
+                        }}
+                      />
+
+                      {/* Type Tag */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '10px',
+                          left: '10px',
+                          padding: '0.2rem 0.55rem',
+                          borderRadius: '6px',
+                          backgroundColor: '#1E56FF',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.64rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.04em',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        SIGN TYPE / SPEC
+                      </div>
+
+                      {/* Zoom Icon Button */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '10px',
+                          right: '10px',
+                          width: '30px',
+                          height: '30px',
+                          borderRadius: '50%',
+                          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                          backdropFilter: 'blur(6px)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#111111',
+                          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                        }}
+                        title="Click to inspect"
+                      >
+                        <Maximize2 size={13} />
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div
+                      style={{
+                        padding: '1.1rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 1,
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div>
+                        <h4
+                          style={{
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            fontSize: '1rem',
+                            color: '#111111',
+                            margin: '0 0 0.4rem 0',
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {typeItem.name}
+                        </h4>
+
+                        <p
+                          style={{
+                            color: '#666666',
+                            fontSize: '0.82rem',
+                            lineHeight: 1.45,
+                            margin: '0 0 0.9rem 0',
+                          }}
+                        >
+                          {typeItem.description ||
+                            `Custom engineered ${typeItem.name} for high-traffic NYC commercial environments.`}
+                        </p>
+                      </div>
+
+                      {/* Card Footer Actions */}
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          paddingTop: '0.85rem',
+                          borderTop: '1px solid rgba(17, 17, 17, 0.06)',
+                          marginTop: '0.6rem',
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.68rem',
+                            color: '#1E56FF',
+                            fontWeight: 700,
+                          }}
+                        >
+                          ✓ DOB APPROVED
+                        </span>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setInspectedItem({
+                              item: typeItem,
+                              type: 'type',
+                              subcatName: activeSubcategory.name,
+                              catName: activeCategory.name,
+                            });
+                          }}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#1E56FF',
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.74rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            padding: '0.25rem 0.5rem',
+                            borderRadius: '6px',
+                          }}
+                        >
+                          DETAILS
+                          <ArrowRight size={12} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Fallback if no designs and no types: Product Showcase Banner */}
+            {!hasDesigns && !hasTypes && (
+              <div
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '20px',
+                  border: '1.5px dashed rgba(17, 17, 17, 0.15)',
+                  padding: '3rem 2rem',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '1rem',
+                }}
+              >
+                <div
+                  style={{
+                    width: '180px',
+                    height: '140px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    backgroundColor: '#F2F2F2',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                  }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={activeSubcategory.image || '/images/hero_storefront.jpg'}
+                    alt={activeSubcategory.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+
+                <h4
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '1.3rem',
+                    color: '#111111',
+                    margin: 0,
+                  }}
+                >
+                  Custom Architectural Fabrication for {activeSubcategory.name}
+                </h4>
+
+                <p style={{ color: '#666666', fontSize: '0.95rem', maxWidth: '580px', lineHeight: 1.5 }}>
+                  {activeSubcategory.description}
+                </p>
+
+                <button
+                  type="button"
+                  onClick={onOpenCampaignModal}
+                  className="btn-primary"
+                  style={{ marginTop: '0.5rem' }}
+                >
+                  REQUEST SPEC & QUOTE FOR {activeSubcategory.name.toUpperCase()}
+                </button>
+              </div>
+            )}
+          </main>
+        </div>
       </div>
 
-      <style jsx>{`
-        .custom-catalog-scroll::-webkit-scrollbar {
-          width: 5px;
-        }
-        .custom-catalog-scroll::-webkit-scrollbar-track {
-          background: rgba(17, 17, 17, 0.03);
-          border-radius: 9999px;
-        }
-        .custom-catalog-scroll::-webkit-scrollbar-thumb {
-          background: rgba(30, 86, 255, 0.25);
-          border-radius: 9999px;
-        }
-        .custom-catalog-scroll::-webkit-scrollbar-thumb:hover {
-          background: #1e56ff;
-        }
+      {/* Item Lightbox Modal / Inspector */}
+      {inspectedItem && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 9999,
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1.5rem',
+            animation: 'fadeIn 0.2s ease-out',
+          }}
+          onClick={() => setInspectedItem(null)}
+        >
+          <div
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderRadius: '24px',
+              maxWidth: '860px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              boxShadow: '0 25px 60px rgba(0, 0, 0, 0.3)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              onClick={() => setInspectedItem(null)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                zIndex: 10,
+                width: '36px',
+                height: '36px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                color: '#FFFFFF',
+                border: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <X size={18} />
+            </button>
 
-        @media (max-width: 992px) {
-          .split-catalog-container {
+            {/* Modal Image Header */}
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '380px',
+                backgroundColor: '#111111',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={inspectedItem.item.image || (inspectedItem.item as CatalogItem).remoteImage}
+                alt={inspectedItem.item.name}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '16px',
+                  left: '16px',
+                  padding: '0.3rem 0.8rem',
+                  borderRadius: '9999px',
+                  backgroundColor: '#1E56FF',
+                  color: '#FFFFFF',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                }}
+              >
+                {inspectedItem.type === 'design' ? 'DESIGN SHOWCASE' : 'ARCHITECTURAL TYPE'}
+              </div>
+            </div>
+
+            {/* Modal Details Body */}
+            <div style={{ padding: '2rem' }}>
+              <div
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.74rem',
+                  color: '#666666',
+                  marginBottom: '0.4rem',
+                }}
+              >
+                {inspectedItem.catName} / {inspectedItem.subcatName}
+              </div>
+
+              <h3
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontWeight: 900,
+                  fontSize: '1.8rem',
+                  color: '#111111',
+                  margin: '0 0 1rem 0',
+                  textTransform: 'capitalize',
+                }}
+              >
+                {inspectedItem.item.name}
+              </h3>
+
+              {inspectedItem.item.description && (
+                <p
+                  style={{
+                    color: '#444444',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.6,
+                    marginBottom: '1.5rem',
+                  }}
+                >
+                  {inspectedItem.item.description}
+                </p>
+              )}
+
+              {/* Specs & Highlights */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '1rem',
+                  padding: '1.25rem',
+                  borderRadius: '12px',
+                  backgroundColor: '#F7F5EF',
+                  marginBottom: '1.5rem',
+                }}
+              >
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
+                    MANUFACTURING
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
+                    10,000 sq ft NYC Facility
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
+                    COMPLIANCE
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#059669' }}>
+                    DOB Expedited & Approved
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
+                    INSTALLATION
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
+                    5 Boroughs (Manhattan, BK, QNS, BX, SI)
+                  </div>
+                </div>
+              </div>
+
+              {/* CTAs */}
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setInspectedItem(null);
+                    onOpenCampaignModal();
+                  }}
+                  className="btn-primary"
+                  style={{ flex: 1, minWidth: '220px' }}
+                >
+                  GET A FREE QUOTE FOR THIS EXACT SIGN
+                  <ArrowRight size={16} />
+                </button>
+
+                <a
+                  href="tel:7184538300"
+                  className="btn-secondary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                >
+                  <PhoneCall size={16} />
+                  CALL (718) 453-8300
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+        .card-hover-effect:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08) !important;
+          border-color: rgba(30, 86, 255, 0.3) !important;
+        }
+        .card-hover-effect:hover .zoom-on-hover {
+          transform: scale(1.05);
+        }
+        @media (max-width: 960px) {
+          .products-catalog-grid {
             grid-template-columns: 1fr !important;
-            height: auto !important;
-            max-height: none !important;
-          }
-          .split-catalog-container > div:first-child {
-            height: 240px !important;
-          }
-          .split-catalog-container > div:last-child {
-            height: auto !important;
-          }
-          .spotlight-features-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .category-tagline {
-            display: none !important;
           }
         }
       `}</style>

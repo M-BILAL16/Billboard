@@ -1,0 +1,1 @@
+Transparent base that lets your surface show through, ideal for clean and subtle looks.

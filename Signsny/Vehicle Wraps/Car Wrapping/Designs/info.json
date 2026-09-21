@@ -1,0 +1,37 @@
+{
+  "section": "Designs",
+  "parent": "Car Wrapping",
+  "count": 6,
+  "designs": [
+    {
+      "name": "vinyl graphics car wraps",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/Vinyl-Graphics-car-wraps.jpg.webp",
+      "description": ""
+    },
+    {
+      "name": "color changing car wraps",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/Color-Changing-Car-Wraps.jpg.webp",
+      "description": ""
+    },
+    {
+      "name": "full car wraps nyc",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/full-car-wraps-nyc.jpg.webp",
+      "description": ""
+    },
+    {
+      "name": "custom car wrapping signs nyc usa",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/custom-car-warpping-signs-nyc-usa.jpg.webp",
+      "description": ""
+    },
+    {
+      "name": "green and black car wraps",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/green-and-black-car-wraps.jpg.webp",
+      "description": ""
+    },
+    {
+      "name": "car wrapping service for range rover",
+      "image": "https://signsny.com/wp-content/uploads/2024/12/car-wrapping-service-for-range-rover.jpg.webp",
+      "description": ""
+    }
+  ]
+}
