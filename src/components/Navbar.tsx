@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Command,
   ExternalLink,
+  Phone,
 } from 'lucide-react';
 import { BILLBOARD_FORMATS, FEATURED_CAMPAIGNS, GLOBAL_LOCATIONS } from '@/data/billboardData';
 
@@ -194,33 +195,35 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           left: 0,
           right: 0,
           zIndex: 950,
-          padding: scrolled ? '0.65rem 1.25rem' : '1.15rem 1.5rem',
-          transition: 'padding 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+          padding: scrolled ? '12px 18px' : '0px',
+          transition: 'padding 0.45s cubic-bezier(0.16, 1, 0.3, 1)',
           display: 'flex',
           justifyContent: 'center',
           pointerEvents: 'none',
         }}
       >
-        {/* Main Floating Island Shell */}
+        {/* Main Floating Island Shell: Full Width on Hero, Floating Squeezed Capsule on Scroll */}
         <nav
           style={{
-            width: '100%',
-            maxWidth: '1360px',
+            width: scrolled ? 'calc(100% - 24px)' : '100%',
+            maxWidth: scrolled ? '1200px' : '100%',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0.45rem 0.65rem',
-            backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.94)' : 'rgba(255, 255, 255, 0.82)',
-            backdropFilter: 'blur(26px)',
-            WebkitBackdropFilter: 'blur(26px)',
-            borderRadius: '9999px',
-            border: scrolled ? '1px solid rgba(17, 17, 17, 0.12)' : '1px solid rgba(17, 17, 17, 0.08)',
+            padding: scrolled ? '0.45rem 0.85rem' : '1.15rem clamp(1.5rem, 3.6vw, 3.5rem)',
+            backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.94)' : 'rgba(247, 245, 239, 0.88)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderRadius: scrolled ? '9999px' : '0px',
+            border: scrolled ? '1px solid rgba(17, 17, 17, 0.12)' : 'none',
+            borderBottom: scrolled ? '1px solid rgba(17, 17, 17, 0.12)' : '1px solid rgba(17, 17, 17, 0.08)',
             boxShadow: scrolled
-              ? '0 18px 44px -8px rgba(0, 0, 0, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03)'
-              : '0 8px 30px -6px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02)',
+              ? '0 16px 40px -8px rgba(0, 0, 0, 0.1), 0 4px 14px rgba(0, 0, 0, 0.04)'
+              : 'none',
             pointerEvents: 'auto',
-            transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+            transition:
+              'max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1), width 0.45s cubic-bezier(0.16, 1, 0.3, 1), padding 0.45s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.45s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, box-shadow 0.4s ease, border 0.4s ease',
           }}
         >
           {/* Scroll Progress Indicator Line */}
@@ -1028,6 +1031,31 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               </kbd>
             </button>
 
+            {/* Direct Phone Call (Prominent on Hero Full-Width) */}
+            <a
+              href="tel:7187847444"
+              className="navbar-hero-phone"
+              style={{
+                display: scrolled ? 'none' : 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.45rem 0.85rem',
+                borderRadius: '9999px',
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                border: '1px solid rgba(17, 17, 17, 0.08)',
+                color: '#111111',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                textDecoration: 'none',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Phone size={12} color="#1E56FF" />
+              <span>(718) 784-7444</span>
+            </a>
+
             {/* Primary Magnetic CTA: GET SIGN QUOTE */}
             <button
               type="button"
@@ -1533,6 +1561,9 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           }
           .mobile-toggle {
             display: flex !important;
+          }
+          .navbar-hero-phone {
+            display: none !important;
           }
         }
       `}</style>
