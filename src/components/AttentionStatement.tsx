@@ -11,6 +11,7 @@ interface StatementItem {
   shortLabel: string;
   line1: string;
   line2: string;
+  line3?: string;
   subtext: string;
   isClimax?: boolean;
 }
@@ -19,7 +20,7 @@ const STATEMENTS: StatementItem[] = [
   {
     id: 1,
     num: '01',
-    tag: 'DIGITAL NOISE',
+    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
     shortLabel: 'SKIP AN AD',
     line1: 'YOU CAN',
     line2: 'SKIP AN AD.',
@@ -29,7 +30,7 @@ const STATEMENTS: StatementItem[] = [
   {
     id: 2,
     num: '02',
-    tag: 'DIGITAL NOISE',
+    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
     shortLabel: 'CLOSE A TAB',
     line1: 'YOU CAN',
     line2: 'CLOSE A TAB.',
@@ -39,7 +40,7 @@ const STATEMENTS: StatementItem[] = [
   {
     id: 3,
     num: '03',
-    tag: 'DIGITAL NOISE',
+    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
     shortLabel: 'MUTE A VIDEO',
     line1: 'YOU CAN',
     line2: 'MUTE A VIDEO.',
@@ -49,10 +50,11 @@ const STATEMENTS: StatementItem[] = [
   {
     id: 4,
     num: '04',
-    tag: 'PHYSICAL REALITY',
+    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
     shortLabel: 'REAL SIGN',
-    line1: 'BUT YOU CAN’T',
-    line2: 'IGNORE A REAL SIGN.',
+    line1: 'BUT YOU',
+    line2: 'CAN’T IGNORE',
+    line3: 'A REAL SIGN.',
     subtext:
       'Towering over New York streets. In full view of millions 24/7/365. Real presence. Unignorable.',
     isClimax: true,
@@ -274,11 +276,13 @@ export default function AttentionStatement() {
                 transition: 'all 0.3s ease',
               }}
             />
-            <span style={{ fontWeight: 800, color: '#111111' }}>
-              {activeStep === 3 ? 'PHYSICAL REALITY' : 'DIGITAL NOISE'}
+            <span style={{ fontWeight: 800, color: '#111111', letterSpacing: '0.04em' }}>
+              THE VALUE OF PHYSICAL STOREFRONT PRESENCE
             </span>
             <span style={{ opacity: 0.35 }}>//</span>
-            <span style={{ opacity: 0.65 }}>STEP 0{activeStep + 1} OF 04</span>
+            <span style={{ opacity: 0.7, color: activeStep === 3 ? '#1E56FF' : '#555555', fontWeight: 800 }}>
+              0{activeStep + 1} OF 04
+            </span>
           </div>
 
           {/* Interactive Step Switcher (Visible on medium+ screens) */}
@@ -420,16 +424,16 @@ export default function AttentionStatement() {
                 <div
                   style={{
                     fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(0.72rem, 1vw, 0.88rem)',
+                    fontSize: 'clamp(0.7rem, 0.9vw, 0.82rem)',
                     fontWeight: 800,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     color: item.isClimax ? '#1E56FF' : '#777777',
-                    marginBottom: 'clamp(0.75rem, 1.6vh, 1.3rem)',
+                    marginBottom: 'clamp(0.6rem, 1.4vh, 1.1rem)',
                     transition: 'color 0.3s ease',
                   }}
                 >
-                  {item.num} // {item.tag}
+                  {item.tag} // {item.num}
                 </div>
 
                 {/* Stacked Centered Words - Line 1 */}
@@ -437,34 +441,36 @@ export default function AttentionStatement() {
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 800,
-                    fontSize: 'clamp(2.4rem, 5.8vw, 5rem)',
+                    fontSize: item.isClimax
+                      ? 'clamp(2.4rem, 5.2vw, 4.4rem)'
+                      : 'clamp(2.4rem, 5.8vw, 5rem)',
                     letterSpacing: '-0.035em',
                     lineHeight: 1.05,
                     textTransform: 'uppercase',
                     color: '#111111',
                     margin: 0,
                     padding: '0 0.5rem',
-                    textShadow: '0 2px 24px rgba(247, 245, 239, 0.9)',
+                    textShadow: '0 2px 24px rgba(255, 255, 255, 0.95)',
                   }}
                 >
                   {item.line1}
                 </h2>
 
-                {/* Stacked Centered Words - Line 2 (Hero Statement) */}
+                {/* Stacked Centered Words - Line 2 */}
                 <h2
                   style={{
                     fontFamily: 'var(--font-display)',
                     fontWeight: 900,
                     fontSize: item.isClimax
-                      ? 'clamp(2.8rem, 7vw, 6rem)'
+                      ? 'clamp(2.8rem, 6.6vw, 5.4rem)'
                       : 'clamp(2.6rem, 6.4vw, 5.4rem)',
                     letterSpacing: '-0.045em',
                     lineHeight: 1.0,
                     textTransform: 'uppercase',
                     color: item.isClimax ? '#1E56FF' : '#111111',
                     textShadow: item.isClimax
-                      ? '0 0 50px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(247, 245, 239, 0.9)'
-                      : '0 2px 24px rgba(247, 245, 239, 0.9)',
+                      ? '0 0 50px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(255, 255, 255, 0.95)'
+                      : '0 2px 24px rgba(255, 255, 255, 0.95)',
                     margin: '0.2rem 0 0 0',
                     padding: '0 0.5rem',
                   }}
@@ -472,13 +478,33 @@ export default function AttentionStatement() {
                   {item.line2}
                 </h2>
 
+                {/* Stacked Centered Words - Line 3 (for Climax) */}
+                {item.line3 && (
+                  <h2
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontWeight: 900,
+                      fontSize: 'clamp(2.8rem, 6.8vw, 5.6rem)',
+                      letterSpacing: '-0.045em',
+                      lineHeight: 1.0,
+                      textTransform: 'uppercase',
+                      color: '#1E56FF',
+                      textShadow: '0 0 50px rgba(30, 86, 255, 0.35), 0 2px 24px rgba(255, 255, 255, 0.95)',
+                      margin: '0.2rem 0 0 0',
+                      padding: '0 0.5rem',
+                    }}
+                  >
+                    {item.line3}
+                  </h2>
+                )}
+
                 {/* Italic Supporting Subtext Stacked Underneath */}
                 <p
                   style={{
-                    marginTop: 'clamp(1rem, 2.2vh, 1.8rem)',
+                    marginTop: 'clamp(0.85rem, 1.8vh, 1.4rem)',
                     fontFamily: 'var(--font-serif)',
                     fontStyle: 'italic',
-                    fontSize: 'clamp(1.1rem, 1.6vw, 1.45rem)',
+                    fontSize: 'clamp(1.1rem, 1.5vw, 1.35rem)',
                     color: '#444444',
                     maxWidth: '640px',
                     lineHeight: 1.38,
