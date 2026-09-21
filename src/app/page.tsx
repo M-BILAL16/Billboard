@@ -8,6 +8,7 @@ import IntroSection from '@/components/IntroSection';
 import ScrollyCanvas from '@/components/ScrollyCanvas';
 import FormatExplorer from '@/components/FormatExplorer';
 import SignProductsDirectory from '@/components/SignProductsDirectory';
+import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
 import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 import ImpactStats from '@/components/ImpactStats';
@@ -102,6 +103,8 @@ export default function Home() {
       {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." */}
       <IntroSection />
 
+      {/* Attention Contrast Section (Typographic Scroll Effect) */}
+      <AttentionStatement />
 
       {/* Interactive Spotlight Torch Section */}
       <SpotlightSection />
