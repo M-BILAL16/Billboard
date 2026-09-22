@@ -10,7 +10,7 @@ import FormatExplorer from '@/components/FormatExplorer';
 import SignProductsDirectory from '@/components/SignProductsDirectory';
 import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
-import BeforeAfterSlider from '@/components/BeforeAfterSlider';
+import TransformationShowcase from '@/components/TransformationShowcase';
 import ImpactStats from '@/components/ImpactStats';
 import LocationMap from '@/components/LocationMap';
 import HowItWorks from '@/components/HowItWorks';
@@ -109,8 +109,8 @@ export default function Home() {
       {/* Interactive Spotlight Torch Section */}
       <SpotlightSection />
 
-      {/* Before / After Billboard Experience */}
-      <BeforeAfterSlider onOpenCampaignModal={handleOpenCampaignModal} />
+      {/* Interactive 10-Category Before / After Architectural Transformation Showcase */}
+      <TransformationShowcase onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* Impact Statistics */}
       <ImpactStats />
