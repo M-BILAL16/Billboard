@@ -106,8 +106,8 @@ export default function Home() {
       {/* Attention Contrast Section (Typographic Scroll Effect) */}
       <AttentionStatement />
 
-      {/* Interactive Spotlight Torch Section */}
-      <SpotlightSection />
+      {/* Interactive Spotlight Torch Section (Hidden) */}
+      {/* <SpotlightSection /> */}
 
       {/* Interactive 10-Category Before / After Architectural Transformation Showcase */}
       <TransformationShowcase onOpenCampaignModal={handleOpenCampaignModal} />
