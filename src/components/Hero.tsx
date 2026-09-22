@@ -472,26 +472,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               </span>
             </div>
 
-            {/* Label 01 In-House Badge */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '20px',
-                left: '-12px',
-                padding: '0.4rem 0.85rem',
-                borderRadius: '9999px',
-                backgroundColor: '#FFFFFF',
-                boxShadow: '0 6px 18px rgba(0, 0, 0, 0.06)',
-                border: '1px solid rgba(0,0,0,0.06)',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                color: '#1E56FF',
-                zIndex: 20,
-              }}
-            >
-              01 // 100% IN-HOUSE FABRICATION
-            </div>
           </div>
         </div>
 
