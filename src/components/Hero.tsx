@@ -517,20 +517,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
         >
           {/* Counter 01 */}
           <div className="counter-card" style={{ position: 'relative', paddingRight: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#1E56FF',
-                  fontWeight: 800,
-                  letterSpacing: '0.06em',
-                }}
-              >
-                01 // HERITAGE & EXPERIENCE
-              </span>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#1E56FF', opacity: 0.7 }} />
-            </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem', marginBottom: '0.25rem' }}>
               <span
                 style={{
@@ -573,20 +559,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               paddingLeft: '1.75rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#1E56FF',
-                  fontWeight: 800,
-                  letterSpacing: '0.06em',
-                }}
-              >
-                02 // IN-HOUSE PRODUCTION
-              </span>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#1E56FF', opacity: 0.7 }} />
-            </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem', marginBottom: '0.25rem' }}>
               <span
                 style={{
@@ -629,20 +601,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               paddingLeft: '1.75rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#1E56FF',
-                  fontWeight: 800,
-                  letterSpacing: '0.06em',
-                }}
-              >
-                03 // CODE & COMPLIANCE
-              </span>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#1E56FF', opacity: 0.7 }} />
-            </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem', marginBottom: '0.25rem' }}>
               <span
                 style={{
@@ -684,20 +642,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               paddingLeft: '1.75rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#1E56FF',
-                  fontWeight: 800,
-                  letterSpacing: '0.06em',
-                }}
-              >
-                04 // DEDICATED RESPONSE
-              </span>
-              <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#1E56FF', opacity: 0.7 }} />
-            </div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.35rem', marginBottom: '0.25rem' }}>
               <span
                 style={{
