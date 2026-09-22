@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { ArrowRight, Sparkles, ShieldCheck, Wrench, Clock, CheckCircle2, Volume2, VolumeX, Play, Pause, Maximize2 } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Wrench, Clock, CheckCircle2, Volume2, VolumeX, Play, Pause, Maximize2 } from 'lucide-react';
 
 interface HeroProps {
   onOpenShowreel: () => void;
@@ -70,28 +70,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
         >
           {/* Left Column: Massive Confident Headline & Typography */}
           <div style={{ gridColumn: 'span 6' }} className="hero-typography-col">
-            {/* Credibility Eyebrow Pill */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.65rem',
-                padding: '0.4rem 1rem',
-                borderRadius: '9999px',
-                background: '#FFFFFF',
-                border: '1px solid rgba(30, 86, 255, 0.2)',
-                color: '#1E56FF',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                fontWeight: 800,
-                letterSpacing: '0.08em',
-                marginBottom: '1.75rem',
-                boxShadow: '0 2px 10px rgba(30, 86, 255, 0.08)',
-              }}
-            >
-              <Sparkles size={13} color="#1E56FF" />
-              LICENSED & INSURED • 10,000 SQ FT IN-HOUSE FABRICATION • NYC SINCE 1989
-            </div>
 
             {/* Massive Architectural Headline (Concept 1) */}
             <h1
