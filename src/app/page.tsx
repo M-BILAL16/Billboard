@@ -100,8 +100,8 @@ export default function Home() {
       {/* Billboard Format Explorer */}
       <FormatExplorer />
 
-      {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." */}
-      <IntroSection />
+      {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." (Hidden) */}
+      {/* <IntroSection /> */}
 
       {/* Attention Contrast Section (Typographic Scroll Effect) */}
       <AttentionStatement />
