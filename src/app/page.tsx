@@ -112,8 +112,8 @@ export default function Home() {
       {/* Interactive 10-Category Before / After Architectural Transformation Showcase */}
       <TransformationShowcase onOpenCampaignModal={handleOpenCampaignModal} />
 
-      {/* Impact Statistics */}
-      <ImpactStats />
+      {/* Impact Statistics (Hidden) */}
+      {/* <ImpactStats /> */}
 
       {/* Interactive Global Network Map */}
       <LocationMap onSelectLocation={handleSelectLocation} />
