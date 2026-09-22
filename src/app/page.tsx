@@ -88,8 +88,8 @@ export default function Home() {
         onOpenCampaignModal={handleOpenCampaignModal}
       />
 
-      {/* Moving Brand Statement Marquee */}
-      <MarqueeTicker />
+      {/* Moving Brand Statement Marquee (Hidden) */}
+      {/* <MarqueeTicker /> */}
 
       {/* Signs Products Catalog & Directory (Tabs, Compact Height, All 9 Categories & 89 Subcategories) */}
       <SignProductsDirectory onOpenCampaignModal={handleOpenCampaignModal} />
@@ -130,8 +130,8 @@ export default function Home() {
 
 
 
-      {/* Brand Trust Monochrome Logo Wall */}
-      <BrandTrust />
+      {/* Brand Trust Monochrome Logo Wall (Hidden) */}
+      {/* <BrandTrust /> */}
 
       {/* Large Executive Testimonial */}
       <TestimonialSection />
