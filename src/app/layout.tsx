@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import CustomCursor from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
   title: 'Signs NYC | Custom Signs, Storefronts & Architectural Fabrication New York',
@@ -44,7 +43,6 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="noise-overlay" aria-hidden="true" />
-        <CustomCursor />
         {children}
       </body>
     </html>
