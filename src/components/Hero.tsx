@@ -232,21 +232,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
                   FABRICATION REEL // NYC ARCHITECTURE
                 </div>
 
-                <div
-                  style={{
-                    background: '#1E56FF',
-                    color: '#FFFFFF',
-                    padding: '0.25rem 0.65rem',
-                    borderRadius: '6px',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.64rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.08em',
-                    boxShadow: '0 2px 10px rgba(30, 86, 255, 0.4)',
-                  }}
-                >
-                  4K // 60 FPS
-                </div>
               </div>
 
               {/* Bottom Interactive HUD Controls */}
