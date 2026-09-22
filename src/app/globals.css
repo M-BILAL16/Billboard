@@ -366,3 +366,14 @@ h1, h2, h3, h4, h5, h6 {
 .btn-shimmer:hover {
   animation: ctaShimmer 2.2s linear infinite;
 }
+
+/* Before & After Auto-Cycle Timeline Laser Progress */
+@keyframes autoCycleProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+

@@ -133,7 +133,7 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               </button>
 
               <a
-                href="#experience"
+                href="#before-after"
                 className="btn-secondary"
                 data-cursor="GALLERY"
                 style={{

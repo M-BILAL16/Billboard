@@ -157,13 +157,14 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '3.5rem',
-            alignItems: 'start',
+            alignItems: 'stretch',
           }}
         >
           {/* Left Column: Streamlined Simple Project Form */}
           <div style={{ gridColumn: 'span 7' }} className="builder-left-col">
             <div
               style={{
+                height: '100%',
                 backgroundColor: '#F7F5EF',
                 borderRadius: '24px',
                 padding: 'clamp(1.75rem, 3.5vw, 2.75rem)',
@@ -621,8 +622,7 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
           <div style={{ gridColumn: 'span 5' }} className="builder-right-col">
             <div
               style={{
-                position: 'sticky',
-                top: '110px',
+                height: '100%',
                 padding: '2.5rem',
                 borderRadius: '24px',
                 backgroundColor: '#F7F5EF',

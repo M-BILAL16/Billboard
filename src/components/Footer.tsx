@@ -1,32 +1,9 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { ArrowUpRight, Mail, Phone, Sparkles } from 'lucide-react';
+import React from 'react';
+import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 
 export default function Footer() {
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
-  const [isHovered, setIsHovered] = useState(false);
-  const skylineRef = useRef<HTMLDivElement>(null);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!skylineRef.current) return;
-    const rect = skylineRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
-  };
-
-  const buildings = [
-    { height: 75, width: 9, left: 2, windows: 24 },
-    { height: 90, width: 11, left: 13, windows: 35 },
-    { height: 60, width: 8, left: 26, windows: 18 },
-    { height: 98, width: 12, left: 36, windows: 42, hasBillboard: true },
-    { height: 70, width: 10, left: 50, windows: 25 },
-    { height: 85, width: 10, left: 62, windows: 32 },
-    { height: 65, width: 9, left: 74, windows: 20 },
-    { height: 92, width: 12, left: 85, windows: 38, hasBillboard: true },
-  ];
-
   return (
     <footer
       style={{
@@ -39,164 +16,6 @@ export default function Footer() {
       }}
     >
       <div className="container-custom">
-        {/* Interactive Architectural Line Drawing Canvas */}
-        <div style={{ marginBottom: '5.5rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '1rem',
-            }}
-          >
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.72rem',
-                color: '#1E56FF',
-                letterSpacing: '0.12em',
-                fontWeight: 800,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              <Sparkles size={12} />
-              MOVE YOUR CURSOR TO LIGHT UP THE CITY
-            </span>
-
-            <span
-              style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.68rem',
-                color: '#888888',
-              }}
-            >
-              ARCHITECTURAL GRID // ACTIVE
-            </span>
-          </div>
-
-          {/* City Skyline Line-Drawing Box */}
-          <div
-            ref={skylineRef}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onMouseMove={handleMouseMove}
-            data-cursor="LIGHT UP"
-            style={{
-              position: 'relative',
-              width: '100%',
-              height: '190px',
-              borderRadius: '20px',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(17, 17, 17, 0.08)',
-              overflow: 'hidden',
-              cursor: 'crosshair',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-            }}
-          >
-            {/* Buildings Line Silhouettes */}
-            {buildings.map((b, bIdx) => {
-              const bCenter = b.left + b.width / 2;
-              const distToCursor = Math.abs(mousePos.x - bCenter);
-              const isLit = isHovered && distToCursor < 18;
-
-              return (
-                <div
-                  key={bIdx}
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: `${b.left}%`,
-                    width: `${b.width}%`,
-                    height: `${b.height}%`,
-                    backgroundColor: isLit ? '#FFF8F4' : '#F7F5EF',
-                    borderTop: isLit ? '2px solid #1E56FF' : '1px solid rgba(17, 17, 17, 0.15)',
-                    borderLeft: '1px solid rgba(17, 17, 17, 0.1)',
-                    borderRight: '1px solid rgba(17, 17, 17, 0.1)',
-                    padding: '8px',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
-                    gap: '4px',
-                    transition: 'all 0.25s ease',
-                  }}
-                >
-                  {/* Rooftop Billboard */}
-                  {b.hasBillboard && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '-24px',
-                        left: '10%',
-                        right: '10%',
-                        height: '18px',
-                        backgroundColor: isLit ? '#1E56FF' : '#E0E0DA',
-                        border: '1px solid #1E56FF',
-                        boxShadow: isLit ? '0 0 16px rgba(30, 86, 255, 0.4)' : 'none',
-                        transition: 'all 0.2s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontSize: '0.48rem',
-                          fontFamily: 'var(--font-mono)',
-                          fontWeight: 900,
-                          color: isLit ? '#FFFFFF' : '#666666',
-                        }}
-                      >
-                        SIGNS NYC
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Window Line Grid */}
-                  {[...Array(b.windows)].map((_, wIdx) => {
-                    const windowActive = isLit && (wIdx + bIdx) % 2 === 0;
-                    return (
-                      <div
-                        key={wIdx}
-                        style={{
-                          width: '100%',
-                          height: '5px',
-                          borderRadius: '1px',
-                          backgroundColor: windowActive
-                            ? '#1E56FF'
-                            : (wIdx * 7) % 5 === 0
-                            ? '#D2D2CA'
-                            : '#EBEBE5',
-                          boxShadow: windowActive ? '0 0 8px rgba(30, 86, 255, 0.5)' : 'none',
-                          transition: 'all 0.2s ease',
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Large Statement */}
-        <div style={{ marginBottom: '5rem' }}>
-          <h2
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontWeight: 900,
-              fontSize: 'clamp(3rem, 7.5vw, 7.5rem)',
-              lineHeight: 0.9,
-              letterSpacing: '-0.04em',
-              textTransform: 'uppercase',
-              color: '#111111',
-            }}
-          >
-            NEW YORK <br />
-            <span style={{ color: '#1E56FF' }}>BUILT TO LAST.</span>
-          </h2>
-        </div>
-
         {/* Directory Columns */}
         <div
           style={{
@@ -204,8 +23,6 @@ export default function Footer() {
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '3rem',
             marginBottom: '5rem',
-            borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-            paddingTop: '3.5rem',
           }}
           className="footer-grid"
         >

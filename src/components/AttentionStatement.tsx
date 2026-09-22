@@ -2,13 +2,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { ChevronDown, ArrowDown, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ArrowDown, ChevronRight, Check } from 'lucide-react';
 
 interface StatementItem {
   id: number;
-  num: string;
-  tag: string;
-  shortLabel: string;
   line1: string;
   line2: string;
   line3?: string;
@@ -19,9 +16,6 @@ interface StatementItem {
 const STATEMENTS: StatementItem[] = [
   {
     id: 1,
-    num: '01',
-    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
-    shortLabel: 'SKIP AN AD',
     line1: 'YOU CAN',
     line2: 'SKIP AN AD.',
     subtext: 'Filtered by ad-blockers. Dismissed in five seconds.',
@@ -29,9 +23,6 @@ const STATEMENTS: StatementItem[] = [
   },
   {
     id: 2,
-    num: '02',
-    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
-    shortLabel: 'CLOSE A TAB',
     line1: 'YOU CAN',
     line2: 'CLOSE A TAB.',
     subtext: 'Buried under dozens of windows. Closed in a single keystroke.',
@@ -39,9 +30,6 @@ const STATEMENTS: StatementItem[] = [
   },
   {
     id: 3,
-    num: '03',
-    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
-    shortLabel: 'MUTE A VIDEO',
     line1: 'YOU CAN',
     line2: 'MUTE A VIDEO.',
     subtext: 'Silenced in autoplay. Scrolled past in an endless feed.',
@@ -49,9 +37,6 @@ const STATEMENTS: StatementItem[] = [
   },
   {
     id: 4,
-    num: '04',
-    tag: 'THE VALUE OF PHYSICAL STOREFRONT PRESENCE',
-    shortLabel: 'REAL SIGN',
     line1: 'BUT YOU',
     line2: 'CAN’T IGNORE',
     line3: 'A REAL SIGN.',
@@ -118,11 +103,6 @@ export default function AttentionStatement() {
     const stepCenters = [0.10, 0.35, 0.60, 0.88];
     const targetY = sectionTop + stepCenters[targetIndex] * totalScrollable;
     window.scrollTo({ top: targetY, behavior: 'smooth' });
-  };
-
-  const handlePrev = () => {
-    const prev = Math.max(0, activeStep - 1);
-    scrollToStep(prev);
   };
 
   const handleNext = () => {
@@ -233,150 +213,6 @@ export default function AttentionStatement() {
           />
         </div>
 
-        {/* Top Telemetry & Interactive Step Tabs */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 'clamp(18px, 3vh, 32px)',
-            left: 'clamp(16px, 3.5vw, 40px)',
-            right: 'clamp(16px, 3.5vw, 40px)',
-            zIndex: 10,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            maxWidth: '1240px',
-            margin: '0 auto',
-            gap: '1rem',
-          }}
-        >
-          {/* Status Badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              fontFamily: 'var(--font-mono)',
-              fontSize: 'clamp(0.65rem, 0.85vw, 0.74rem)',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              padding: '0.45rem 0.9rem',
-              borderRadius: '9999px',
-              border: '1px solid rgba(17, 17, 17, 0.08)',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
-            }}
-          >
-            <span
-              style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
-                backgroundColor: activeStep === 3 ? '#1E56FF' : '#10B981',
-                boxShadow: `0 0 10px ${activeStep === 3 ? '#1E56FF' : '#10B981'}`,
-                display: 'inline-block',
-                transition: 'all 0.3s ease',
-              }}
-            />
-            <span style={{ fontWeight: 800, color: '#111111', letterSpacing: '0.04em' }}>
-              THE VALUE OF PHYSICAL STOREFRONT PRESENCE
-            </span>
-            <span style={{ opacity: 0.35 }}>//</span>
-            <span style={{ opacity: 0.7, color: activeStep === 3 ? '#1E56FF' : '#555555', fontWeight: 800 }}>
-              0{activeStep + 1} OF 04
-            </span>
-          </div>
-
-          {/* Interactive Step Switcher (Visible on medium+ screens) */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.4rem',
-              backgroundColor: 'rgba(255, 255, 255, 0.85)',
-              backdropFilter: 'blur(10px)',
-              padding: '0.3rem',
-              borderRadius: '9999px',
-              border: '1px solid rgba(17, 17, 17, 0.08)',
-            }}
-            className="attention-step-tabs"
-          >
-            {STATEMENTS.map((item, idx) => {
-              const isActive = idx === activeStep;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToStep(idx)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                    padding: '0.35rem 0.75rem',
-                    borderRadius: '9999px',
-                    backgroundColor: isActive ? (idx === 3 ? '#1E56FF' : '#111111') : 'transparent',
-                    color: isActive ? '#FFFFFF' : '#666666',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.66rem',
-                    fontWeight: 800,
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <span>0{idx + 1}.</span>
-                  <span>{item.shortLabel}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Prev / Next Quick Nav Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <button
-              onClick={handlePrev}
-              disabled={activeStep === 0}
-              aria-label="Previous statement"
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: '#FFFFFF',
-                border: '1px solid rgba(17, 17, 17, 0.12)',
-                color: activeStep === 0 ? '#CCCCCC' : '#111111',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: activeStep === 0 ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-              }}
-            >
-              <ChevronLeft size={16} strokeWidth={2.5} />
-            </button>
-
-            <button
-              onClick={handleNext}
-              disabled={activeStep === 3}
-              aria-label="Next statement"
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: activeStep === 3 ? '#FFFFFF' : '#1E56FF',
-                border: activeStep === 3 ? '1px solid rgba(17, 17, 17, 0.12)' : '1px solid #1E56FF',
-                color: activeStep === 3 ? '#CCCCCC' : '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: activeStep === 3 ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
-              }}
-            >
-              <ChevronRight size={16} strokeWidth={2.5} />
-            </button>
-          </div>
-        </div>
-
         {/* Center Stage: Guaranteed Persistent Text Container with Smooth CSS Transitions */}
         <div
           style={{
@@ -420,22 +256,6 @@ export default function AttentionStatement() {
                   pointerEvents: isActive ? 'auto' : 'none',
                 }}
               >
-                {/* Chapter Label */}
-                <div
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(0.7rem, 0.9vw, 0.82rem)',
-                    fontWeight: 800,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    color: item.isClimax ? '#1E56FF' : '#777777',
-                    marginBottom: 'clamp(0.6rem, 1.4vh, 1.1rem)',
-                    transition: 'color 0.3s ease',
-                  }}
-                >
-                  {item.tag} // {item.num}
-                </div>
-
                 {/* Stacked Centered Words - Line 1 */}
                 <h2
                   style={{
@@ -709,13 +529,6 @@ export default function AttentionStatement() {
         </div>
       </div>
 
-      <style jsx>{`
-        @media (max-width: 820px) {
-          .attention-step-tabs {
-            display: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

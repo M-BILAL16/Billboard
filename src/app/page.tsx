@@ -5,10 +5,8 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import MarqueeTicker from '@/components/MarqueeTicker';
 import IntroSection from '@/components/IntroSection';
-import ScrollyCanvas from '@/components/ScrollyCanvas';
 import FormatExplorer from '@/components/FormatExplorer';
 import SignProductsDirectory from '@/components/SignProductsDirectory';
-import AttentionStatement from '@/components/AttentionStatement';
 import SpotlightSection from '@/components/SpotlightSection';
 import TransformationShowcase from '@/components/TransformationShowcase';
 import ImpactStats from '@/components/ImpactStats';
@@ -17,7 +15,6 @@ import HowItWorks from '@/components/HowItWorks';
 import CampaignBuilder from '@/components/CampaignBuilder';
 import BrandTrust from '@/components/BrandTrust';
 import TestimonialSection from '@/components/TestimonialSection';
-import InsightsSection from '@/components/InsightsSection';
 import Footer from '@/components/Footer';
 import CampaignModal from '@/components/CampaignModal';
 import { FeaturedCampaign, BillboardLocation } from '@/types';
@@ -94,8 +91,8 @@ export default function Home() {
       {/* Signs Products Catalog & Directory (Tabs, Compact Height, All 9 Categories & 89 Subcategories) */}
       <SignProductsDirectory onOpenCampaignModal={handleOpenCampaignModal} />
 
-      {/* 7-Stage "Your Brand Goes Here" Scrollytelling */}
-      <ScrollyCanvas />
+      {/* 7-Stage "Your Brand Goes Here" Scrollytelling (Hidden) */}
+      {/* <ScrollyCanvas /> */}
 
       {/* Billboard Format Explorer */}
       <FormatExplorer />
@@ -103,8 +100,8 @@ export default function Home() {
       {/* Editorial Intro: "Digital Ads Get Ignored. Real Signs Stand Out." (Hidden) */}
       {/* <IntroSection /> */}
 
-      {/* Attention Contrast Section (Typographic Scroll Effect) */}
-      <AttentionStatement />
+      {/* Attention Contrast Section (Hidden) */}
+      {/* <AttentionStatement /> */}
 
       {/* Interactive Spotlight Torch Section (Hidden) */}
       {/* <SpotlightSection /> */}
@@ -136,8 +133,8 @@ export default function Home() {
       {/* Large Executive Testimonial */}
       <TestimonialSection />
 
-      {/* Insights, Stories & Culture */}
-      <InsightsSection />
+      {/* Insights, Stories & Culture (Hidden) */}
+      {/* <InsightsSection /> */}
 
 
       {/* Oversized Interactive Footer */}

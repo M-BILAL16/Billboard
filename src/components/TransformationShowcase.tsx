@@ -3,16 +3,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import { 
-  ArrowRight, 
-  Sparkles, 
   ChevronLeft, 
   ChevronRight, 
-  Layers, 
-  CheckCircle2, 
-  ShieldCheck, 
-  TrendingUp, 
-  Sliders, 
-  Maximize2,
   Play,
   Pause
 } from 'lucide-react';
@@ -60,56 +52,18 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
   {
     id: 'window-wrap',
     category: 'WINDOW WRAPS',
-    title: 'GRAND OPENING RESTAURANT FACADE WRAP',
-    subtitle: 'Turnkey Storefront Launch Graphics',
-    borough: 'SoHo & NoHo, Manhattan',
-    beforeImg: '/images/before_after/02_window_wrap_before.jpg',
-    afterImg: '/Signsny/Vinyl Graphics/Window Wraps/Designs/06-window wraps for restaurants.jpg',
-    beforeDesc: 'Raw unfinished glass windows revealing active interior construction and messy renovation.',
-    afterDesc: 'Full opaque barricade window vinyl driving excitement, grand opening buzz, and complete dust privacy.',
-    specs: {
-      material: 'Blockout Opaque Air-Release Polymeric Film',
-      finish: 'UV-Cured Vibrant Pigment & Lamination',
-      compliance: 'NYC DOB Temporary Barricade Code Compliant',
-      impact: 'Generated 450+ Opening Day Footfall Queue',
-    },
-    highlightStat: '100%',
-    statLabel: 'Construction Privacy',
-  },
-  {
-    id: 'tech-perforated',
-    category: 'PERFORATED WINDOW WRAPS',
-    title: 'TECH HEADQUARTERS PRIVACY & BRANDING',
-    subtitle: '60/40 One-Way Optical Perforated Glass',
-    borough: 'Flatiron District / Silicon Alley, NYC',
-    beforeImg: '/images/before_after/03_tech_window_before.jpg',
-    afterImg: '/Signsny/Vinyl Graphics/Perforated Window Wraps/Designs/08-tech company perforated window wrap with digital patterns and blue tones.jpg',
-    beforeDesc: 'Fishbowl transparent ground-floor windows causing screen glare and complete loss of interior confidentiality.',
-    afterDesc: 'Architectural one-way micro-perforated graphics displaying bold circuit identity while preserving outward views.',
-    specs: {
-      material: '60/40 Optical Perforated Window Film',
-      finish: 'Optically Clear Opti-Gard Protective Overlam',
-      compliance: 'NYC Commercial Code & Daylighting Standards',
-      impact: 'Blocks 68% Solar Heat & 100% Street Prying Eyes',
-    },
-    highlightStat: '68%',
-    statLabel: 'Solar Heat Reduction',
-  },
-  {
-    id: 'clinic-perforated',
-    category: 'HEALTHCARE PERFORATED WRAPS',
-    title: 'PHYSICAL THERAPY & REHAB CLINIC FACADE',
-    subtitle: 'HIPAA-Compliant Patient Privacy Glass',
+    title: 'PHYSICAL THERAPY & CLINIC WINDOW WRAP',
+    subtitle: 'One-Way Optical Perforated Privacy & Anatomy Graphics',
     borough: 'Long Island City, Queens',
-    beforeImg: '/images/before_after/04_clinic_window_before.jpg',
+    beforeImg: '/images/before_after/02_window_wrap_before.jpg',
     afterImg: '/Signsny/Vinyl Graphics/Perforated Window Wraps/Designs/06-rehab clinic perforated window wrap with movement and anatomy visuals.jpg',
-    beforeDesc: 'Exposed medical floor where patients exercised in plain sight of parking lot traffic.',
-    afterDesc: 'Precision skeletal & muscle biomechanics graphics safeguarding patient dignity while attracting new clients.',
+    beforeDesc: 'Clear transparent storefront glass exposing interior treatment floor, desks, and street glare.',
+    afterDesc: 'Precision skeletal & muscle biomechanics perforated graphics providing patient privacy while preserving natural outward daylight.',
     specs: {
-      material: 'Medical-Grade 70/30 Micro-Perforated Vinyl',
-      finish: 'Matte Anti-Reflective Daylight Filter',
-      compliance: 'HIPAA Visual Privacy & ADA Compliant',
-      impact: '+92% Patient Comfort & +45 Inbound Consults',
+      material: 'Medical-Grade 70/30 One-Way Micro-Perforated Vinyl',
+      finish: 'Optically Clear UV-Protective Overlaminate (Anti-Glare)',
+      compliance: 'HIPAA Visual Patient Privacy & NYC Commercial Code',
+      impact: '+92% Patient Comfort & +100% Streetfront Privacy',
     },
     highlightStat: '+92%',
     statLabel: 'Patient Privacy Rating',
@@ -120,10 +74,10 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     title: 'ARCHITECTURAL WATERPROOF RETRACTABLE AWNING',
     subtitle: 'Boutique Facade Canopy & Streetfront Shade',
     borough: 'Upper East Side, Manhattan',
-    beforeImg: '/images/before_after/05_awning_before.jpg',
+    beforeImg: '/images/before_after/commercial_awning_striped_before.jpg',
     afterImg: '/images/commercial-awnings-business.webp',
-    beforeDesc: 'Bare facade without rain shelter or solar protection, leaving entrance exposed to elements.',
-    afterDesc: 'Custom motorized Sunbrella architectural awning with precision gold lettering and integrated weather valance.',
+    beforeDesc: 'Dated striped fabric awning with aged pattern, providing zero bespoke identity for luxury boutique.',
+    afterDesc: 'Bespoke matte charcoal architectural awning with crisp white typography, floral wreath emblem, and contact valance.',
     specs: {
       material: 'Sunbrella Marine-Grade Solution-Dyed Acrylic',
       finish: 'Heavy-Duty Welded Aluminum Truss System',
@@ -139,10 +93,10 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     title: 'MODULAR RESTAURANT OUTDOOR DINING BARRIERS',
     subtitle: 'DOT-Compliant Modular Cafe Enclosure',
     borough: 'Williamsburg, Brooklyn',
-    beforeImg: '/images/before_after/06_sidewalk_barriers_before.jpg',
+    beforeImg: '/images/before_after/sidewalk_cafe_tables_before.jpg',
     afterImg: '/Signsny/Outdoor Signs/Sidewalk Barriers/Designs/03-restaurant sidewalk barriers nyc.jpg',
-    beforeDesc: 'Scattered bistro chairs spilling onto busy sidewalk with pedestrian collisions and zero perimeter security.',
-    afterDesc: 'Heavyweight powder-coated welded steel modular barriers with branded canvas panels and counterweight bases.',
+    beforeDesc: 'Open sidewalk cafe with tables exposed directly to pedestrian walkway and zero perimeter enclosure.',
+    afterDesc: 'Heavyweight powder-coated navy steel modular barriers with branded Banyan Grill canvas inserts and safety bases.',
     specs: {
       material: 'Tubular Steel Frame with Marine Vinyl Inserts',
       finish: 'Outdoor Industrial Matte Powder Coat (UV Stable)',
@@ -160,7 +114,7 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     borough: 'Tri-State & 5 Boroughs Transit',
     beforeImg: '/images/before_after/07_bus_wrap_before.jpg',
     afterImg: '/Signsny/Vehicle Wraps/Bus Wrapping/Designs/02-custom bus wrapping in ny.jpg',
-    beforeDesc: 'Anonymous solid white charter bus blending into highway traffic without brand presence.',
+    beforeDesc: 'Factory plain white luxury coach bus with blank body panels and zero brand presence.',
     afterDesc: 'Full 360° cosmic galaxy wrap with 3M perforated window graphics turning every mile into high-ROI marketing.',
     specs: {
       material: '3M Controltac Comply Wrap Film with Micro-Air',
@@ -209,25 +163,6 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     highlightStat: '65K',
     statLabel: 'Daily Drive-By Views',
   },
-  {
-    id: 'billboard-printing',
-    category: 'HIGHWAY BILLBOARDS',
-    title: 'HIGH-VISIBILITY ARTERIAL HIGHWAY BILLBOARD',
-    subtitle: 'High-Tension Heavyweight Vinyl Banner',
-    borough: 'BQE / LIE Highway Arterials, NYC',
-    beforeImg: '/images/before_after/10_billboard_before.jpg',
-    afterImg: '/Signsny/Large Format Printing/Billboard Printing/Designs/02-Scaffolding Billboard nyc.jpg',
-    beforeDesc: 'Blank unleased billboard face with peeling backing canvas causing zero driver notice.',
-    afterDesc: 'Seamless UV-cured heavyweight vinyl banner engineered for 120 MPH wind load and vibrant daytime pop.',
-    specs: {
-      material: '13oz Heavyweight High-Tear Polyester PVC Banner',
-      finish: 'Matte Anti-Glare UV Stable Pigment Inks',
-      compliance: 'NYC DOB Arterial Highway Billboard Permits',
-      impact: '2.4 Million Monthly NYC Commuter Impressions',
-    },
-    highlightStat: '2.4M',
-    statLabel: 'Monthly Commuters',
-  },
 ];
 
 interface TransformationShowcaseProps {
@@ -236,13 +171,79 @@ interface TransformationShowcaseProps {
 
 export default function TransformationShowcase({ onOpenCampaignModal }: TransformationShowcaseProps) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [sliderPos, setSliderPos] = useState(50);
+  const [sliderPos, setSliderPos] = useState(100); // 100 = Full Before, 0 = Full After
   const [isDragging, setIsDragging] = useState(false);
-  const [autoPlay, setAutoPlay] = useState(false);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [transitionSpeed, setTransitionSpeed] = useState<'none' | 'sweep' | 'preset'>('none');
+  const [cycleKey, setCycleKey] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const categoryTrackRef = useRef<HTMLDivElement>(null);
+  const categoryBtnsRef = useRef<(HTMLButtonElement | null)[]>([]);
+  const idleResumeTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const current = TRANSFORMATIONS[activeIdx];
+
+  // Auto-transition engine:
+  // Phase 1: Dwell on BEFORE (1.6s)
+  // Phase 2: Sweep curtain 100% -> 0% revealing AFTER (2.8s)
+  // Phase 3: Dwell on AFTER (2.0s)
+  // Phase 4: Advance to next transformation slide and repeat infinitely!
+  useEffect(() => {
+    if (!isAutoPlay || isDragging) return;
+
+    let armSweepTimer: NodeJS.Timeout;
+    let startSweepTimer: NodeJS.Timeout;
+    let nextSlideTimer: NodeJS.Timeout;
+
+    // 1. Instantly snap slider to 100% BEFORE for the current slide
+    setTransitionSpeed('none');
+    setSliderPos(100);
+    setCycleKey((k) => k + 1);
+
+    // 2. Arm sweep transition speed after DOM layout settles
+    armSweepTimer = setTimeout(() => {
+      setTransitionSpeed('sweep');
+    }, 60);
+
+    // 3. Dwell on BEFORE for 1.6s, then start smooth 2.8s sweep across the canvas
+    startSweepTimer = setTimeout(() => {
+      setSliderPos(0);
+    }, 1600);
+
+    // 4. After sweep finishes (1.6s + 2.8s = 4.4s) and 2.0s dwell on AFTER (total 6.4s), advance to next slide!
+    nextSlideTimer = setTimeout(() => {
+      setActiveIdx((prev) => (prev + 1) % TRANSFORMATIONS.length);
+    }, 6400);
+
+    return () => {
+      clearTimeout(armSweepTimer);
+      clearTimeout(startSweepTimer);
+      clearTimeout(nextSlideTimer);
+    };
+  }, [isAutoPlay, activeIdx, isDragging]);
+
+  // Auto-scroll active category button within its horizontal track ONLY (never scrolls or focuses the page)
+  useEffect(() => {
+    const track = categoryTrackRef.current;
+    const activeBtn = categoryBtnsRef.current[activeIdx];
+    if (track && activeBtn) {
+      const targetScrollLeft = activeBtn.offsetLeft - track.clientWidth / 2 + activeBtn.clientWidth / 2;
+      track.scrollTo({
+        left: Math.max(0, targetScrollLeft),
+        behavior: 'smooth',
+      });
+    }
+  }, [activeIdx]);
+
+  // Restart idle auto-resume timer (if user manually touched controls, resume auto-play after 8s)
+  const restartIdleTimer = useCallback(() => {
+    if (idleResumeTimerRef.current) {
+      clearTimeout(idleResumeTimerRef.current);
+    }
+    idleResumeTimerRef.current = setTimeout(() => {
+      setIsAutoPlay(true);
+    }, 8000);
+  }, []);
 
   // Handle Drag Position
   const updatePosition = useCallback((clientX: number) => {
@@ -255,9 +256,10 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
 
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
+    setIsAutoPlay(false);
+    setTransitionSpeed('none');
     updatePosition(e.clientX);
-    // Pause autoplay on user interaction
-    setAutoPlay(false);
+    if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -267,34 +269,57 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
   };
 
   const handlePointerUp = () => {
-    setIsDragging(false);
+    if (isDragging) {
+      setIsDragging(false);
+      restartIdleTimer();
+    }
   };
 
   useEffect(() => {
-    const handleGlobalMouseUp = () => setIsDragging(false);
+    const handleGlobalMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+        restartIdleTimer();
+      }
+    };
     window.addEventListener('pointerup', handleGlobalMouseUp);
     return () => window.removeEventListener('pointerup', handleGlobalMouseUp);
-  }, []);
+  }, [isDragging, restartIdleTimer]);
 
-  // Preset Slider Controls
+  // Preset Slider Controls (100 = Before, 50 = Split, 0 = After)
   const setPreset = (percentage: number) => {
-    setAutoPlay(false);
+    setIsAutoPlay(false);
+    setTransitionSpeed('preset');
     setSliderPos(percentage);
+    restartIdleTimer();
   };
 
   // Next / Prev Project
   const handlePrev = () => {
     setActiveIdx((prev) => (prev === 0 ? TRANSFORMATIONS.length - 1 : prev - 1));
-    setSliderPos(50);
+    restartIdleTimer();
   };
 
   const handleNext = () => {
     setActiveIdx((prev) => (prev === TRANSFORMATIONS.length - 1 ? 0 : prev + 1));
-    setSliderPos(50);
+    restartIdleTimer();
+  };
+
+  const handleSelectCategory = (idx: number) => {
+    setActiveIdx(idx);
+    restartIdleTimer();
+  };
+
+  const toggleAutoPlay = () => {
+    if (idleResumeTimerRef.current) clearTimeout(idleResumeTimerRef.current);
+    setIsAutoPlay((prev) => !prev);
   };
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    setIsAutoPlay(false);
+    setTransitionSpeed('none');
+    restartIdleTimer();
     if (e.key === 'ArrowLeft') {
       setSliderPos((p) => Math.max(0, p - 5));
     } else if (e.key === 'ArrowRight') {
@@ -316,23 +341,6 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
       <div className="container-custom">
         {/* Section Header */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.75rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#1E56FF',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-            }}
-          >
-            <Sparkles size={14} />
-            NYC ARCHITECTURAL TRANSFORMATIONS // BEFORE & AFTER
-          </div>
-
           <div
             style={{
               display: 'flex',
@@ -441,6 +449,7 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
 
         {/* 10 Category Switcher Pill Track */}
         <div
+          ref={categoryTrackRef}
           style={{
             display: 'flex',
             gap: '0.5rem',
@@ -457,11 +466,9 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
             return (
               <button
                 key={item.id}
+                ref={(el) => { categoryBtnsRef.current[idx] = el; }}
                 type="button"
-                onClick={() => {
-                  setActiveIdx(idx);
-                  setSliderPos(50);
-                }}
+                onClick={() => handleSelectCategory(idx)}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -542,16 +549,62 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
               </h3>
             </div>
 
-            {/* Interactive View Presets */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            {/* Interactive View Presets & Auto Transition Toggle */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+              {/* Auto Transition Toggle Button */}
               <button
                 type="button"
-                onClick={() => setPreset(0)}
+                onClick={toggleAutoPlay}
                 style={{
-                  padding: '0.4rem 0.8rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.45rem',
+                  padding: '0.42rem 0.85rem',
                   borderRadius: '8px',
-                  backgroundColor: sliderPos <= 5 ? '#1E56FF' : '#FFFFFF',
-                  color: sliderPos <= 5 ? '#FFFFFF' : '#555555',
+                  backgroundColor: isAutoPlay ? 'rgba(30, 86, 255, 0.08)' : '#FFFFFF',
+                  color: isAutoPlay ? '#1E56FF' : '#555555',
+                  border: isAutoPlay ? '1px solid #1E56FF' : '1px solid rgba(17, 17, 17, 0.12)',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.68rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: isAutoPlay ? '0 0 12px rgba(30, 86, 255, 0.15)' : 'none',
+                }}
+                title={isAutoPlay ? 'Click to Pause Auto-Transition' : 'Click to Resume Auto-Transition'}
+              >
+                {isAutoPlay ? (
+                  <>
+                    <span
+                      style={{
+                        width: '7px',
+                        height: '7px',
+                        borderRadius: '50%',
+                        backgroundColor: '#1E56FF',
+                        boxShadow: '0 0 8px #1E56FF',
+                      }}
+                    />
+                    <Pause size={12} />
+                    AUTO-TRANSITION ON
+                  </>
+                ) : (
+                  <>
+                    <Play size={12} fill="#555555" />
+                    RESUME AUTO-PLAY
+                  </>
+                )}
+              </button>
+
+              <div style={{ width: '1px', height: '18px', backgroundColor: 'rgba(17, 17, 17, 0.12)', margin: '0 0.2rem' }} />
+
+              <button
+                type="button"
+                onClick={() => setPreset(100)}
+                style={{
+                  padding: '0.42rem 0.8rem',
+                  borderRadius: '8px',
+                  backgroundColor: sliderPos >= 95 ? '#1E56FF' : '#FFFFFF',
+                  color: sliderPos >= 95 ? '#FFFFFF' : '#555555',
                   border: '1px solid rgba(17, 17, 17, 0.1)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.68rem',
@@ -566,7 +619,7 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
                 type="button"
                 onClick={() => setPreset(50)}
                 style={{
-                  padding: '0.4rem 0.8rem',
+                  padding: '0.42rem 0.8rem',
                   borderRadius: '8px',
                   backgroundColor: sliderPos > 40 && sliderPos < 60 ? '#111111' : '#FFFFFF',
                   color: sliderPos > 40 && sliderPos < 60 ? '#FFFFFF' : '#555555',
@@ -582,12 +635,12 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
               </button>
               <button
                 type="button"
-                onClick={() => setPreset(100)}
+                onClick={() => setPreset(0)}
                 style={{
-                  padding: '0.4rem 0.8rem',
+                  padding: '0.42rem 0.8rem',
                   borderRadius: '8px',
-                  backgroundColor: sliderPos >= 95 ? '#1E56FF' : '#FFFFFF',
-                  color: sliderPos >= 95 ? '#FFFFFF' : '#555555',
+                  backgroundColor: sliderPos <= 5 ? '#1E56FF' : '#FFFFFF',
+                  color: sliderPos <= 5 ? '#FFFFFF' : '#555555',
                   border: '1px solid rgba(17, 17, 17, 0.1)',
                   fontFamily: 'var(--font-mono)',
                   fontSize: '0.68rem',
@@ -604,7 +657,6 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
           {/* Interactive Split Drag Stage */}
           <div
             ref={containerRef}
-            tabIndex={0}
             onKeyDown={handleKeyDown}
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
@@ -619,6 +671,32 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
               touchAction: 'none',
             }}
           >
+            {/* Top Laser Timeline Progress Indicator */}
+            {isAutoPlay && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '3px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                  zIndex: 25,
+                  overflow: 'hidden',
+                }}
+              >
+                <div
+                  key={`${activeIdx}-${cycleKey}`}
+                  style={{
+                    height: '100%',
+                    backgroundColor: '#1E56FF',
+                    boxShadow: '0 0 10px #1E56FF, 0 0 5px #00D4FF',
+                    animation: 'autoCycleProgress 6.4s linear forwards',
+                  }}
+                />
+              </div>
+            )}
+
             {/* UNDER LAYER: AFTER IMAGE (Signs NYC Finished Work) */}
             <div
               style={{
@@ -639,58 +717,6 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
                   objectPosition: 'center',
                 }}
               />
-
-              {/* After Floating Tag (Right Side) */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1.25rem',
-                  right: '1.25rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.45rem',
-                  padding: '0.45rem 0.95rem',
-                  borderRadius: '8px',
-                  backgroundColor: 'rgba(30, 86, 255, 0.92)',
-                  backdropFilter: 'blur(10px)',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  boxShadow: '0 4px 16px rgba(30, 86, 255, 0.35)',
-                  zIndex: 4,
-                  pointerEvents: 'none',
-                }}
-              >
-                <CheckCircle2 size={13} />
-                AFTER // SIGNS NYC FABRICATION
-              </div>
-
-              {/* Bottom Subtle Description Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '1.25rem',
-                  right: '1.25rem',
-                  maxWidth: '380px',
-                  padding: '0.75rem 1.1rem',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.72)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#FFFFFF',
-                  fontSize: '0.78rem',
-                  lineHeight: 1.45,
-                  zIndex: 4,
-                  pointerEvents: 'none',
-                }}
-              >
-                <span style={{ color: '#00D4FF', fontWeight: 800, display: 'block', fontSize: '0.65rem', marginBottom: '0.2rem', fontFamily: 'var(--font-mono)' }}>
-                  FABRICATED RESULT
-                </span>
-                {current.afterDesc}
-              </div>
             </div>
 
             {/* TOP LAYER: BEFORE IMAGE (Raw State - Clipped horizontally by sliderPos) */}
@@ -702,7 +728,13 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
                 height: '100%',
                 clipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)`,
                 WebkitClipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)`,
-                transition: isDragging ? 'none' : 'clip-path 0.12s ease-out',
+                transition: isDragging
+                  ? 'none'
+                  : transitionSpeed === 'sweep'
+                  ? 'clip-path 2.8s cubic-bezier(0.4, 0, 0.2, 1), -webkit-clip-path 2.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                  : transitionSpeed === 'preset'
+                  ? 'clip-path 0.35s ease-out, -webkit-clip-path 0.35s ease-out'
+                  : 'none',
                 zIndex: 2,
               }}
             >
@@ -717,57 +749,6 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
                   objectPosition: 'center',
                 }}
               />
-
-              {/* Before Floating Tag (Left Side) */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1.25rem',
-                  left: '1.25rem',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.45rem',
-                  padding: '0.45rem 0.95rem',
-                  borderRadius: '8px',
-                  backgroundColor: 'rgba(20, 20, 20, 0.85)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  color: '#EEEEEE',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.72rem',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  zIndex: 5,
-                  pointerEvents: 'none',
-                }}
-              >
-                BEFORE // RAW UNBRANDED STATE
-              </div>
-
-              {/* Bottom Subtle Description Badge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '1.25rem',
-                  left: '1.25rem',
-                  maxWidth: '380px',
-                  padding: '0.75rem 1.1rem',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.72)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#FFFFFF',
-                  fontSize: '0.78rem',
-                  lineHeight: 1.45,
-                  zIndex: 5,
-                  pointerEvents: 'none',
-                }}
-              >
-                <span style={{ color: '#FFB800', fontWeight: 800, display: 'block', fontSize: '0.65rem', marginBottom: '0.2rem', fontFamily: 'var(--font-mono)' }}>
-                  INITIAL CONDITIONS
-                </span>
-                {current.beforeDesc}
-              </div>
             </div>
 
             {/* Center Split Slider Handle Divider */}
@@ -779,11 +760,18 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
                 left: `${sliderPos}%`,
                 width: '3px',
                 backgroundColor: '#FFFFFF',
-                boxShadow: '0 0 16px rgba(0, 0, 0, 0.6), 0 0 8px rgba(30, 86, 255, 0.8)',
+                boxShadow: '0 0 16px rgba(0, 0, 0, 0.6), 0 0 10px rgba(30, 86, 255, 0.9)',
                 zIndex: 10,
                 transform: 'translateX(-50%)',
                 cursor: 'ew-resize',
                 pointerEvents: 'none',
+                transition: isDragging
+                  ? 'none'
+                  : transitionSpeed === 'sweep'
+                  ? 'left 2.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                  : transitionSpeed === 'preset'
+                  ? 'left 0.35s ease-out'
+                  : 'none',
               }}
             >
               {/* Circular Grip Knob */}
@@ -810,217 +798,18 @@ export default function TransformationShowcase({ onOpenCampaignModal }: Transfor
               </div>
             </div>
           </div>
+        </div>
 
-          {/* 4-Box Technical Specification & Impact Deck (Inspired by Section 3 & 6) */}
-          <div
-            style={{
-              padding: '2rem 2.25rem',
-              backgroundColor: '#FFFFFF',
-              borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-              gap: '1.5rem',
-            }}
-          >
-            {/* Spec 1: Material */}
-            <div
-              style={{
-                padding: '1.25rem',
-                backgroundColor: '#F8F7F2',
-                borderRadius: '14px',
-                border: '1px solid rgba(17, 17, 17, 0.06)',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#666666',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.35rem',
-                }}
-              >
-                01 // SUBSTRATE & MEDIA
-              </div>
-              <div
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  color: '#111111',
-                  lineHeight: 1.35,
-                }}
-              >
-                {current.specs.material}
-              </div>
-            </div>
-
-            {/* Spec 2: Finish & Protection */}
-            <div
-              style={{
-                padding: '1.25rem',
-                backgroundColor: '#F8F7F2',
-                borderRadius: '14px',
-                border: '1px solid rgba(17, 17, 17, 0.06)',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#666666',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.35rem',
-                }}
-              >
-                02 // FINISH & LAMINATION
-              </div>
-              <div
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  color: '#111111',
-                  lineHeight: 1.35,
-                }}
-              >
-                {current.specs.finish}
-              </div>
-            </div>
-
-            {/* Spec 3: Code & Compliance */}
-            <div
-              style={{
-                padding: '1.25rem',
-                backgroundColor: '#F8F7F2',
-                borderRadius: '14px',
-                border: '1px solid rgba(17, 17, 17, 0.06)',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#666666',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.35rem',
-                }}
-              >
-                03 // NYC CODE COMPLIANCE
-              </div>
-              <div
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: 800,
-                  color: '#111111',
-                  lineHeight: 1.35,
-                }}
-              >
-                {current.specs.compliance}
-              </div>
-            </div>
-
-            {/* Spec 4: Business Impact */}
-            <div
-              style={{
-                padding: '1.25rem',
-                backgroundColor: 'rgba(30, 86, 255, 0.04)',
-                borderRadius: '14px',
-                border: '1px solid rgba(30, 86, 255, 0.2)',
-              }}
-            >
-              <div
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.68rem',
-                  color: '#1E56FF',
-                  fontWeight: 800,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  marginBottom: '0.35rem',
-                }}
-              >
-                04 // REAL-WORLD IMPACT
-              </div>
-              <div
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: 900,
-                  color: '#1E56FF',
-                  lineHeight: 1.35,
-                }}
-              >
-                {current.specs.impact}
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Action Strip */}
-          <div
-            style={{
-              padding: '1.4rem 2.25rem',
-              backgroundColor: '#111111',
-              display: 'flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '1.25rem',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-              <div
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '2rem',
-                  fontWeight: 900,
-                  color: '#00D4FF',
-                  lineHeight: 1,
-                }}
-              >
-                {current.highlightStat}
-              </div>
-              <div>
-                <div style={{ color: '#FFFFFF', fontSize: '0.86rem', fontWeight: 800 }}>
-                  {current.statLabel}
-                </div>
-                <div style={{ color: '#888888', fontSize: '0.74rem' }}>
-                  Measured commercial lift across NYC client installations
-                </div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <button
-                type="button"
-                onClick={onOpenCampaignModal}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  backgroundColor: '#1E56FF',
-                  color: '#FFFFFF',
-                  padding: '0.75rem 1.4rem',
-                  borderRadius: '10px',
-                  fontWeight: 800,
-                  fontSize: '0.84rem',
-                  fontFamily: 'var(--font-mono)',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 4px 14px rgba(30, 86, 255, 0.4)',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#1644cc')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#1E56FF')}
-              >
-                GET A QUOTE FOR THIS FORMAT
-                <ArrowRight size={15} />
-              </button>
-            </div>
-          </div>
+        {/* Hidden Preloader for all Before/After Images */}
+        <div style={{ display: 'none' }} aria-hidden="true">
+          {TRANSFORMATIONS.map((t) => (
+            <React.Fragment key={t.id}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={t.beforeImg} alt="" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={t.afterImg} alt="" />
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </section>

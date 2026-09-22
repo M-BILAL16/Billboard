@@ -7,12 +7,9 @@ import {
   Search,
   ChevronRight,
   ChevronLeft,
-  ShieldCheck,
-  Building2,
   Maximize2,
   X,
   PhoneCall,
-  BadgeCheck,
   Filter,
   Grid,
   List,
@@ -22,6 +19,8 @@ import { FULL_CATALOG, MainCategory, Subcategory, CatalogItem } from '@/data/cat
 interface SignProductsDirectoryProps {
   onOpenCampaignModal: () => void;
 }
+
+const MAX_VISIBLE_CATALOG_TILES = 6;
 
 export default function SignProductsDirectory({ onOpenCampaignModal }: SignProductsDirectoryProps) {
   // Main Category State
@@ -591,7 +590,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                       alignItems: 'flex-start',
                       flexWrap: 'wrap',
                       gap: '1rem',
-                      marginBottom: '0.85rem',
+                      marginBottom: '1.5rem',
                     }}
                   >
                     <h3
@@ -624,77 +623,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                       REQUEST A FREE QUOTE
                       <ArrowRight size={14} />
                     </button>
-                  </div>
-
-                  {/* Subcategory Official Description */}
-                  <p
-                    style={{
-                      color: '#444444',
-                      fontSize: '0.98rem',
-                      lineHeight: 1.55,
-                      maxWidth: '820px',
-                      marginBottom: '1.25rem',
-                    }}
-                  >
-                    {activeSubcategory.description}
-                  </p>
-
-                  {/* Architectural Standards Bar */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.55rem' }}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '9999px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid rgba(17, 17, 17, 0.08)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        fontWeight: 700,
-                        color: '#111111',
-                      }}
-                    >
-                      <Building2 size={12} style={{ color: '#1E56FF' }} />
-                      10,000 SQ FT NYC FABRICATION
-                    </span>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '9999px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid rgba(17, 17, 17, 0.08)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        fontWeight: 700,
-                        color: '#059669',
-                      }}
-                    >
-                      <ShieldCheck size={12} />
-                      NYC DOB EXPEDITED & COMPLIANT
-                    </span>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.35rem',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '9999px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid rgba(17, 17, 17, 0.08)',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.68rem',
-                        fontWeight: 700,
-                        color: '#666666',
-                      }}
-                    >
-                      <BadgeCheck size={12} style={{ color: '#1E56FF' }} />
-                      5-BOROUGH LICENSED INSTALLATION
-                    </span>
                   </div>
                 </div>
               </div>
@@ -749,7 +677,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           fontWeight: 700,
                         }}
                       >
-                        {activeSubcategory.designs.length}
+                        {Math.min(activeSubcategory.designs.length, MAX_VISIBLE_CATALOG_TILES)}
                       </span>
                     </button>
                   )}
@@ -790,7 +718,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           fontWeight: 700,
                         }}
                       >
-                        {activeSubcategory.types.length}
+                        {Math.min(activeSubcategory.types.length, MAX_VISIBLE_CATALOG_TILES)}
                       </span>
                     </button>
                   )}
@@ -861,7 +789,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     gap: '1.5rem',
                   }}
                 >
-                  {activeSubcategory.designs.map((design) => (
+                  {activeSubcategory.designs.slice(0, MAX_VISIBLE_CATALOG_TILES).map((design) => (
                     <div
                       key={design.id + design.name}
                       style={{
@@ -871,8 +799,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                         overflow: 'hidden',
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        height: '380px',
+                        height: '270px',
                         transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
                       }}
@@ -965,99 +892,27 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           padding: '1.1rem',
                           display: 'flex',
                           flexDirection: 'column',
-                          justifyContent: 'space-between',
+                          justifyContent: 'center',
                           flex: 1,
                         }}
                       >
-                        <div>
-                          {/* Clamped Title */}
-                          <h4
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 700,
-                              fontSize: '0.96rem',
-                              color: '#111111',
-                              margin: '0 0 0.35rem 0',
-                              lineHeight: 1.3,
-                              textTransform: 'capitalize',
-                              height: '2.5rem',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            {design.name}
-                          </h4>
-
-                          {/* Clamped Description */}
-                          <p
-                            style={{
-                              color: '#666666',
-                              fontSize: '0.8rem',
-                              lineHeight: 1.45,
-                              margin: 0,
-                              height: '2.35rem',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            {design.description ||
-                              `Custom fabricated ${design.name} built in our NYC plant with custom mounting.`}
-                          </p>
-                        </div>
-
-                        {/* Card Baseline Action Bar */}
-                        <div
+                        <h4
                           style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            paddingTop: '0.75rem',
-                            borderTop: '1px solid rgba(17, 17, 17, 0.07)',
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            fontSize: '0.96rem',
+                            color: '#111111',
+                            margin: 0,
+                            lineHeight: 1.3,
+                            textTransform: 'capitalize',
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
                         >
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.66rem',
-                              color: '#059669',
-                              fontWeight: 700,
-                            }}
-                          >
-                            ✓ IN-HOUSE NYC BUILD
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setInspectedItem({
-                                item: design,
-                                type: 'design',
-                                subcatName: activeSubcategory.name,
-                                catName: activeCategory.name,
-                              });
-                            }}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#1E56FF',
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.72rem',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.2rem',
-                              padding: '0.2rem 0.4rem',
-                            }}
-                          >
-                            DETAILS
-                            <ArrowRight size={12} />
-                          </button>
-                        </div>
+                          {design.name}
+                        </h4>
                       </div>
                     </div>
                   ))}
@@ -1073,7 +928,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                     gap: '1.5rem',
                   }}
                 >
-                  {filteredTypes.map((typeItem) => (
+                  {filteredTypes.slice(0, MAX_VISIBLE_CATALOG_TILES).map((typeItem) => (
                     <div
                       key={typeItem.id + typeItem.name}
                       style={{
@@ -1083,8 +938,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                         overflow: 'hidden',
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        height: '380px',
+                        height: '270px',
                         transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
                       }}
@@ -1176,98 +1030,26 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           padding: '1.1rem',
                           display: 'flex',
                           flexDirection: 'column',
-                          justifyContent: 'space-between',
+                          justifyContent: 'center',
                           flex: 1,
                         }}
                       >
-                        <div>
-                          {/* Clamped Title */}
-                          <h4
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 700,
-                              fontSize: '0.96rem',
-                              color: '#111111',
-                              margin: '0 0 0.35rem 0',
-                              lineHeight: 1.3,
-                              height: '2.5rem',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            {typeItem.name}
-                          </h4>
-
-                          {/* Clamped Description */}
-                          <p
-                            style={{
-                              color: '#666666',
-                              fontSize: '0.8rem',
-                              lineHeight: 1.45,
-                              margin: 0,
-                              height: '2.35rem',
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            {typeItem.description ||
-                              `Architectural grade ${typeItem.name} engineered for commercial NYC environments.`}
-                          </p>
-                        </div>
-
-                        {/* Card Baseline Action Bar */}
-                        <div
+                        <h4
                           style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            paddingTop: '0.75rem',
-                            borderTop: '1px solid rgba(17, 17, 17, 0.07)',
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: 700,
+                            fontSize: '0.96rem',
+                            color: '#111111',
+                            margin: 0,
+                            lineHeight: 1.3,
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
                         >
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.66rem',
-                              color: '#1E56FF',
-                              fontWeight: 700,
-                            }}
-                          >
-                            ✓ DOB APPROVED
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setInspectedItem({
-                                item: typeItem,
-                                type: 'type',
-                                subcatName: activeSubcategory.name,
-                                catName: activeCategory.name,
-                              });
-                            }}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              color: '#1E56FF',
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.72rem',
-                              fontWeight: 700,
-                              cursor: 'pointer',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              gap: '0.2rem',
-                              padding: '0.2rem 0.4rem',
-                            }}
-                          >
-                            SPECS
-                            <ArrowRight size={12} />
-                          </button>
-                        </div>
+                          {typeItem.name}
+                        </h4>
                       </div>
                     </div>
                   ))}
