@@ -162,7 +162,7 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
             }}
           >
             <Sparkles size={14} />
-            NYC PRODUCT CATALOG // 9 CATEGORIES • 89 SUBCATEGORIES • 410 MINI-CATEGORIES
+            NYC PRODUCT CATALOG
           </div>
 
           <h2
