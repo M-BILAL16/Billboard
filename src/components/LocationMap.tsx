@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import {
-  Sparkles,
   MapPin,
   ExternalLink,
   Navigation,
@@ -464,24 +463,6 @@ export default function LocationMap({ onSelectLocation }: LocationMapProps) {
           }}
         >
           <div style={{ maxWidth: '820px' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                color: '#1E56FF',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                marginBottom: '1.25rem',
-              }}
-            >
-              <Sparkles size={14} />
-              FIVE BOROUGH INSTALLATION COVERAGE.
-            </div>
-
             <h2
               style={{
                 fontFamily: 'var(--font-display)',

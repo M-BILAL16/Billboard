@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ArrowUpRight,
   Search,
@@ -25,6 +26,8 @@ import {
   Phone,
 } from 'lucide-react';
 import { BILLBOARD_FORMATS, FEATURED_CAMPAIGNS, GLOBAL_LOCATIONS } from '@/data/billboardData';
+import { FULL_CATALOG } from '@/data/catalogTypes';
+import { INDUSTRIES_DATA } from '@/components/FormatExplorer';
 
 interface NavbarProps {
   onOpenCampaignModal: () => void;
@@ -36,6 +39,7 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [activeLink, setActiveLink] = useState<string>('');
+  const [hoveredCatalogId, setHoveredCatalogId] = useState<string>(FULL_CATALOG[0].id);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -186,6 +190,43 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
     }
   };
 
+  const handleScrollTop = () => {
+    setActiveDropdown(null);
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Opens the catalog section already focused on the chosen category / subcategory
+  const handleOpenCatalogItem = (categoryId: string, subcategoryName?: string) => {
+    window.dispatchEvent(
+      new CustomEvent('catalog:select', { detail: { categoryId, subcategoryName } })
+    );
+    setActiveLink('Catalog');
+    handleNavigate('#products');
+  };
+
+  const hoveredCatalogCategory =
+    FULL_CATALOG.find((cat) => cat.id === hoveredCatalogId) || FULL_CATALOG[0];
+
+  const navLinkStyle = (label: string, isOpen = false): React.CSSProperties => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.25rem',
+    padding: '0.45rem 0.85rem',
+    borderRadius: '9999px',
+    fontSize: '0.8rem',
+    fontWeight: 700,
+    textTransform: 'uppercase',
+    letterSpacing: '0.04em',
+    textDecoration: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    color: isOpen || activeLink === label ? '#111111' : '#444444',
+    backgroundColor: isOpen || activeLink === label ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
+    transition: 'all 0.2s ease',
+  });
+
   return (
     <>
       <header
@@ -260,86 +301,19 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.65rem',
                 textDecoration: 'none',
-                color: '#111111',
-                padding: '0.35rem 0.65rem 0.35rem 0.45rem',
+                padding: '0.2rem 0.35rem',
                 borderRadius: '9999px',
-                transition: 'background-color 0.2s ease',
               }}
-              data-cursor="SIGNS.NYC"
             >
-              {/* 3D Geometric Billboard Monolith */}
-              <div
-                style={{
-                  width: '28px',
-                  height: '28px',
-                  backgroundColor: '#111111',
-                  borderRadius: '8px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'relative',
-                  boxShadow: '0 4px 12px rgba(17, 17, 17, 0.15)',
-                  transform: 'perspective(400px) rotateX(10deg)',
-                  transition: 'transform 0.3s ease',
-                }}
-              >
-                {/* Micro Screen Grid */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '2px',
-                    width: '12px',
-                    height: '12px',
-                  }}
-                >
-                  <div style={{ backgroundColor: '#1E56FF', borderRadius: '1.5px' }} />
-                  <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)', borderRadius: '1.5px' }} />
-                  <div style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)', borderRadius: '1.5px' }} />
-                  <div style={{ backgroundColor: '#00D4FF', borderRadius: '1.5px' }} />
-                </div>
-              </div>
-
-              {/* Wordmark */}
-              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.05 }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 900,
-                    fontSize: '1.18rem',
-                    letterSpacing: '-0.035em',
-                    color: '#111111',
-                    display: 'flex',
-                    alignItems: 'baseline',
-                  }}
-                >
-                  SIGNS
-                  <span
-                    style={{
-                      color: '#1E56FF',
-                      marginLeft: '2px',
-                      fontSize: '0.74rem',
-                      fontWeight: 800,
-                      fontFamily: 'var(--font-mono)',
-                    }}
-                  >
-                    .NYC
-                  </span>
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.55rem',
-                    letterSpacing: '0.08em',
-                    color: '#888888',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  35+ Yrs // 5 Boroughs
-                </span>
-              </div>
+              <Image
+                src="/images/signsny-logo1.png"
+                alt="Signs NYC"
+                width={1024}
+                height={576}
+                priority
+                style={{ width: 'auto', height: '44px', display: 'block' }}
+              />
             </Link>
 
             {/* Live Global Network Status Pill */}
@@ -511,57 +485,222 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               display: 'flex',
               alignItems: 'center',
               gap: '0.2rem',
-              position: 'relative',
             }}
           >
-            {/* 1. Formats with Mega-Menu */}
+            {/* Home */}
+            <button type="button" onClick={handleScrollTop} style={navLinkStyle('Home')}>
+              Home
+            </button>
+
+            {/* About Us */}
+            <a
+              href="#about"
+              onClick={() => setActiveLink('About Us')}
+              style={navLinkStyle('About Us')}
+            >
+              About Us
+            </a>
+
+            {/* Catalog with full category / subcategory mega-menu */}
             <div
-              style={{ position: 'relative' }}
-              onMouseEnter={() => handleDropdownEnter('formats')}
+              onMouseEnter={() => handleDropdownEnter('catalog')}
               onMouseLeave={handleDropdownLeave}
             >
               <a
-                href="#formats"
-                onClick={() => setActiveLink('Formats')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  padding: '0.45rem 0.85rem',
-                  borderRadius: '9999px',
-                  fontSize: '0.8rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  textDecoration: 'none',
-                  color: activeDropdown === 'formats' || activeLink === 'Formats' ? '#111111' : '#444444',
-                  backgroundColor:
-                    activeDropdown === 'formats' || activeLink === 'Formats'
-                      ? 'rgba(17, 17, 17, 0.06)'
-                      : 'transparent',
-                  transition: 'all 0.2s ease',
-                }}
+                href="#products"
+                onClick={() => setActiveLink('Catalog')}
+                style={navLinkStyle('Catalog', activeDropdown === 'catalog')}
+              >
+                Catalog
+                <ChevronDown
+                  size={12}
+                  style={{
+                    transform: activeDropdown === 'catalog' ? 'rotate(180deg)' : 'none',
+                    transition: 'transform 0.2s ease',
+                  }}
+                />
+              </a>
+
+              {activeDropdown === 'catalog' && (
+                <div
+                  className="mega-menu-enter"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 14px)',
+                    left: '50%',
+                    marginLeft: 'calc(min(1040px, 100vw - 48px) / -2)',
+                    width: 'min(1040px, calc(100vw - 48px))',
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    backdropFilter: 'blur(30px)',
+                    WebkitBackdropFilter: 'blur(30px)',
+                    borderRadius: '22px',
+                    border: '1px solid rgba(17, 17, 17, 0.1)',
+                    boxShadow: '0 24px 60px rgba(0, 0, 0, 0.14)',
+                    padding: '1.25rem',
+                    zIndex: 1000,
+                    display: 'grid',
+                    gridTemplateColumns: '260px 1fr',
+                    gap: '1.25rem',
+                  }}
+                >
+                  {/* Category rail */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.15rem',
+                      borderRight: '1px solid rgba(17, 17, 17, 0.07)',
+                      paddingRight: '1rem',
+                    }}
+                  >
+                    {FULL_CATALOG.map((cat) => {
+                      const isHovered = cat.id === hoveredCatalogCategory.id;
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onMouseEnter={() => setHoveredCatalogId(cat.id)}
+                          onClick={() => handleOpenCatalogItem(cat.id)}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: '0.5rem',
+                            padding: '0.55rem 0.7rem',
+                            borderRadius: '10px',
+                            border: 'none',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            backgroundColor: isHovered ? 'rgba(30, 86, 255, 0.08)' : 'transparent',
+                            color: isHovered ? '#1E56FF' : '#333333',
+                            fontFamily: 'var(--font-display)',
+                            fontWeight: isHovered ? 800 : 600,
+                            fontSize: '0.85rem',
+                            transition: 'all 0.15s ease',
+                          }}
+                        >
+                          <span>{cat.name}</span>
+                          <ChevronRight size={13} style={{ opacity: isHovered ? 1 : 0.35 }} />
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Subcategories of the hovered category */}
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginBottom: '0.75rem',
+                        paddingBottom: '0.55rem',
+                        borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: '0.7rem',
+                          fontWeight: 700,
+                          letterSpacing: '0.06em',
+                          color: '#666666',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        {hoveredCatalogCategory.name} ({hoveredCatalogCategory.subcategories.length})
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenCatalogItem(hoveredCatalogCategory.id)}
+                        style={{
+                          fontSize: '0.72rem',
+                          color: '#1E56FF',
+                          fontWeight: 700,
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '2px',
+                        }}
+                      >
+                        View Category <ArrowUpRight size={12} />
+                      </button>
+                    </div>
+
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gap: '0.2rem 0.75rem',
+                        maxHeight: '340px',
+                        overflowY: 'auto',
+                      }}
+                    >
+                      {hoveredCatalogCategory.subcategories.map((sub) => (
+                        <button
+                          key={sub.name}
+                          type="button"
+                          onClick={() => handleOpenCatalogItem(hoveredCatalogCategory.id, sub.name)}
+                          style={{
+                            padding: '0.4rem 0.55rem',
+                            borderRadius: '8px',
+                            border: 'none',
+                            background: 'none',
+                            cursor: 'pointer',
+                            textAlign: 'left',
+                            fontSize: '0.78rem',
+                            color: '#444444',
+                            transition: 'all 0.15s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.04)';
+                            e.currentTarget.style.color = '#111111';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.color = '#444444';
+                          }}
+                        >
+                          {sub.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Industries with hover menu */}
+            <div
+              onMouseEnter={() => handleDropdownEnter('industries')}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <a
+                href="#industries"
+                onClick={() => setActiveLink('Industries')}
+                style={navLinkStyle('Industries', activeDropdown === 'industries')}
               >
                 Industries
                 <ChevronDown
                   size={12}
                   style={{
-                    transform: activeDropdown === 'formats' ? 'rotate(180deg)' : 'none',
+                    transform: activeDropdown === 'industries' ? 'rotate(180deg)' : 'none',
                     transition: 'transform 0.2s ease',
                   }}
                 />
               </a>
 
-              {/* Formats / Industries Mega Menu Dropdown */}
-              {activeDropdown === 'formats' && (
+              {activeDropdown === 'industries' && (
                 <div
                   className="mega-menu-enter"
                   style={{
                     position: 'absolute',
                     top: 'calc(100% + 14px)',
                     left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '580px',
+                    marginLeft: 'calc(min(640px, 100vw - 48px) / -2)',
+                    width: 'min(640px, calc(100vw - 48px))',
                     backgroundColor: 'rgba(255, 255, 255, 0.98)',
                     backdropFilter: 'blur(30px)',
                     WebkitBackdropFilter: 'blur(30px)',
@@ -577,8 +716,8 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'space-between',
-                      marginBottom: '0.9rem',
-                      paddingBottom: '0.6rem',
+                      marginBottom: '0.85rem',
+                      paddingBottom: '0.55rem',
                       borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
                     }}
                   >
@@ -592,325 +731,44 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Signage By Industry (8 Sectors)
+                      Signage By Industry ({INDUSTRIES_DATA.length})
                     </span>
-                    <a
-                      href="#industries"
-                      onClick={() => setActiveDropdown(null)}
-                      style={{
-                        fontSize: '0.72rem',
-                        color: '#1E56FF',
-                        textDecoration: 'none',
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '2px',
-                      }}
-                    >
-                      Explore All 8 Sectors <ArrowUpRight size={12} />
-                    </a>
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                    {BILLBOARD_FORMATS.slice(0, 4).map((fmt) => (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.2rem 0.5rem' }}>
+                    {INDUSTRIES_DATA.map((ind) => (
                       <a
-                        key={fmt.id}
-                        href="#formats"
-                        onClick={() => setActiveDropdown(null)}
+                        key={ind.id}
+                        href="#industries"
+                        onClick={() => {
+                          setActiveLink('Industries');
+                          handleNavigate('#industries');
+                        }}
                         style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.25rem',
-                          padding: '0.75rem 0.85rem',
-                          borderRadius: '12px',
-                          backgroundColor: 'rgba(17, 17, 17, 0.02)',
-                          border: '1px solid rgba(17, 17, 17, 0.05)',
+                          padding: '0.45rem 0.6rem',
+                          borderRadius: '8px',
                           textDecoration: 'none',
-                          color: '#111111',
-                          transition: 'all 0.2s ease',
+                          fontSize: '0.8rem',
+                          fontWeight: 600,
+                          color: '#444444',
+                          transition: 'all 0.15s ease',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(30, 86, 255, 0.05)';
-                          e.currentTarget.style.borderColor = 'rgba(30, 86, 255, 0.3)';
+                          e.currentTarget.style.backgroundColor = 'rgba(30, 86, 255, 0.06)';
+                          e.currentTarget.style.color = '#1E56FF';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.02)';
-                          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.05)';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                          e.currentTarget.style.color = '#444444';
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 800,
-                              fontSize: '0.86rem',
-                            }}
-                          >
-                            {fmt.title}
-                          </span>
-                          <span
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.62rem',
-                              color: '#1E56FF',
-                              fontWeight: 700,
-                            }}
-                          >
-                            {fmt.specs.estimatedReach}
-                          </span>
-                        </div>
-                        <span
-                          style={{
-                            fontSize: '0.72rem',
-                            color: '#666666',
-                            lineHeight: 1.35,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                          }}
-                        >
-                          {fmt.specs.format}
-                        </span>
+                        {ind.title}
                       </a>
                     ))}
                   </div>
                 </div>
               )}
             </div>
-
-            {/* Catalog Link */}
-            <a
-              href="#products"
-              onClick={() => setActiveLink('Catalog')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.45rem 0.85rem',
-                borderRadius: '9999px',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                textDecoration: 'none',
-                color: activeLink === 'Catalog' ? '#111111' : '#444444',
-                backgroundColor: activeLink === 'Catalog' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <span>Catalog</span>
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  fontFamily: 'var(--font-mono)',
-                  backgroundColor: 'rgba(30, 86, 255, 0.1)',
-                  color: '#1E56FF',
-                  padding: '0.08rem 0.35rem',
-                  borderRadius: '9999px',
-                  fontWeight: 800,
-                }}
-              >
-                89
-              </span>
-            </a>
-
-            {/* 2. Locations with Mega-Menu */}
-            <div
-              style={{ position: 'relative' }}
-              onMouseEnter={() => handleDropdownEnter('locations')}
-              onMouseLeave={handleDropdownLeave}
-            >
-              <a
-                href="#locations"
-                onClick={() => setActiveLink('Locations')}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                  padding: '0.45rem 0.85rem',
-                  borderRadius: '9999px',
-                  fontSize: '0.8rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  textDecoration: 'none',
-                  color: activeDropdown === 'locations' || activeLink === 'Locations' ? '#111111' : '#444444',
-                  backgroundColor:
-                    activeDropdown === 'locations' || activeLink === 'Locations'
-                      ? 'rgba(17, 17, 17, 0.06)'
-                      : 'transparent',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Locations
-                <ChevronDown
-                  size={12}
-                  style={{
-                    transform: activeDropdown === 'locations' ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 0.2s ease',
-                  }}
-                />
-              </a>
-
-              {/* Locations Mega Menu Dropdown */}
-              {activeDropdown === 'locations' && (
-                <div
-                  className="mega-menu-enter"
-                  style={{
-                    position: 'absolute',
-                    top: 'calc(100% + 14px)',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: '600px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                    backdropFilter: 'blur(30px)',
-                    WebkitBackdropFilter: 'blur(30px)',
-                    borderRadius: '22px',
-                    border: '1px solid rgba(17, 17, 17, 0.1)',
-                    boxShadow: '0 24px 60px rgba(0, 0, 0, 0.14)',
-                    padding: '1.25rem',
-                    zIndex: 1000,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      marginBottom: '0.9rem',
-                      paddingBottom: '0.6rem',
-                      borderBottom: '1px solid rgba(17, 17, 17, 0.06)',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.7rem',
-                        fontWeight: 700,
-                        letterSpacing: '0.06em',
-                        color: '#666666',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      Five NYC Borough Coverage
-                    </span>
-                    <a
-                      href="#locations"
-                      onClick={() => setActiveDropdown(null)}
-                      style={{
-                        fontSize: '0.72rem',
-                        color: '#1E56FF',
-                        textDecoration: 'none',
-                        fontWeight: 700,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '2px',
-                      }}
-                    >
-                      Borough Map <MapPin size={12} />
-                    </a>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                    {GLOBAL_LOCATIONS.slice(0, 4).map((loc) => (
-                      <a
-                        key={loc.id}
-                        href="#locations"
-                        onClick={() => setActiveDropdown(null)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '0.75rem 0.85rem',
-                          borderRadius: '12px',
-                          backgroundColor: 'rgba(17, 17, 17, 0.02)',
-                          border: '1px solid rgba(17, 17, 17, 0.05)',
-                          textDecoration: 'none',
-                          color: '#111111',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(36, 87, 255, 0.05)';
-                          e.currentTarget.style.borderColor = 'rgba(36, 87, 255, 0.3)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'rgba(17, 17, 17, 0.02)';
-                          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.05)';
-                        }}
-                      >
-                        <div>
-                          <div
-                            style={{
-                              fontFamily: 'var(--font-display)',
-                              fontWeight: 800,
-                              fontSize: '0.84rem',
-                            }}
-                          >
-                            {loc.name}
-                          </div>
-                          <div style={{ fontSize: '0.7rem', color: '#666666' }}>
-                            {loc.city}, {loc.country}
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.65rem',
-                            fontWeight: 700,
-                            color: '#2457FF',
-                            backgroundColor: 'rgba(36, 87, 255, 0.08)',
-                            padding: '0.15rem 0.4rem',
-                            borderRadius: '4px',
-                          }}
-                        >
-                          {loc.weeklyImpressions}/wk
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-
-            {/* 5. Planner Link with Live ROI badge */}
-            <a
-              href="#planner"
-              onClick={() => setActiveLink('Planner')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.35rem',
-                padding: '0.45rem 0.85rem',
-                borderRadius: '9999px',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-                textDecoration: 'none',
-                color: activeLink === 'Planner' ? '#111111' : '#444444',
-                backgroundColor: activeLink === 'Planner' ? 'rgba(17, 17, 17, 0.06)' : 'transparent',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <span>Planner</span>
-              <span
-                style={{
-                  fontSize: '0.62rem',
-                  fontFamily: 'var(--font-mono)',
-                  backgroundColor: 'rgba(30, 86, 255, 0.1)',
-                  color: '#1E56FF',
-                  padding: '0.08rem 0.35rem',
-                  borderRadius: '9999px',
-                  fontWeight: 800,
-                }}
-              >
-                LIVE
-              </span>
-            </a>
-
           </div>
 
           {/* ============================================================ */}
@@ -1310,15 +1168,22 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           {/* Mobile Navigation Links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
-              { num: '01', label: 'Catalog', href: '#products', tag: '89 Products' },
-              { num: '02', label: 'Industries', href: '#industries', tag: '8 Sectors' },
-              { num: '03', label: 'Locations', href: '#locations', tag: 'Borough Map' },
-              { num: '04', label: 'Planner', href: '#planner', tag: 'Instant Estimate' },
+              { num: '01', label: 'Home', href: '#top', tag: 'Start' },
+              { num: '02', label: 'About Us', href: '#about', tag: 'How We Work' },
+              { num: '03', label: 'Catalog', href: '#products', tag: `${FULL_CATALOG.length} Categories` },
+              { num: '04', label: 'Industries', href: '#industries', tag: `${INDUSTRIES_DATA.length} Sectors` },
             ].map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => {
+                  if (link.href === '#top') {
+                    e.preventDefault();
+                    handleScrollTop();
+                    return;
+                  }
+                  setMobileMenuOpen(false);
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',

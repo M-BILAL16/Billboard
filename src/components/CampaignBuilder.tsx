@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import {
-  Sparkles,
   ArrowRight,
   CheckCircle2,
   Phone,
@@ -112,24 +111,6 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
       <div className="container-custom" style={{ position: 'relative', zIndex: 10 }}>
         {/* Section Header */}
         <div style={{ maxWidth: '860px', marginBottom: '4rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#1E56FF',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-            }}
-          >
-            <Sparkles size={14} />
-            INTERACTIVE SIGN SPECIFICATION BUILDER
-          </div>
-
           <h2
             style={{
               fontFamily: 'var(--font-display)',
@@ -179,16 +160,14 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     <label
                       style={{
                         display: 'block',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.74rem',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '1rem',
                         fontWeight: 800,
-                        letterSpacing: '0.08em',
-                        color: '#1E56FF',
-                        textTransform: 'uppercase',
+                        color: '#111111',
                         marginBottom: '0.75rem',
                       }}
                     >
-                      01 // PROJECT BOROUGH
+                      Project Borough
                     </label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {BOROUGHS.map((borough) => {
@@ -224,16 +203,14 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     <label
                       style={{
                         display: 'block',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.74rem',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '1rem',
                         fontWeight: 800,
-                        letterSpacing: '0.08em',
-                        color: '#1E56FF',
-                        textTransform: 'uppercase',
+                        color: '#111111',
                         marginBottom: '0.75rem',
                       }}
                     >
-                      02 // SIGNAGE TYPE NEEDED
+                      Signage Type Needed
                     </label>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                       {SIGN_TYPES.map((type) => {
@@ -269,16 +246,14 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                     <label
                       style={{
                         display: 'block',
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: '0.74rem',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '1rem',
                         fontWeight: 800,
-                        letterSpacing: '0.08em',
-                        color: '#1E56FF',
-                        textTransform: 'uppercase',
+                        color: '#111111',
                         marginBottom: '0.75rem',
                       }}
                     >
-                      03 // CONTACT & SPECIFICATIONS
+                      Contact &amp; Specifications
                     </label>
 
                     <div
@@ -628,6 +603,8 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                 backgroundColor: '#F7F5EF',
                 border: '1.5px solid #1E56FF',
                 boxShadow: '0 20px 50px rgba(30, 86, 255, 0.08)',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
               {/* Header */}
@@ -654,17 +631,17 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                 </span>
                 <span
                   style={{
-                    fontSize: '0.66rem',
-                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.72rem',
+                    fontFamily: 'var(--font-body)',
                     padding: '0.25rem 0.65rem',
                     borderRadius: '9999px',
                     backgroundColor: '#FFFFFF',
                     color: '#059669',
-                    fontWeight: 800,
+                    fontWeight: 700,
                     border: '1px solid rgba(5, 150, 105, 0.25)',
                   }}
                 >
-                  GUARANTEED IN 2 HOURS
+                  Reply within 2 hours
                 </span>
               </div>
 
@@ -759,7 +736,6 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                   borderRadius: '16px',
                   padding: '1.25rem',
                   border: '1px solid rgba(17, 17, 17, 0.08)',
-                  marginBottom: '1.5rem',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.75rem' }}>
@@ -806,22 +782,34 @@ export default function CampaignBuilder({ onComplete }: CampaignBuilderProps) {
                 </div>
               </div>
 
-              {/* Trust Strip */}
               <div
                 style={{
+                  flex: 1,
+                  marginTop: '1.5rem',
+                  backgroundColor: '#FFFFFF',
+                  borderRadius: '16px',
+                  padding: '1.5rem',
+                  border: '1px solid rgba(17, 17, 17, 0.08)',
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.64rem',
-                  color: '#777777',
-                  borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-                  paddingTop: '1rem',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: '0.85rem',
                 }}
               >
-                <span>LICENSED NYC SIGN HANGER</span>
-                <span>•</span>
-                <span>UL LISTED #E351404</span>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 800,
+                    fontSize: '0.98rem',
+                    color: '#111111',
+                  }}
+                >
+                  What happens next
+                </span>
+                <p style={{ fontSize: '0.86rem', color: '#555555', lineHeight: 1.55, margin: 0 }}>
+                  Send the form and a project manager reviews your borough, sign type, and specs. You get a written quote with
+                  fabrication notes and the permit steps needed to install in New York City.
+                </p>
               </div>
             </div>
           </div>

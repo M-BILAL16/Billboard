@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Star, MapPin, Sparkles, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, MapPin, ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface TestimonialItem {
   id: string;
@@ -443,10 +443,10 @@ export default function TestimonialSection() {
       id="testimonials"
       style={{
         position: 'relative',
-        backgroundColor: '#F5F3EC', // Warm NYC luxury paper
+        backgroundColor: '#090D16',
         padding: 'clamp(5rem, 8vw, 8.5rem) 0 clamp(4rem, 6vw, 6rem)',
-        borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-        borderBottom: '1px solid rgba(17, 17, 17, 0.08)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         overflow: 'hidden',
       }}
       aria-roledescription="carousel"
@@ -456,7 +456,7 @@ export default function TestimonialSection() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Ambient background architectural grid and glowing radial blur */}
+      {/* Background Image: Real NYC Signage Across Industries */}
       <div
         style={{
           position: 'absolute',
@@ -464,13 +464,25 @@ export default function TestimonialSection() {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `
-            radial-gradient(circle at 18% 25%, rgba(30, 86, 255, 0.05) 0%, transparent 55%),
-            radial-gradient(circle at 85% 75%, rgba(17, 17, 17, 0.03) 0%, transparent 60%),
-            linear-gradient(rgba(17, 17, 17, 0.02) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(17, 17, 17, 0.02) 1px, transparent 1px)
+          backgroundImage: 'url(/images/industries.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      />
+
+      {/* Atmospheric dark gradient overlay to preserve signage glow while ensuring pristine contrast */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            radial-gradient(circle at 50% 50%, rgb(0 21 69 / 94%) 0%, rgb(0 21 69 / 94%) 100%),
+            linear-gradient(to bottom, rgba(7, 10, 18, 0.85) 0%, rgba(7, 10, 18, 0.62) 40%, rgba(7, 10, 18, 0.72) 70%, rgba(7, 10, 18, 0.9) 100%)
           `,
-          backgroundSize: '100% 100%, 100% 100%, 48px 48px, 48px 48px',
           pointerEvents: 'none',
         }}
       />
@@ -493,23 +505,23 @@ export default function TestimonialSection() {
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '0.55rem',
-              backgroundColor: '#FFFFFF',
-              border: '1px solid rgba(17, 17, 17, 0.1)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               padding: '0.45rem 1.1rem',
               borderRadius: '9999px',
               fontFamily: 'var(--font-mono)',
               fontSize: '0.74rem',
               fontWeight: 800,
-              color: '#1E56FF',
+              color: '#60A5FA',
               letterSpacing: '0.12em',
               textTransform: 'uppercase',
               marginBottom: '1.25rem',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
+              boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)',
             }}
           >
-            <Sparkles size={14} />
-            <span>CLIENT REVIEWS // 850+ FIVE-BOROUGH INSTALLATIONS</span>
+            CLIENT REVIEWS
           </div>
 
           {/* Main Headline */}
@@ -520,12 +532,13 @@ export default function TestimonialSection() {
               fontWeight: 900,
               lineHeight: 1.08,
               letterSpacing: '-0.03em',
-              color: '#111111',
+              color: '#FFFFFF',
               margin: '0 0 1rem',
               textTransform: 'uppercase',
+              textShadow: '0 4px 20px rgba(0, 0, 0, 0.4)',
             }}
           >
-            THE PROOF IS IN THE <span style={{ color: '#1E56FF' }}>WORDS</span>.
+            THE PROOF IS IN THE <span style={{ color: '#3B82F6', textShadow: '0 0 28px rgba(59, 130, 246, 0.6)' }}>WORDS</span>.
           </h2>
 
           {/* Subtext */}
@@ -533,12 +546,13 @@ export default function TestimonialSection() {
             style={{
               fontSize: 'clamp(0.95rem, 1.15vw, 1.15rem)',
               lineHeight: 1.6,
-              color: '#555555',
+              color: 'rgba(255, 255, 255, 0.82)',
               maxWidth: '680px',
               margin: 0,
+              textShadow: '0 2px 10px rgba(0, 0, 0, 0.35)',
             }}
           >
-            Real feedback from business owners, general contractors, landmark architects, and operations directors who trusted Signs NYC with their street presence.
+            Real feedback from business owners, general contractors, landmark architects, and operations directors who trusted Signs NYC.
           </p>
         </div>
 
@@ -552,8 +566,8 @@ export default function TestimonialSection() {
               backgroundColor: '#FFFFFF',
               borderRadius: '24px',
               padding: 'clamp(2rem, 3.5vw, 3.25rem)',
-              border: '1px solid rgba(17, 17, 17, 0.1)',
-              boxShadow: '0 20px 48px -12px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              boxShadow: '0 24px 60px -12px rgba(0, 0, 0, 0.45), 0 2px 12px rgba(0, 0, 0, 0.1)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -781,9 +795,11 @@ export default function TestimonialSection() {
               width: '46px',
               height: '46px',
               borderRadius: '50%',
-              backgroundColor: '#F8F7F2',
-              border: '1px solid rgba(17, 17, 17, 0.12)',
-              color: '#111111',
+              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -801,18 +817,18 @@ export default function TestimonialSection() {
               fontFamily: 'var(--font-mono)',
               fontSize: '0.85rem',
               fontWeight: 900,
-              color: '#111111',
+              color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
               gap: '0.5rem',
             }}
           >
-            <span style={{ color: '#1E56FF', fontSize: '1.05rem' }}>
+            <span style={{ color: '#60A5FA', fontSize: '1.05rem' }}>
               {String(currentIndex + 1).padStart(2, '0')}
             </span>
-            <span style={{ color: '#AAAAAA' }}>/</span>
+            <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>/</span>
             <span>{String(totalReviews).padStart(2, '0')}</span>
-            <span style={{ color: '#888888', fontSize: '0.72rem', fontWeight: 600 }}>
+            <span style={{ color: 'rgba(255, 255, 255, 0.65)', fontSize: '0.72rem', fontWeight: 600 }}>
               REVIEWS
             </span>
           </div>
@@ -832,7 +848,7 @@ export default function TestimonialSection() {
               justifyContent: 'center',
               cursor: 'pointer',
               transition: 'all 0.2s ease',
-              boxShadow: '0 4px 12px rgba(30, 86, 255, 0.25)',
+              boxShadow: '0 4px 16px rgba(30, 86, 255, 0.4)',
             }}
             className="slider-nav-btn"
           >

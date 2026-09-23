@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export interface IndustryItem {
   id: string;
@@ -11,46 +11,21 @@ export interface IndustryItem {
 }
 
 export const INDUSTRIES_DATA: IndustryItem[] = [
-  {
-    id: 'retail',
-    title: 'RETAIL',
-    image: '/images/industry_retail.jpg',
-  },
-  {
-    id: 'restaurant',
-    title: 'RESTAURANT',
-    image: '/images/industry_restaurant.jpg',
-  },
-  {
-    id: 'manufacturing',
-    title: 'MANUFACTURING',
-    image: '/images/industry_manufacturing.jpg',
-  },
-  {
-    id: 'schools-universities',
-    title: 'SCHOOLS & UNIVERSITIES',
-    image: '/images/industry_education.jpg',
-  },
-  {
-    id: 'hospital',
-    title: 'HOSPITAL',
-    image: '/images/industry_hospital.jpg',
-  },
-  {
-    id: 'city-government',
-    title: 'CITY & GOVERNMENT',
-    image: '/images/industry_government.jpg',
-  },
-  {
-    id: 'construction',
-    title: 'CONSTRUCTION',
-    image: '/images/industry_construction.jpg',
-  },
-  {
-    id: 'corporate-offices',
-    title: 'CORPORATE OFFICES',
-    image: '/images/industry_corporate.jpg',
-  },
+  { id: 'retail', title: 'RETAIL', image: '/images/ind_retail.jpg' },
+  { id: 'restaurants', title: 'RESTAURANTS', image: '/images/ind_restaurant.jpg' },
+  { id: 'museums', title: 'MUSEUMS', image: '/images/ind_museum.jpg' },
+  { id: 'property', title: 'PROPERTY', image: '/images/ind_property.jpg' },
+  { id: 'education', title: 'EDUCATION', image: '/images/ind_education.jpg' },
+  { id: 'religious', title: 'RELIGIOUS', image: '/images/ind_religious.jpg' },
+  { id: 'charity', title: 'CHARITY', image: '/images/ind_charity.jpg' },
+  { id: 'political', title: 'POLITICAL', image: '/images/ind_political.jpg' },
+  { id: 'government', title: 'GOVERNMENT', image: '/images/ind_government.jpg' },
+  { id: 'healthcare', title: 'HEALTHCARE', image: '/images/ind_healthcare.jpg' },
+  { id: 'convention', title: 'CONVENTION', image: '/images/ind_convention.jpg' },
+  { id: 'arenas', title: 'ARENAS', image: '/images/ind_arenas.jpg' },
+  { id: 'transportation', title: 'TRANSPORTATION', image: '/images/ind_transportation.jpg' },
+  { id: 'contractors', title: 'CONTRACTORS', image: '/images/ind_contractors.jpg' },
+  { id: 'pop-up-store', title: 'POP-UP STORE', image: '/images/ind_popup.jpg' },
 ];
 
 interface FormatExplorerProps {
@@ -114,24 +89,6 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
           }}
         >
           <div style={{ maxWidth: '820px' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                color: '#1E56FF',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                marginBottom: '1.25rem',
-              }}
-            >
-              <Sparkles size={14} />
-              SPECIALIZED SIGNAGE BY INDUSTRY.
-            </div>
-
             <h2
               style={{
                 fontFamily: 'var(--font-display)',
@@ -177,7 +134,10 @@ export default function FormatExplorer({ onSelectFormat }: FormatExplorerProps) 
                 boxShadow: '0 4px 12px rgba(0, 0, 0, 0.04)',
               }}
             >
-              <span style={{ color: '#1E56FF' }}>0{currentIndex + 1}</span> / 0{INDUSTRIES_DATA.length}
+              <span style={{ color: '#1E56FF' }}>
+                {String(currentIndex + 1).padStart(2, '0')}
+              </span>{' '}
+              / {String(INDUSTRIES_DATA.length).padStart(2, '0')}
             </div>
 
             <div style={{ display: 'flex', gap: '0.5rem' }}>

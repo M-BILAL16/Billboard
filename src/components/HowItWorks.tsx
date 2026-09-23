@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, ArrowRight, Target, MapPin, Sliders, Radio } from 'lucide-react';
+import { Target, MapPin, Sliders, Radio } from 'lucide-react';
 
 const STEPS = [
   {
@@ -30,13 +30,10 @@ const STEPS = [
   },
 ];
 
-interface HowItWorksProps {
-  onStartPlanning: () => void;
-}
-
-export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
+export default function HowItWorks() {
   return (
     <section
+      id="about"
       style={{
         position: 'relative',
         backgroundColor: '#F2ECDD', // Soft beige / cream
@@ -48,24 +45,6 @@ export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
       <div className="container-custom">
         {/* Header */}
         <div style={{ maxWidth: '820px', marginBottom: '5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#1E56FF',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: '1.25rem',
-            }}
-          >
-            <Sparkles size={14} />
-            FROM BLUEPRINT TO LANDMARK.
-          </div>
-
           <h2
             style={{
               fontFamily: 'var(--font-display)',
@@ -191,45 +170,6 @@ export default function HowItWorks({ onStartPlanning }: HowItWorksProps) {
               </div>
             );
           })}
-        </div>
-
-        {/* CTA Banner */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '2rem',
-            padding: '2.5rem',
-            borderRadius: '24px',
-            backgroundColor: '#FFFFFF',
-            border: '1px solid rgba(17, 17, 17, 0.08)',
-            boxShadow: '0 8px 30px rgba(0, 0, 0, 0.04)',
-          }}
-        >
-          <div>
-            <h4
-              style={{
-                fontFamily: 'var(--font-display)',
-                fontSize: '1.5rem',
-                fontWeight: 900,
-                color: '#111111',
-                textTransform: 'uppercase',
-                marginBottom: '0.25rem',
-              }}
-            >
-              PRECISION FABRICATION. <span style={{ color: '#1E56FF' }}>UNMISSABLE RESULTS.</span>
-            </h4>
-            <p style={{ color: '#666666', fontSize: '0.95rem' }}>
-              From boutique retail storefronts to multi-story building signs across Manhattan and all five boroughs.
-            </p>
-          </div>
-
-          <button onClick={onStartPlanning} className="btn-primary" data-cursor="QUOTE">
-            REQUEST A FREE QUOTE
-            <ArrowRight size={16} strokeWidth={2.5} />
-          </button>
         </div>
       </div>
 

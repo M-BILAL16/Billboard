@@ -75,7 +75,7 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     subtitle: 'Boutique Facade Canopy & Streetfront Shade',
     borough: 'Upper East Side, Manhattan',
     beforeImg: '/images/before_after/commercial_awning_striped_before.jpg',
-    afterImg: '/images/commercial-awnings-business.webp',
+    afterImg: '/images/before_after/commercial_awning_after.jpg',
     beforeDesc: 'Dated striped fabric awning with aged pattern, providing zero bespoke identity for luxury boutique.',
     afterDesc: 'Bespoke matte charcoal architectural awning with crisp white typography, floral wreath emblem, and contact valance.',
     specs: {
@@ -132,7 +132,7 @@ const TRANSFORMATIONS: ProjectTransformation[] = [
     subtitle: 'Matte Charcoal & Gold Leaf Mobile Cafe',
     borough: 'DUMBO & Brooklyn Navy Yard',
     beforeImg: '/images/before_after/08_food_truck_before.jpg',
-    afterImg: '/Signsny/Vehicle Wraps/Food Truck Wrapping/Designs/01-custom food truck wrapping.jpg',
+    afterImg: '/images/before_after/08_food_truck_after.jpg',
     beforeDesc: 'Weathered primer-grey step van looking like an uninviting utility vehicle.',
     afterDesc: 'Turned into an upscale artisan espresso bar with ornate Victorian filigree, matte wrap, and menu lettering.',
     specs: {

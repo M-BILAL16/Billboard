@@ -1,35 +1,13 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import Image from 'next/image';
-import { ArrowRight, ShieldCheck, Wrench, Clock, CheckCircle2, Volume2, VolumeX, Play, Pause, Maximize2 } from 'lucide-react';
+import React from 'react';
+import { ArrowRight } from 'lucide-react';
 
 interface HeroProps {
-  onOpenShowreel: () => void;
   onOpenCampaignModal: () => void;
 }
 
-export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      videoRef.current.play();
-      setIsPlaying(true);
-    }
-  };
-
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !isMuted;
-    setIsMuted(!isMuted);
-  };
+export default function Hero({ onOpenCampaignModal }: HeroProps) {
 
   return (
     <section
@@ -112,7 +90,7 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               }}
             >
               From illuminated storefront channel letters and architectural metalwork to corporate lobby branding
-              and fleet graphics. Engineered in our 10,000 sq ft NYC facility, installed across all five boroughs with full DOB permit management.
+              and fleet graphics.
             </p>
 
             {/* CTAs */}
@@ -163,12 +141,11 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
               }}
             >
               <video
-                ref={videoRef}
                 src="/videos/video2.mp4"
                 poster="/images/video2_thumb.jpg"
                 autoPlay
                 loop
-                muted={isMuted}
+                muted
                 playsInline
                 style={{
                   width: '100%',
@@ -177,284 +154,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
                   display: 'block',
                 }}
               />
-
-              {/* Subtle Top & Bottom Vignette Overlays for HUD contrast */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background:
-                    'linear-gradient(to bottom, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0) 25%, rgba(15, 23, 42, 0) 70%, rgba(15, 23, 42, 0.65) 100%)',
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Top Bar Telemetry Badges */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1rem',
-                  left: '1rem',
-                  right: '1rem',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  zIndex: 2,
-                }}
-              >
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.5rem',
-                    background: 'rgba(15, 23, 42, 0.8)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.18)',
-                    padding: '0.35rem 0.75rem',
-                    borderRadius: '9999px',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.68rem',
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '7px',
-                      height: '7px',
-                      borderRadius: '50%',
-                      background: '#00D4FF',
-                      boxShadow: '0 0 8px #00D4FF',
-                      display: 'inline-block',
-                    }}
-                  />
-                  FABRICATION REEL // NYC ARCHITECTURE
-                </div>
-
-              </div>
-
-              {/* Bottom Interactive HUD Controls */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '1rem',
-                  left: '1rem',
-                  right: '1rem',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  zIndex: 2,
-                }}
-              >
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  {/* Play / Pause Button */}
-                  <button
-                    type="button"
-                    onClick={togglePlay}
-                    aria-label={isPlaying ? 'Pause video' : 'Play video'}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      background: 'rgba(15, 23, 42, 0.85)',
-                      backdropFilter: 'blur(12px)',
-                      border: '1px solid rgba(255, 255, 255, 0.25)',
-                      padding: '0.4rem 0.75rem',
-                      borderRadius: '8px',
-                      color: '#FFFFFF',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                    }}
-                  >
-                    {isPlaying ? <Pause size={12} fill="#FFFFFF" /> : <Play size={12} fill="#FFFFFF" />}
-                    {isPlaying ? 'PAUSE' : 'PLAY'}
-                  </button>
-
-                  {/* Audio Mute / Unmute Button */}
-                  <button
-                    type="button"
-                    onClick={toggleMute}
-                    aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.4rem',
-                      background: 'rgba(15, 23, 42, 0.85)',
-                      backdropFilter: 'blur(12px)',
-                      border: isMuted ? '1px solid rgba(255, 255, 255, 0.25)' : '1px solid #00D4FF',
-                      padding: '0.4rem 0.75rem',
-                      borderRadius: '8px',
-                      color: isMuted ? '#94A3B8' : '#00D4FF',
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: '0.68rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease',
-                      boxShadow: isMuted ? 'none' : '0 0 12px rgba(0, 212, 255, 0.35)',
-                    }}
-                  >
-                    {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
-                    {isMuted ? 'UNMUTE' : 'AUDIO LIVE'}
-                  </button>
-                </div>
-
-                {/* Showreel Fullscreen Trigger */}
-                <button
-                  type="button"
-                  onClick={onOpenShowreel}
-                  aria-label="Open Fullscreen Showreel"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    background: '#1E56FF',
-                    border: '1px solid rgba(255, 255, 255, 0.35)',
-                    padding: '0.4rem 0.85rem',
-                    borderRadius: '8px',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.68rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 15px rgba(30, 86, 255, 0.4)',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <Maximize2 size={12} />
-                  EXPAND
-                </button>
-              </div>
-            </div>
-
-            {/* Overlapping Cropped Architectural Image (Bottom Left) */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '-24px',
-                left: '-24px',
-                width: '180px',
-                height: '210px',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.12)',
-                border: '3px solid #FFFFFF',
-              }}
-              className="collage-floating-img"
-            >
-              <Image
-                src="/images/daylight_arch_vertical.jpg"
-                alt="New York storefront sign architecture"
-                fill
-                sizes="200px"
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-
-            {/* Rotating Circular Badge (Top Right) */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '-20px',
-                right: '-16px',
-                width: '114px',
-                height: '114px',
-                borderRadius: '50%',
-                backgroundColor: '#1E56FF',
-                color: '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 10px 28px rgba(30, 86, 255, 0.35)',
-                zIndex: 20,
-              }}
-            >
-              {/* Rotating Curved Text */}
-              <div
-                className="animate-spin-slow"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <svg viewBox="0 0 100 100" width="100%" height="100%">
-                  <path
-                    id="circlePath"
-                    d="M 50, 50 m -35, 0 a 35,35 0 1,1 70,0 a 35,35 0 1,1 -70,0"
-                    fill="none"
-                  />
-                  <text fill="#FFFFFF" fontSize="8" fontFamily="var(--font-mono)" fontWeight="700" letterSpacing="1.2">
-                    <textPath href="#circlePath" startOffset="0%">
-                      • NYC SIGN MAKER • SINCE 1989 •
-                    </textPath>
-                  </text>
-                </svg>
-              </div>
-
-              <div style={{ textAlign: 'center', zIndex: 2 }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    fontWeight: 900,
-                    fontSize: '1.05rem',
-                    lineHeight: 1,
-                    display: 'block',
-                  }}
-                >
-                  35+
-                </span>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.55rem',
-                    letterSpacing: '0.08em',
-                  }}
-                >
-                  YEARS
-                </span>
-              </div>
-            </div>
-
-            {/* Floating Editorial Labels */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: '16px',
-                right: '16px',
-                padding: '0.65rem 1rem',
-                borderRadius: '12px',
-                backgroundColor: '#FFFFFF',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.08)',
-                border: '1px solid rgba(0,0,0,0.06)',
-                zIndex: 20,
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.62rem',
-                  color: '#888888',
-                  display: 'block',
-                }}
-              >
-                03 // FIVE BOROUGHS
-              </span>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '0.95rem',
-                  fontWeight: 900,
-                  color: '#111111',
-                }}
-              >
-                MANHATTAN & NYC WIDE
-              </span>
             </div>
 
           </div>
@@ -670,9 +369,6 @@ export default function Hero({ onOpenShowreel, onOpenCampaignModal }: HeroProps)
           }
           .hero-typography-col {
             margin-bottom: 2rem;
-          }
-          .collage-floating-img {
-            display: none !important;
           }
         }
         @media (max-width: 600px) {

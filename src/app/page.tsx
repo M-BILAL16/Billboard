@@ -37,11 +37,6 @@ export default function Home() {
     setModalOpen(true);
   };
 
-  const handleOpenShowreel = () => {
-    setModalMode('showreel');
-    setModalOpen(true);
-  };
-
   const handleSelectCampaign = (campaign: FeaturedCampaign) => {
     setSelectedCaseStudy(campaign);
     setModalMode('case-study');
@@ -80,10 +75,7 @@ export default function Home() {
       <Navbar onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* Hero Section */}
-      <Hero
-        onOpenShowreel={handleOpenShowreel}
-        onOpenCampaignModal={handleOpenCampaignModal}
-      />
+      <Hero onOpenCampaignModal={handleOpenCampaignModal} />
 
       {/* Moving Brand Statement Marquee (Hidden) */}
       {/* <MarqueeTicker /> */}
@@ -117,10 +109,7 @@ export default function Home() {
 
 
       {/* How It Works Timeline */}
-      <HowItWorks onStartPlanning={() => {
-        const el = document.getElementById('planner');
-        if (el) el.scrollIntoView({ behavior: 'smooth' });
-      }} />
+      <HowItWorks />
 
       {/* Interactive Campaign Planner & Builder */}
       <CampaignBuilder onComplete={handleBuilderComplete} />

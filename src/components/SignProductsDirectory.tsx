@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import {
-  Sparkles,
   ArrowRight,
   Search,
   ChevronRight,
@@ -21,6 +20,14 @@ interface SignProductsDirectoryProps {
 }
 
 const MAX_VISIBLE_CATALOG_TILES = 6;
+
+function getCatalogItemDescription(item: CatalogItem, kind: 'design' | 'type') {
+  if (item.description?.trim()) return item.description;
+  if (kind === 'design') {
+    return `Custom fabricated ${item.name} built in our NYC plant with custom mounting.`;
+  }
+  return `Architectural grade ${item.name} engineered for commercial NYC environments.`;
+}
 
 export default function SignProductsDirectory({ onOpenCampaignModal }: SignProductsDirectoryProps) {
   // Main Category State
@@ -48,6 +55,24 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
 
   // Scroll ref for top categories navigation
   const categoriesScrollRef = useRef<HTMLDivElement>(null);
+
+  // Navbar catalog menu selects a category / subcategory before scrolling here
+  useEffect(() => {
+    const handleCatalogSelect = (event: Event) => {
+      const { categoryId, subcategoryName } =
+        (event as CustomEvent<{ categoryId: string; subcategoryName?: string }>).detail || {};
+      const category = FULL_CATALOG.find((cat) => cat.id === categoryId);
+      if (!category) return;
+
+      setActiveCategoryId(category.id);
+      setSidebarSearch('');
+      setTypesSearch('');
+      setSelectedSubcatName(subcategoryName || category.subcategories[0]?.name || '');
+    };
+
+    window.addEventListener('catalog:select', handleCatalogSelect);
+    return () => window.removeEventListener('catalog:select', handleCatalogSelect);
+  }, []);
 
   // Active Category
   const activeCategory: MainCategory = useMemo(() => {
@@ -146,24 +171,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
       <div className="container-custom">
         {/* Section Header */}
         <div style={{ maxWidth: '880px', marginBottom: '2.5rem' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              color: '#1E56FF',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.74rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              textTransform: 'uppercase',
-              marginBottom: '0.9rem',
-            }}
-          >
-            <Sparkles size={14} />
-            NYC PRODUCT CATALOG
-          </div>
-
           <h2
             style={{
               fontFamily: 'var(--font-display)',
@@ -173,16 +180,12 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
               letterSpacing: '-0.04em',
               textTransform: 'uppercase',
               color: '#111111',
-              marginBottom: '1rem',
+              marginBottom: 0,
             }}
           >
             FIND THE EXACT SIGN <br />
             <span style={{ color: '#1E56FF' }}>FOR YOUR NYC SPACE.</span>
           </h2>
-
-          <p style={{ color: '#555555', fontSize: '1.08rem', maxWidth: '720px', lineHeight: 1.6 }}>
-            Browse New York&apos;s most comprehensive commercial signage database. Search across all 9 major categories, 89 product lines, design showcases, and over 400 architectural material types &amp; mini-categories.
-          </p>
         </div>
 
         {/* 1. Main Category Selector (Interactive Left/Right Scroll with Visible Navigation) */}
@@ -499,19 +502,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                             }}
                           >
                             {sub.name}
-                          </div>
-                          <div
-                            style={{
-                              fontFamily: 'var(--font-mono)',
-                              fontSize: '0.66rem',
-                              color: isSelected ? '#555555' : '#888888',
-                              marginTop: '0.15rem',
-                            }}
-                          >
-                            {sub.designs.length > 0 && `${sub.designs.length} Designs`}
-                            {sub.designs.length > 0 && sub.types.length > 0 && ' • '}
-                            {sub.types.length > 0 && `${sub.types.length} Types & Mini-Cats`}
-                            {sub.designs.length === 0 && sub.types.length === 0 && 'Custom Specs'}
                           </div>
                         </div>
                       </div>
@@ -842,27 +832,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                           }}
                         />
 
-                        {/* Top Badge */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                            padding: '0.2rem 0.55rem',
-                            borderRadius: '6px',
-                            backgroundColor: 'rgba(17, 17, 17, 0.78)',
-                            backdropFilter: 'blur(6px)',
-                            color: '#FFFFFF',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.62rem',
-                            fontWeight: 700,
-                            letterSpacing: '0.04em',
-                            textTransform: 'uppercase',
-                          }}
-                        >
-                          DESIGN SHOWCASE
-                        </div>
-
                         {/* Inspect Zoom Pill */}
                         <div
                           style={{
@@ -980,26 +949,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                               activeSubcategory.image || '/images/hero_storefront.jpg';
                           }}
                         />
-
-                        {/* Tag: Mini-Category vs Type */}
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                            padding: '0.2rem 0.55rem',
-                            borderRadius: '6px',
-                            backgroundColor: typeItem.isMiniCategory ? '#0F172A' : '#1E56FF',
-                            color: '#FFFFFF',
-                            fontFamily: 'var(--font-mono)',
-                            fontSize: '0.62rem',
-                            fontWeight: 700,
-                            letterSpacing: '0.04em',
-                            textTransform: 'uppercase',
-                          }}
-                        >
-                          {typeItem.isMiniCategory ? 'MINI-CATEGORY // SPEC' : 'ARCHITECTURAL TYPE'}
-                        </div>
 
                         {/* Inspect Zoom Pill */}
                         <div
@@ -1122,79 +1071,6 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                   </button>
                 </div>
               )}
-            </div>
-
-            {/* Bottom Even Baseline Dock (Guarantees Perfectly Level Section Bottom) */}
-            <div
-              style={{
-                marginTop: '2.5rem',
-                paddingTop: '1.5rem',
-                borderTop: '1px solid rgba(17, 17, 17, 0.08)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '1rem',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <span
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: '#10B981',
-                    display: 'inline-block',
-                  }}
-                />
-                <span
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.74rem',
-                    color: '#666666',
-                  }}
-                >
-                  NYC SIGN FACILITY ACTIVE // 10,000 SQ FT SHOP IN FULL PRODUCTION
-                </span>
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <a
-                  href="tel:7184538300"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.4rem',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.76rem',
-                    fontWeight: 700,
-                    color: '#111111',
-                    textDecoration: 'none',
-                  }}
-                >
-                  <PhoneCall size={13} style={{ color: '#1E56FF' }} />
-                  (718) 453-8300
-                </a>
-
-                <button
-                  type="button"
-                  onClick={onOpenCampaignModal}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#1E56FF',
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.76rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                  }}
-                >
-                  CUSTOM SPECIFICATIONS INQUIRY →
-                </button>
-              </div>
             </div>
           </main>
         </div>
@@ -1324,57 +1200,19 @@ export default function SignProductsDirectory({ onOpenCampaignModal }: SignProdu
                 {inspectedItem.item.name}
               </h3>
 
-              {inspectedItem.item.description && (
-                <p
-                  style={{
-                    color: '#444444',
-                    fontSize: '1.02rem',
-                    lineHeight: 1.6,
-                    marginBottom: '1.5rem',
-                  }}
-                >
-                  {inspectedItem.item.description}
-                </p>
-              )}
-
-              {/* Architectural Highlights */}
-              <div
+              <p
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                  gap: '1rem',
-                  padding: '1.25rem',
-                  borderRadius: '12px',
-                  backgroundColor: '#FDF7E7',
+                  color: '#444444',
+                  fontSize: '1.02rem',
+                  lineHeight: 1.6,
                   marginBottom: '1.5rem',
-                  border: '1px solid rgba(17, 17, 17, 0.06)',
                 }}
               >
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
-                    MANUFACTURING
-                  </div>
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
-                    10,000 sq ft NYC Plant
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
-                    COMPLIANCE
-                  </div>
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#059669' }}>
-                    DOB Expedited & Approved
-                  </div>
-                </div>
-                <div>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.68rem', color: '#777777' }}>
-                    INSTALLATION
-                  </div>
-                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#111111' }}>
-                    All 5 NYC Boroughs
-                  </div>
-                </div>
-              </div>
+                {getCatalogItemDescription(
+                  inspectedItem.item as CatalogItem,
+                  inspectedItem.type === 'design' ? 'design' : 'type'
+                )}
+              </p>
 
               {/* CTAs */}
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
