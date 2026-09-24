@@ -1,9 +1,20 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 
 export default function Footer() {
+  const navItems = [
+    { label: 'About Us', href: '/about' },
+    { label: 'Sign Categories', href: '/#products' },
+    { label: 'Boroughs', href: '/#locations' },
+    { label: 'Installations', href: '/#transformations' },
+    { label: 'DOB Permits', href: '/#permits' },
+    { label: 'Client Reviews', href: '/#testimonials' },
+    { label: 'Planner', href: '/#planner' },
+  ];
+
   return (
     <footer
       style={{
@@ -42,10 +53,10 @@ export default function Footer() {
               NAVIGATION
             </span>
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              {['Sign Categories', 'Boroughs', 'Installations', 'DOB Permits', 'Experience', 'Planner'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
                     style={{
                       color: '#444444',
                       textDecoration: 'none',
@@ -56,8 +67,8 @@ export default function Footer() {
                     onMouseEnter={(e) => (e.currentTarget.style.color = '#1E56FF')}
                     onMouseLeave={(e) => (e.currentTarget.style.color = '#444444')}
                   >
-                    {item}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

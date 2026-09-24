@@ -184,16 +184,26 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
     setActiveDropdown(null);
     setSearchOpen(false);
     setMobileMenuOpen(false);
-    const element = document.querySelector(hash);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.location.href = `/${hash}`;
+      }
     }
   };
 
   const handleScrollTop = () => {
     setActiveDropdown(null);
     setMobileMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (typeof window !== 'undefined') {
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
   };
 
   // Opens the catalog section already focused on the chosen category / subcategory
@@ -488,18 +498,25 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
             }}
           >
             {/* Home */}
-            <button type="button" onClick={handleScrollTop} style={navLinkStyle('Home')}>
+            <Link
+              href="/"
+              onClick={() => {
+                setActiveLink('Home');
+                handleScrollTop();
+              }}
+              style={navLinkStyle('Home')}
+            >
               Home
-            </button>
+            </Link>
 
             {/* About Us */}
-            <a
-              href="#about"
+            <Link
+              href="/about"
               onClick={() => setActiveLink('About Us')}
               style={navLinkStyle('About Us')}
             >
               About Us
-            </a>
+            </Link>
 
             {/* Catalog with full category / subcategory mega-menu */}
             <div
@@ -1168,21 +1185,27 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
           {/* Mobile Navigation Links */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             {[
-              { num: '01', label: 'Home', href: '#top', tag: 'Start' },
-              { num: '02', label: 'About Us', href: '#about', tag: 'How We Work' },
-              { num: '03', label: 'Catalog', href: '#products', tag: `${FULL_CATALOG.length} Categories` },
-              { num: '04', label: 'Industries', href: '#industries', tag: `${INDUSTRIES_DATA.length} Sectors` },
+              { num: '01', label: 'Home', href: '/', tag: 'Start' },
+              { num: '02', label: 'About Us', href: '/about', tag: 'Our 35-Yr Story' },
+              { num: '03', label: 'Catalog', href: '/#products', tag: `${FULL_CATALOG.length} Categories` },
+              { num: '04', label: 'Industries', href: '/#industries', tag: `${INDUSTRIES_DATA.length} Sectors` },
             ].map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={(e) => {
-                  if (link.href === '#top') {
+                  setMobileMenuOpen(false);
+                  if (link.href === '/') {
                     e.preventDefault();
                     handleScrollTop();
-                    return;
+                  } else if (link.href.startsWith('/#')) {
+                    const hash = link.href.replace('/', '');
+                    const element = document.querySelector(hash);
+                    if (element) {
+                      e.preventDefault();
+                      element.scrollIntoView({ behavior: 'smooth' });
+                    }
                   }
-                  setMobileMenuOpen(false);
                 }}
                 style={{
                   display: 'flex',
