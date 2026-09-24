@@ -518,6 +518,15 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
               About Us
             </Link>
 
+            {/* Portfolio */}
+            <Link
+              href="/portfolio"
+              onClick={() => setActiveLink('Portfolio')}
+              style={navLinkStyle('Portfolio')}
+            >
+              Portfolio
+            </Link>
+
             {/* Catalog with full category / subcategory mega-menu */}
             <div
               onMouseEnter={() => handleDropdownEnter('catalog')}
@@ -1187,8 +1196,9 @@ export default function Navbar({ onOpenCampaignModal }: NavbarProps) {
             {[
               { num: '01', label: 'Home', href: '/', tag: 'Start' },
               { num: '02', label: 'About Us', href: '/about', tag: 'Our 35-Yr Story' },
-              { num: '03', label: 'Catalog', href: '/#products', tag: `${FULL_CATALOG.length} Categories` },
-              { num: '04', label: 'Industries', href: '/#industries', tag: `${INDUSTRIES_DATA.length} Sectors` },
+              { num: '03', label: 'Portfolio', href: '/portfolio', tag: '850+ Projects' },
+              { num: '04', label: 'Catalog', href: '/#products', tag: `${FULL_CATALOG.length} Categories` },
+              { num: '05', label: 'Industries', href: '/#industries', tag: `${INDUSTRIES_DATA.length} Sectors` },
             ].map((link) => (
               <a
                 key={link.label}

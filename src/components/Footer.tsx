@@ -7,6 +7,7 @@ import { ArrowUpRight, Mail, Phone } from 'lucide-react';
 export default function Footer() {
   const navItems = [
     { label: 'About Us', href: '/about' },
+    { label: 'Portfolio', href: '/portfolio' },
     { label: 'Sign Categories', href: '/#products' },
     { label: 'Boroughs', href: '/#locations' },
     { label: 'Installations', href: '/#transformations' },
